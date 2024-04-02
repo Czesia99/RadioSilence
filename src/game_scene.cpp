@@ -8,8 +8,7 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
 
     camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, true);
 
-    cube_shader = Shader("diffuse_map.vs", "diffuse_map_spotlight.fs");
-    // light_shader = Shader("light.vs", "light.fs"); // lightShader
+    wall_shader = Shader("diffuse_map.vs", "map_spotlight.fs");
 
     store_scene_in_ctx();
 }
@@ -33,30 +32,29 @@ void GameScene::update()
     deltaTime = currentTime - lastFrame;
     lastFrame = currentTime;
 
-    cube_shader.use();
+    wall_shader.use();
     
     //spotlight properties
-    cube_shader.set_vec3("light.position", camera.position);
-    cube_shader.set_vec3("light.direction", camera.front);
-    cube_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
-    cube_shader.set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+    wall_shader.set_vec3("light.position", camera.position);
+    wall_shader.set_vec3("light.direction", camera.front);
+    wall_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
+    wall_shader.set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-    cube_shader.set_vec3("viewPos", camera.position);
+    wall_shader.set_vec3("viewPos", camera.position);
+
     // light properties
-    cube_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
-    cube_shader.set_vec3("light.diffuse", 0.8f, 0.8f, 0.8f);
-    cube_shader.set_vec3("light.specular", 1.0f, 1.0f, 1.0f);
+    wall_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
+    wall_shader.set_vec3("light.diffuse", 0.8f, 0.8f, 0.8f);
+    wall_shader.set_vec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-    cube_shader.set_float("light.constant", 1.0f);
-    cube_shader.set_float("light.linear", 0.14f);
-    cube_shader.set_float("light.quadratic", 0.07f);
+    wall_shader.set_float("light.constant", 1.0f);
+    wall_shader.set_float("light.linear", 0.22f);
+    wall_shader.set_float("light.quadratic", 0.20f);
 
     //material properties
-    cube_shader.set_float("material.shininess", 64.0f);
+    wall_shader.set_float("material.shininess", 64.0f);
 
-    // cube.render(cube_shader, camera);
-    // cube2.render(cube_shader, camera);
-    map.render(cube_shader, camera);
+    map.render(wall_shader, camera);
 }
 
 void GameScene::scene_clear()
