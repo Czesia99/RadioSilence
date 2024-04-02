@@ -4,19 +4,15 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
     camera = Camera3D(glm::vec3(0.0f, 0.0f, 3.0f), ctx.win_width, ctx.win_height);
 
+    map.print_map_txt();
+    map.load_map();
     cube_shader = Shader("diffuse_map.vs", "diffuse_map.fs");
     light_shader = Shader("light.vs", "light.fs"); // lightShader
-
-    cube2.transform.position = glm::vec3(0.0f, 1.0f, 2.0f);
-    light_pos = cube2.transform.position;
     
     cube.add_texture("../textures/container2.png", cube.diffuse_texture);
     cube.add_texture("../textures/container2_specular.png", cube.specular_texture);
 
-    modelShader = Shader("model_loading.vs", "model_loading.fs");
-
-    stbi_set_flip_vertically_on_load(true);
-    model = Model("../backpack/backpack.obj");
+    cube2.add_texture("../textures/brick_wall.jpg", cube.diffuse_texture);
     store_scene_in_ctx();
 }
 
@@ -54,19 +50,9 @@ void GameScene::update()
     //material properties
     cube_shader.set_float("material.shininess", 64.0f);
 
-    model.draw(modelShader, camera);
     // cube.render(cube_shader, camera);
-    // cube2.render(light_shader, camera);
-
-    light_pos = cube2.transform.position;
-
-    float angle = currentTime;
-    float distance = 2.0f;
-    cube2.transform.position.x = cos(angle) * distance;
-    cube2.transform.position.y = sin(angle) * distance;
-    //cube2.transform.position.y = sin(angle * 2);
-    // cube.transform.rotation.y += 0.01;
-    // cube.transform.rotation.z += 0.01;
+    // cube2.render(cube_shader, camera);
+    map.render(cube_shader, camera);
     skybox.render(camera);
 }
 

@@ -8,6 +8,7 @@
 #include "mygl/button.hpp"
 #include "mygl/skybox.hpp"
 #include "mygl/model.hpp"
+#include "map.hpp"
 
 class GameScene : public IScene {
     public:
@@ -30,20 +31,23 @@ class GameScene : public IScene {
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
 
+        float lastX = ctx.win_width / 2.0f;
+        float lastY = ctx.win_height / 2.0f;
+        bool first_mouse = true;
+    
+        Camera3D camera;
+
+        Map map;
         Shader light_shader;
         Shader cube_shader;
 
         Cube cube;
         Cube cube2;
-
-        Camera3D camera;
         
-        float lastX = ctx.win_width / 2.0f;
-        float lastY = ctx.win_height / 2.0f;
-        bool first_mouse = true;
+
         glm::vec3 light_pos;
 
         Shader modelShader;
-        Model model;
+
         Skybox skybox;
 };

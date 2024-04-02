@@ -56,6 +56,11 @@ class Camera3D : public ICamera {
                 position += right * velocity;
             if (fps)
                 position.y = 0;
+            
+            std::cout << "cam pos x: " << position.x << std::endl;
+            std::cout << "cam pos y: " << position.y << std::endl;
+            std::cout << "cam pos z: " << position.z << std::endl;
+
         }
 
         void process_mouse_movement(float xoffset, float yoffset, GLboolean constrainPitch = true)
