@@ -7,12 +7,15 @@
 class Map {
     public:
         std::vector<std::vector<char>> txt_map;
-        std::vector<Cube> walls;
+        std::vector<glm::vec3> walls_position;
         Cube floor;
+        Cube roof;
+        glm::vec3 player_position = {0.0f, 0.0f, 0.0f};
 
         Map()
         {
             read_map_file("../map.txt");
+            wall.add_texture("../textures/brick_wall.jpg", wall.diffuse_texture);
         }
 
         void read_map_file(const char *path)
@@ -53,12 +56,20 @@ class Map {
         void load_map() 
         {
             glm::vec3 position = {0.0f, 0.0f, 0.0f};
+            floor.add_texture("../textures/concrete2.jpg", floor.diffuse_texture);
             floor.transform.scale.x *= txt_map[0].size();
             floor.transform.scale.z *= txt_map.size();
-            floor.transform.scale.y *= 0.1;
+            floor.transform.scale.y *= 0.1f;
             floor.transform.position.x += txt_map[0].size() / 2;
             floor.transform.position.z += txt_map.size() / 2;
-            floor.transform.position.y -= 0.5;
+            floor.transform.position.y -= 0.5f;
+
+            roof.transform.scale.x *= txt_map[0].size();
+            roof.transform.scale.z *= txt_map.size();
+            roof.transform.scale.y *= 0.1f;
+            roof.transform.position.x += txt_map[0].size() / 2;
+            roof.transform.position.z += txt_map.size() / 2;
+            roof.transform.position.y += 1.5f;
 
             for (const auto &row : txt_map)
             {
@@ -66,10 +77,12 @@ class Map {
                {
                     if (element == '#')
                     {
-                        Cube cube;
-                        cube.add_texture("../textures/brick_wall.jpg", cube.diffuse_texture);
-                        cube.transform.position = position;
-                        walls.push_back(cube);
+                        
+                        walls_position.push_back(position);
+                    }
+                    if (element == '@')
+                    {
+                        player_position = {position.x, 0, position.z};
                     }
                     position.x += 1.0f;
                }
@@ -83,12 +96,17 @@ class Map {
         
         void render(Shader shader, const ICamera &camera)
         {
-            for (auto &wall : walls)
+            for (auto &pos : walls_position)
             {
+                wall.transform.position = pos;
+                wall.render(shader, camera);
+                wall.transform.position.y += 1.0f;
                 wall.render(shader, camera);
             }
             floor.render(shader, camera);
+            roof.render(shader, camera);
         }
 
     private:
+        Cube wall;
 };

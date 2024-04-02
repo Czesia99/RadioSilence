@@ -40,14 +40,9 @@ class GameScene : public IScene {
         Map map;
         Shader light_shader;
         Shader cube_shader;
-
-        Cube cube;
-        Cube cube2;
         
 
         glm::vec3 light_pos;
 
         Shader modelShader;
-
-        Skybox skybox;
 };
