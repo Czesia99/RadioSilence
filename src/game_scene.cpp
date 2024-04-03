@@ -7,7 +7,6 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     map.load_map();
 
     camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, true);
-
     wall_shader = Shader("basic_light.vs", "map_spotlight.fs");
 
     store_scene_in_ctx();
@@ -44,7 +43,7 @@ void GameScene::update()
 
     // light properties
     wall_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
-    wall_shader.set_vec3("light.diffuse", 0.8f, 0.8f, 0.8f);
+    wall_shader.set_vec3("light.diffuse", 0.6f, 0.6f, 0.6f);
     wall_shader.set_vec3("light.specular", 1.0f, 1.0f, 1.0f);
 
     wall_shader.set_float("light.constant", 1.0f);
@@ -52,7 +51,7 @@ void GameScene::update()
     wall_shader.set_float("light.quadratic", 0.20f);
 
     //material properties
-    wall_shader.set_float("material.shininess", 64.0f);
+    wall_shader.set_float("material.shininess", 32.0f);
 
     map.render(wall_shader, camera);
 }

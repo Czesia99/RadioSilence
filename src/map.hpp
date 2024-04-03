@@ -8,16 +8,13 @@ class Map {
     public:
         std::vector<std::vector<char>> txt_map;
         std::vector<glm::vec3> walls_position;
-        Cube floor;
-        Cube roof;
         glm::vec3 player_position = {0.0f, 0.5f, 0.0f};
 
         Map()
         {
-            read_map_file("../map.txt");
-            wall.add_texture("../textures/brick_wall.jpg", wall.diffuse_texture);
+            read_map_file("../map2.txt");
             stbi_set_flip_vertically_on_load(true);
-            wall2 = Model("../wall_model2/wall.obj");
+            wall = Model("../wall_model2/wall.obj");
         }
 
         void read_map_file(const char *path)
@@ -64,7 +61,6 @@ class Map {
             floor.transform.scale.y *= 0.1f;
             floor.transform.position.x += txt_map[0].size() / 2;
             floor.transform.position.z += txt_map.size() / 2;
-            // floor.transform.position.y -= 0.5f;
 
             roof.transform.scale.x *= txt_map[0].size();
             roof.transform.scale.z *= txt_map.size();
@@ -79,7 +75,6 @@ class Map {
                {
                     if (element == '#')
                     {
-                        
                         walls_position.push_back(position);
                     }
                     if (element == '@')
@@ -100,14 +95,15 @@ class Map {
         {
             for (auto &pos : walls_position)
             {
-                wall2.transform.position = pos;
-                wall2.draw(shader, camera);
+                wall.transform.position = pos;
+                wall.draw(shader, camera);
             }
             floor.render(shader, camera);
             roof.render(shader, camera);
         }
 
     private:
-        Cube wall;
-        Model wall2;
+        Model wall;
+        Cube floor;
+        Cube roof;
 };
