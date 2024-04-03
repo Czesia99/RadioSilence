@@ -27,6 +27,7 @@ class Camera3D : public ICamera {
         Camera3D(glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f), float win_width = 800, float win_height = 600, bool is_fps = false) : front(glm::vec3(0.0f, 0.0f, -1.0f)), world_up(UP), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), fov(FOV), pitch(PITCH), yaw(YAW)
         {
             position = pos;
+            initial_pos = pos;
             width = win_width;
             height = win_height;
             fps = is_fps;
@@ -55,7 +56,7 @@ class Camera3D : public ICamera {
             if (direction == RIGHT)
                 position += right * velocity;
             if (fps)
-                position.y = 0;
+                position.y = initial_pos.y;
             
             std::cout << "cam pos x: " << position.x << std::endl;
             std::cout << "cam pos y: " << position.y << std::endl;
@@ -95,6 +96,7 @@ class Camera3D : public ICamera {
 
     public:
         glm::vec3 position;
+        glm::vec3 initial_pos;
         glm::vec3 front;
         glm::vec3 up;
         glm::vec3 right;
