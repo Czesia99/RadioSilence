@@ -10,14 +10,14 @@ class Map {
         std::vector<glm::vec3> walls_position;
         Cube floor;
         Cube roof;
-        glm::vec3 player_position = {0.0f, 0.0f, 0.0f};
+        glm::vec3 player_position = {0.0f, 0.5f, 0.0f};
 
         Map()
         {
             read_map_file("../map.txt");
             wall.add_texture("../textures/brick_wall.jpg", wall.diffuse_texture);
             stbi_set_flip_vertically_on_load(true);
-            wall2 = Model("../wall_model/wall.obj");
+            wall2 = Model("../wall_model2/wall.obj");
         }
 
         void read_map_file(const char *path)
@@ -64,14 +64,14 @@ class Map {
             floor.transform.scale.y *= 0.1f;
             floor.transform.position.x += txt_map[0].size() / 2;
             floor.transform.position.z += txt_map.size() / 2;
-            floor.transform.position.y -= 0.5f;
+            // floor.transform.position.y -= 0.5f;
 
             roof.transform.scale.x *= txt_map[0].size();
             roof.transform.scale.z *= txt_map.size();
             roof.transform.scale.y *= 0.1f;
             roof.transform.position.x += txt_map[0].size() / 2;
             roof.transform.position.z += txt_map.size() / 2;
-            roof.transform.position.y += 1.5f;
+            roof.transform.position.y += 2.0f;
 
             for (const auto &row : txt_map)
             {
@@ -84,7 +84,7 @@ class Map {
                     }
                     if (element == '@')
                     {
-                        player_position = {position.x, 0, position.z};
+                        player_position = {position.x, player_position.y, position.z};
                     }
                     position.x += 1.0f;
                }
@@ -101,8 +101,6 @@ class Map {
             for (auto &pos : walls_position)
             {
                 wall2.transform.position = pos;
-                wall2.draw(shader, camera);
-                wall2.transform.position.y += 1.0f;
                 wall2.draw(shader, camera);
             }
             floor.render(shader, camera);
