@@ -6,9 +6,9 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     map.print_map_txt();
     map.load_map();
 
-    camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, true);
+    camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, false);
 
-    wall_shader = Shader("diffuse_map.vs", "map_spotlight.fs");
+    wall_shader = Shader("basic_light.vs", "map_spotlight.fs");
 
     store_scene_in_ctx();
 }

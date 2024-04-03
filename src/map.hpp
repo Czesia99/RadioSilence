@@ -16,6 +16,8 @@ class Map {
         {
             read_map_file("../map.txt");
             wall.add_texture("../textures/brick_wall.jpg", wall.diffuse_texture);
+            stbi_set_flip_vertically_on_load(true);
+            wall2 = Model("../wall_model/wall.obj");
         }
 
         void read_map_file(const char *path)
@@ -98,10 +100,10 @@ class Map {
         {
             for (auto &pos : walls_position)
             {
-                wall.transform.position = pos;
-                wall.render(shader, camera);
-                wall.transform.position.y += 1.0f;
-                wall.render(shader, camera);
+                wall2.transform.position = pos;
+                wall2.draw(shader, camera);
+                wall2.transform.position.y += 1.0f;
+                wall2.draw(shader, camera);
             }
             floor.render(shader, camera);
             roof.render(shader, camera);
@@ -109,4 +111,5 @@ class Map {
 
     private:
         Cube wall;
+        Model wall2;
 };

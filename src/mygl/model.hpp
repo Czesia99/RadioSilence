@@ -49,10 +49,12 @@ class Model
             glm::mat4 mat = transform.get_model_matrix();
             glm::mat4 projection = camera.get_projection_matrix();
             glm::mat4 view = camera.get_view_matrix();
+            glm::mat3 normal = glm::transpose(glm::inverse(mat));
 
             shader.set_mat4("model", mat);
             shader.set_mat4("projection", projection);
             shader.set_mat4("view", view);
+            shader.set_mat3("normal", normal);
 
             for(unsigned int i = 0; i < meshes.size(); i++)
                 meshes[i].draw(shader);
