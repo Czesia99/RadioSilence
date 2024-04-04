@@ -44,15 +44,13 @@ class Player
                 player_camera.position += player_camera.right * velocity;
             if (player_camera.fps)
                 player_camera.position.y = player_camera.initial_pos.y;
-            std::cout << velocity << std::endl;
         }
 
     private:
         float headbob(float delta_time, float current_time)
         {
-            float headbob_frequency = 0.5f;
+            float headbob_frequency = 0.8f;
             float headbob_amount_y = 0.03f;
-
 
             // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
             float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;

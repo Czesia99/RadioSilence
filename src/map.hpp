@@ -12,9 +12,9 @@ class Map {
 
         Map()
         {
-            read_map_file("../map2.txt");
+            read_map_file("../assets/map2.txt");
             stbi_set_flip_vertically_on_load(true);
-            wall = Model("../wall_model2/wall.obj");
+            wall = Model("../assets/models/wall/wall.obj");
         }
 
         void read_map_file(const char *path)
@@ -25,7 +25,7 @@ class Map {
             if (!infile.is_open())
             {
                 std::cout << "can't open file" << std::endl;
-                return;
+                exit(-1);
             }
 
             while (std::getline(infile, line)) {
@@ -55,7 +55,7 @@ class Map {
         void load_map() 
         {
             glm::vec3 position = {0.0f, 0.0f, 0.0f};
-            floor.add_texture("../textures/concrete2.jpg", floor.diffuse_texture);
+            floor.add_texture("../assets/textures/concrete2.jpg", floor.diffuse_texture);
             floor.transform.scale.x *= txt_map[0].size();
             floor.transform.scale.z *= txt_map.size();
             floor.transform.scale.y *= 0.1f;
