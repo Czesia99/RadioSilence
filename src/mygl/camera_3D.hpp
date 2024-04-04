@@ -31,7 +31,6 @@ class Camera3D : public ICamera {
             height = win_height;
             fps = is_fps;
             movement_speed = speed;
-            velocity = 0.0f;
             update_camera_vectors();
         }
 
@@ -47,7 +46,7 @@ class Camera3D : public ICamera {
 
         void process_keyboard(Camera3D_Movement direction, float delta_time)
         {
-            velocity = movement_speed * delta_time;
+            float velocity = movement_speed * delta_time;
             if (direction == FORWARD)
                 position += front * velocity;
             if (direction == BACKWARD)
@@ -109,8 +108,6 @@ class Camera3D : public ICamera {
         float height;
 
         bool fps;
-
-        float velocity;
 
     private:
         void update_camera_vectors()

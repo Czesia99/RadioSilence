@@ -14,7 +14,6 @@ class Player
 
         void update()
         {
-            velocity = 0.0f;
             clock.update();
             if (velocity > 0.0f)
             {
@@ -22,22 +21,31 @@ class Player
             }
         }
 
-        // void process_keyboard(Camera3D_Movement direction, float delta_time)
-        // {
-        //     velocity = player_camera.movement_speed * delta_time;
-        //     // player_camera.velocity = player_camera.movement_speed * delta_time;
-        //     if (direction == FORWARD)
-        //         player_camera.position += player_camera.front * velocity;
-        //     if (direction == BACKWARD)
-        //         player_camera.position -= player_camera.front * velocity;
-        //     if (direction == LEFT)
-        //         player_camera.position -= player_camera.right * velocity;
-        //     if (direction == RIGHT)
-        //         player_camera.position += player_camera.right * velocity;
-        //     if (player_camera.fps)
-        //         player_camera.position.y = player_camera.initial_pos.y;
-        //     std::cout << velocity << std::endl;
-        // }
+        void update_velocity(bool k_pressed, float delta_time)
+        {
+            if (!k_pressed) {
+                velocity = 0.0f;
+            } else {
+                velocity = player_camera.movement_speed * delta_time;
+            }
+        }
+
+        void process_keyboard(Camera3D_Movement direction, float delta_time, bool k_pressed)
+        {
+            velocity = player_camera.movement_speed * delta_time;
+            // player_camera.velocity = player_camera.movement_speed * delta_time;
+            if (direction == FORWARD)
+                player_camera.position += player_camera.front * velocity;
+            if (direction == BACKWARD)
+                player_camera.position -= player_camera.front * velocity;
+            if (direction == LEFT)
+                player_camera.position -= player_camera.right * velocity;
+            if (direction == RIGHT)
+                player_camera.position += player_camera.right * velocity;
+            if (player_camera.fps)
+                player_camera.position.y = player_camera.initial_pos.y;
+            std::cout << velocity << std::endl;
+        }
 
     private:
         float headbob(float delta_time, float current_time)

@@ -66,17 +66,29 @@ void GameScene::scene_clear()
 
 void GameScene::process_input()
 {
+    bool k_pressed = false;
+
     if (glfwGetKey(ctx.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(ctx.window, true);
 
-    if (glfwGetKey(ctx.window, GLFW_KEY_W) == GLFW_PRESS)
-        player.player_camera.process_keyboard(FORWARD, clock.delta_time);
-    if (glfwGetKey(ctx.window, GLFW_KEY_S) == GLFW_PRESS)
-        player.player_camera.process_keyboard(BACKWARD, clock.delta_time);
-    if (glfwGetKey(ctx.window, GLFW_KEY_A) == GLFW_PRESS)
-        player.player_camera.process_keyboard(LEFT, clock.delta_time);
-    if (glfwGetKey(ctx.window, GLFW_KEY_D) == GLFW_PRESS)
-        player.player_camera.process_keyboard(RIGHT, clock.delta_time);
+    if (glfwGetKey(ctx.window, GLFW_KEY_W) == GLFW_PRESS) {
+        k_pressed = true;
+        player.process_keyboard(FORWARD, clock.delta_time, k_pressed);
+    }
+    if (glfwGetKey(ctx.window, GLFW_KEY_S) == GLFW_PRESS) {
+        k_pressed = true;
+        player.process_keyboard(BACKWARD, clock.delta_time, k_pressed);
+    }
+    if (glfwGetKey(ctx.window, GLFW_KEY_A) == GLFW_PRESS) {
+        k_pressed = true;
+        player.process_keyboard(LEFT, clock.delta_time, k_pressed);
+    }
+    if (glfwGetKey(ctx.window, GLFW_KEY_D) == GLFW_PRESS) {
+        k_pressed = true;
+        player.process_keyboard(RIGHT, clock.delta_time, k_pressed);
+    }
+
+    player.update_velocity(k_pressed, clock.delta_time);
 }
 
 void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
