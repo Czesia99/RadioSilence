@@ -2,14 +2,16 @@
 
 #include "mygl/shader.h"
 #include "mygl/shape.hpp"
-#include "mygl/camera_3D.hpp"
+// #include "mygl/camera_3D.hpp"
 #include "mygl/iscene.hpp"
 #include "mygl/context.hpp"
 #include "mygl/button.hpp"
 #include "mygl/skybox.hpp"
 #include "mygl/model.hpp"
-#include "map.hpp"
 #include "mygl/clock.hpp"
+
+#include "map.hpp"
+#include "player.hpp"
 
 class GameScene : public IScene {
     public:
@@ -37,7 +39,7 @@ class GameScene : public IScene {
         float lastY = ctx.win_height / 2.0f;
         bool first_mouse = true;
     
-        Camera3D camera;
+        Player player;
 
         Map map;
         Shader light_shader;

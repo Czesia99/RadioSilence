@@ -31,6 +31,7 @@ class Camera3D : public ICamera {
             height = win_height;
             fps = is_fps;
             movement_speed = speed;
+            velocity = 0.0f;
             update_camera_vectors();
         }
 
@@ -44,9 +45,9 @@ class Camera3D : public ICamera {
             return glm::perspective(glm::radians(fov), width / height, 0.1f, 100.0f);
         }
 
-        void process_keyboard(Camera3D_Movement direction, float delta_time, float current_time)
+        void process_keyboard(Camera3D_Movement direction, float delta_time)
         {
-            float velocity = movement_speed * delta_time;
+            velocity = movement_speed * delta_time;
             if (direction == FORWARD)
                 position += front * velocity;
             if (direction == BACKWARD)
@@ -56,26 +57,7 @@ class Camera3D : public ICamera {
             if (direction == RIGHT)
                 position += right * velocity;
             if (fps)
-                position.y = headbob(delta_time, current_time) + initial_pos.y;
-            
-            // std::cout << "cam pos x: " << position.x << std::endl;
-            std::cout << "cam pos y: " << position.y << std::endl;
-            // std::cout << "cam pos z: " << position.z << std::endl;
-
-        }
-
-        float headbob(float delta_time, float current_time)
-        {
-            float headbob_frequency = 0.5f;
-            float headbob_amount_y = 0.03f;
-
-
-            // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
-            float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
-            std::cout << delta_time << std::endl;
-            std::cout << current_time << std::endl;
-
-            return bobbing;
+                position.y = initial_pos.y;
         }
 
         void process_mouse_movement(float xoffset, float yoffset, GLboolean constrainPitch = true)
@@ -127,6 +109,8 @@ class Camera3D : public ICamera {
         float height;
 
         bool fps;
+
+        float velocity;
 
     private:
         void update_camera_vectors()

@@ -1,12 +1,16 @@
 #include "game_scene.hpp"
 
+
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
 
     map.print_map_txt();
     map.load_map();
 
-    camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, 1.0f, true);
+    // camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, 1.0f, true);
+    player = Player(map.player_position, ctx.win_width, ctx.win_height);
+
+
     wall_shader = Shader("basic_light.vs", "map_spotlight.fs");
 
     store_scene_in_ctx();
@@ -28,15 +32,16 @@ void GameScene::close_scene() {}
 void GameScene::update()
 {
     clock.update();
+    player.update();
     wall_shader.use();
     
     //spotlight properties
-    wall_shader.set_vec3("light.position", camera.position);
-    wall_shader.set_vec3("light.direction", camera.front);
+    wall_shader.set_vec3("light.position", player.player_camera.position);
+    wall_shader.set_vec3("light.direction", player.player_camera.front);
     wall_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
     wall_shader.set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-    wall_shader.set_vec3("viewPos", camera.position);
+    wall_shader.set_vec3("viewPos", player.player_camera.position);
 
     // light properties
     wall_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
@@ -50,7 +55,7 @@ void GameScene::update()
     //material properties
     wall_shader.set_float("material.shininess", 32.0f);
 
-    map.render(wall_shader, camera);
+    map.render(wall_shader, player.player_camera);
 }
 
 void GameScene::scene_clear()
@@ -65,13 +70,13 @@ void GameScene::process_input()
     glfwSetWindowShouldClose(ctx.window, true);
 
     if (glfwGetKey(ctx.window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.process_keyboard(FORWARD, clock.delta_time, clock.current_time);
+        player.player_camera.process_keyboard(FORWARD, clock.delta_time);
     if (glfwGetKey(ctx.window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.process_keyboard(BACKWARD, clock.delta_time, clock.current_time);
+        player.player_camera.process_keyboard(BACKWARD, clock.delta_time);
     if (glfwGetKey(ctx.window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.process_keyboard(LEFT, clock.delta_time, clock.current_time);
+        player.player_camera.process_keyboard(LEFT, clock.delta_time);
     if (glfwGetKey(ctx.window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.process_keyboard(RIGHT, clock.delta_time, clock.current_time);
+        player.player_camera.process_keyboard(RIGHT, clock.delta_time);
 }
 
 void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
@@ -92,7 +97,7 @@ void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     lastX = xpos;
     lastY = ypos;
 
-    camera.process_mouse_movement(xoffset, yoffset);
+    player.player_camera.process_mouse_movement(xoffset, yoffset);
 }
 
 void GameScene::left_click_callback(GLFWwindow* window, int button, int action, int mods)
@@ -103,14 +108,14 @@ void GameScene::left_click_callback(GLFWwindow* window, int button, int action, 
 
 void GameScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) 
 {
-    camera.process_mouse_scroll(static_cast<float>(yoffset));
+    player.player_camera.process_mouse_scroll(static_cast<float>(yoffset));
 }
 
 void GameScene::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
-    camera.width = width;
-    camera.height = height;
+    player.player_camera.width = width;
+    player.player_camera.height = height;
     ctx.win_width = width;
     ctx.win_height = height;
 }
