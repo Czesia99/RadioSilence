@@ -9,6 +9,7 @@
 #include "mygl/skybox.hpp"
 #include "mygl/model.hpp"
 #include "map.hpp"
+#include "mygl/clock.hpp"
 
 class GameScene : public IScene {
     public:
@@ -30,6 +31,7 @@ class GameScene : public IScene {
     private:
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
+        double currentTime = 0.0f;
 
         float lastX = ctx.win_width / 2.0f;
         float lastY = ctx.win_height / 2.0f;
@@ -41,7 +43,7 @@ class GameScene : public IScene {
         Shader light_shader;
         Shader wall_shader;
         
-
+        Clock clock;
         glm::vec3 light_pos;
 
         Shader modelShader;

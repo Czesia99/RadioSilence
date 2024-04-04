@@ -6,7 +6,7 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     map.print_map_txt();
     map.load_map();
 
-    camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, true);
+    camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, 1.0f, true);
     wall_shader = Shader("basic_light.vs", "map_spotlight.fs");
 
     store_scene_in_ctx();
@@ -27,10 +27,7 @@ void GameScene::close_scene() {}
 
 void GameScene::update()
 {
-    double currentTime = glfwGetTime();
-    deltaTime = currentTime - lastFrame;
-    lastFrame = currentTime;
-
+    clock.update();
     wall_shader.use();
     
     //spotlight properties
@@ -44,7 +41,7 @@ void GameScene::update()
     // light properties
     wall_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
     wall_shader.set_vec3("light.diffuse", 0.6f, 0.6f, 0.6f);
-    wall_shader.set_vec3("light.specular", 1.0f, 1.0f, 1.0f);
+    wall_shader.set_vec3("light.specular", 0.1f, 0.1f, 0.1f);
 
     wall_shader.set_float("light.constant", 1.0f);
     wall_shader.set_float("light.linear", 0.22f);
@@ -68,13 +65,13 @@ void GameScene::process_input()
     glfwSetWindowShouldClose(ctx.window, true);
 
     if (glfwGetKey(ctx.window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.process_keyboard(FORWARD, deltaTime);
+        camera.process_keyboard(FORWARD, clock.delta_time, clock.current_time);
     if (glfwGetKey(ctx.window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.process_keyboard(BACKWARD, deltaTime);
+        camera.process_keyboard(BACKWARD, clock.delta_time, clock.current_time);
     if (glfwGetKey(ctx.window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.process_keyboard(LEFT, deltaTime);
+        camera.process_keyboard(LEFT, clock.delta_time, clock.current_time);
     if (glfwGetKey(ctx.window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.process_keyboard(RIGHT, deltaTime);
+        camera.process_keyboard(RIGHT, clock.delta_time, clock.current_time);
 }
 
 void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 

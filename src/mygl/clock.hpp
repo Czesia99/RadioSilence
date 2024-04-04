@@ -1,0 +1,17 @@
+#include <GLFW/glfw3.h>
+
+class Clock
+{
+    public:
+        double current_time;
+        float delta_time;
+        float last_frame;
+
+        Clock() {};
+
+        void update() {
+            current_time = glfwGetTime();
+            delta_time = current_time - last_frame;
+            last_frame = current_time;
+        };
+};

@@ -17,20 +17,20 @@ enum Camera3D_Movement  {
 
 const float YAW         = -90.0f;
 const float PITCH       =  0.0f;
-const float SPEED       =  2.5f;
 const float SENSITIVITY =  0.1f;
 const float FOV         =  45.0f;
 const glm::vec3 UP      =  glm::vec3(0.0f, 1.0f, 0.0f);
 
 class Camera3D : public ICamera {
     public:
-        Camera3D(glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f), float win_width = 800, float win_height = 600, bool is_fps = false) : front(glm::vec3(0.0f, 0.0f, -1.0f)), world_up(UP), movement_speed(SPEED), mouse_sensitivity(SENSITIVITY), fov(FOV), pitch(PITCH), yaw(YAW)
+        Camera3D(glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f), float win_width = 800, float win_height = 600, float speed = 2.5f, bool is_fps = false) : front(glm::vec3(0.0f, 0.0f, -1.0f)), world_up(UP), mouse_sensitivity(SENSITIVITY), fov(FOV), pitch(PITCH), yaw(YAW)
         {
             position = pos;
             initial_pos = pos;
             width = win_width;
             height = win_height;
             fps = is_fps;
+            movement_speed = speed;
             update_camera_vectors();
         }
 
@@ -44,9 +44,9 @@ class Camera3D : public ICamera {
             return glm::perspective(glm::radians(fov), width / height, 0.1f, 100.0f);
         }
 
-        void process_keyboard(Camera3D_Movement direction, float deltaTime)
+        void process_keyboard(Camera3D_Movement direction, float delta_time, float current_time)
         {
-            float velocity = movement_speed * deltaTime;
+            float velocity = movement_speed * delta_time;
             if (direction == FORWARD)
                 position += front * velocity;
             if (direction == BACKWARD)
@@ -56,12 +56,26 @@ class Camera3D : public ICamera {
             if (direction == RIGHT)
                 position += right * velocity;
             if (fps)
-                position.y = initial_pos.y;
+                position.y = headbob(delta_time, current_time) + initial_pos.y;
             
-            std::cout << "cam pos x: " << position.x << std::endl;
+            // std::cout << "cam pos x: " << position.x << std::endl;
             std::cout << "cam pos y: " << position.y << std::endl;
-            std::cout << "cam pos z: " << position.z << std::endl;
+            // std::cout << "cam pos z: " << position.z << std::endl;
 
+        }
+
+        float headbob(float delta_time, float current_time)
+        {
+            float headbob_frequency = 0.5f;
+            float headbob_amount_y = 0.03f;
+
+
+            // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
+            float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
+            std::cout << delta_time << std::endl;
+            std::cout << current_time << std::endl;
+
+            return bobbing;
         }
 
         void process_mouse_movement(float xoffset, float yoffset, GLboolean constrainPitch = true)

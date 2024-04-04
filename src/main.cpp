@@ -9,7 +9,7 @@
 int main()
 {
     Context ctx;
-    //glfwSwapInterval(1); //vsync
+    glfwSwapInterval(1); //vsync
 
     MenuScene menu(ctx);
     GameScene scene(ctx);
