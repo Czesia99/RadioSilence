@@ -85,7 +85,7 @@ void GameScene::process_input()
         player->process_keyboard(RIGHT, clock.delta_time, k_pressed);
     }
 
-    player->update_velocity(k_pressed, clock.delta_time);
+    player->update_velocity(k_pressed);
 }
 
 void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 

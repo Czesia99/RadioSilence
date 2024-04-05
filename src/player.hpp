@@ -55,12 +55,12 @@ class Player
             // torchlight.draw(torchlight_shader, player_camera);
         }
 
-        void update_velocity(bool k_pressed, float delta_time)
+        void update_velocity(bool k_pressed)
         {
             if (!k_pressed) {
                 velocity = 0.0f;
             } else {
-                velocity = player_camera.movement_speed * delta_time;
+                velocity = player_camera.movement_speed * clock.delta_time;
             }
         }
 
