@@ -1,5 +1,6 @@
 #include "mygl/camera_3D.hpp"
 #include "mygl/model.hpp"
+#include "map.hpp"
 
 class Player
 {
@@ -10,10 +11,12 @@ class Player
 
         Shader torchlight_shader;
         Model torchlight;
+        Map &my_map;
+        int x = 0;
 
-        Player(glm::vec3 position = {0.0f, 0.0f, 0.0f}, float win_width = 800, float win_height = 600)
+        Player(Map &map, float win_width = 800, float win_height = 600) : my_map(map)
         {
-            player_camera = Camera3D(position, win_width, win_height, 1.0f, true);
+            player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
             torchlight_shader = Shader("basic_light.vs", "map_spotlight.fs");
             torchlight = Model("../assets/models/torchlight/torchlight.obj");
             torchlight.transform.scale *= 3;
@@ -64,7 +67,16 @@ class Player
 
         void process_keyboard(Camera3D_Movement direction, float delta_time, bool k_pressed)
         {
-            velocity = player_camera.movement_speed * delta_time;
+            
+            // velocity = player_camera.movement_speed * delta_time;
+            if (collide(direction))
+            {
+                x += 1;
+                std::cout << "COLLIDE" << x << std::endl;
+                velocity = 0 * delta_time;
+            } else {
+               velocity = player_camera.movement_speed * delta_time; 
+            }
             // player_camera.velocity = player_camera.movement_speed * delta_time;
             if (direction == FORWARD)
                 player_camera.position += player_camera.front * velocity;
@@ -76,6 +88,40 @@ class Player
                 player_camera.position += player_camera.right * velocity;
             if (player_camera.fps)
                 player_camera.position.y = player_camera.initial_pos.y;
+        }
+        
+        bool collide(Camera3D_Movement direction)
+        {
+            // Calculate the future position of the player's camera after movement
+            glm::vec3 futurePos = player_camera.position;
+            if (direction == FORWARD)
+                futurePos += player_camera.front * velocity;
+            if (direction == BACKWARD)
+                futurePos -= player_camera.front * velocity;
+            if (direction == LEFT)
+                futurePos -= player_camera.right * velocity;
+            if (direction == RIGHT)
+                futurePos += player_camera.right * velocity;
+
+            // std::cout << futurePos.x << std::endl;
+            // Check for collision with each wall
+            for (auto& wall_pos : my_map.walls_position)
+            {
+                float offset = 0.2f;
+                float wallMinX = wall_pos.x - 0.5f - offset;
+                float wallMaxX = wall_pos.x + 0.5f + offset;
+                float wallMinZ = wall_pos.z - 0.5f - offset;
+                float wallMaxZ = wall_pos.z + 0.5f + offset;
+
+                // Check if the future position is inside the bounding box of the wall
+                if (futurePos.x > wallMinX && futurePos.x < wallMaxX && futurePos.z > wallMinZ && futurePos.z < wallMaxZ)
+                {
+                    // Collision detected
+                    return true;
+                }
+            }
+            // No collision detected
+            return false;
         }
 
     private:

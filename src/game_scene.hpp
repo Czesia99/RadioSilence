@@ -10,7 +10,7 @@
 #include "mygl/model.hpp"
 #include "mygl/clock.hpp"
 
-#include "map.hpp"
+// #include "map.hpp"
 #include "player.hpp"
 
 class GameScene : public IScene {
@@ -39,7 +39,7 @@ class GameScene : public IScene {
         float lastY = ctx.win_height / 2.0f;
         bool first_mouse = true;
     
-        Player player;
+        Player *player = nullptr;
 
         Map map;
         Shader light_shader;
