@@ -101,7 +101,6 @@ class Player
 
         bool collide(Camera3D_Movement direction)
         {
-            // Calculate the future position of the player's camera after movement
             glm::vec3 futurePos = player_camera.position;
             if (direction == FORWARD)
                 futurePos += player_camera.front * velocity;
@@ -112,25 +111,19 @@ class Player
             if (direction == RIGHT)
                 futurePos += player_camera.right * velocity;
 
-            // std::cout << futurePos.x << std::endl;
-            // Check for collision with each wall
             for (auto& wall_pos : my_map.walls_position)
             {
-                float offset = 0.12f;
-                float wallMinX = wall_pos.x - 0.5f - offset;
-                float wallMaxX = wall_pos.x + 0.5f + offset;
-                float wallMinZ = wall_pos.z - 0.5f - offset;
-                float wallMaxZ = wall_pos.z + 0.5f + offset;
+                float offset = 0.11f;
+                float min_x = wall_pos.x - 0.5f - offset;
+                float max_x = wall_pos.x + 0.5f + offset;
+                float min_z = wall_pos.z - 0.5f - offset;
+                float max_z = wall_pos.z + 0.5f + offset;
 
-                // Check if the future position is inside the bounding box of the wall
-                if (futurePos.x >= wallMinX && futurePos.x <= wallMaxX && futurePos.z >= wallMinZ && futurePos.z <= wallMaxZ)
+                if (futurePos.x >= min_x && futurePos.x <= max_x && futurePos.z >= min_z && futurePos.z <= max_z)
                 {
-                    // Collision detected
                     return true;
                 }
             }
-            // No collision detected
             return false;
         }
-
 };
