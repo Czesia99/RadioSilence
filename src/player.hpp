@@ -12,16 +12,15 @@ class Player
         Shader torchlight_shader;
         Model torchlight;
         Map &my_map;
-        int x = 0;
 
         Player(Map &map, float win_width = 800, float win_height = 600) : my_map(map)
         {
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
-            torchlight_shader = Shader("basic_light.vs", "map_spotlight.fs");
-            torchlight = Model("../assets/models/torchlight/torchlight.obj");
-            torchlight.transform.scale *= 3;
-            torchlight.transform.position = player_camera.position;
-            torchlight.transform.position.z -= 0.3f;
+            // torchlight_shader = Shader("basic_light.vs", "map_spotlight.fs");
+            // torchlight = Model("../assets/models/torchlight/torchlight.obj");
+            // torchlight.transform.scale *= 3;
+            // torchlight.transform.position = player_camera.position;
+            // torchlight.transform.position.z -= 0.3f;
             // torchlight.transform.rotation -= 90.0f;
         }
 
@@ -71,8 +70,6 @@ class Player
             // velocity = player_camera.movement_speed * delta_time;
             if (collide(direction))
             {
-                x += 1;
-                std::cout << "COLLIDE" << x << std::endl;
                 velocity = 0 * delta_time;
             } else {
                velocity = player_camera.movement_speed * delta_time; 
@@ -89,7 +86,19 @@ class Player
             if (player_camera.fps)
                 player_camera.position.y = player_camera.initial_pos.y;
         }
-        
+
+    private:
+
+        float headbob(float delta_time, float current_time)
+        {
+            float headbob_frequency = 0.7f;
+            float headbob_amount_y = 0.03f;
+
+            // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
+            float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
+            return bobbing;
+        }
+
         bool collide(Camera3D_Movement direction)
         {
             // Calculate the future position of the player's camera after movement
@@ -107,14 +116,14 @@ class Player
             // Check for collision with each wall
             for (auto& wall_pos : my_map.walls_position)
             {
-                float offset = 0.2f;
+                float offset = 0.12f;
                 float wallMinX = wall_pos.x - 0.5f - offset;
                 float wallMaxX = wall_pos.x + 0.5f + offset;
                 float wallMinZ = wall_pos.z - 0.5f - offset;
                 float wallMaxZ = wall_pos.z + 0.5f + offset;
 
                 // Check if the future position is inside the bounding box of the wall
-                if (futurePos.x > wallMinX && futurePos.x < wallMaxX && futurePos.z > wallMinZ && futurePos.z < wallMaxZ)
+                if (futurePos.x >= wallMinX && futurePos.x <= wallMaxX && futurePos.z >= wallMinZ && futurePos.z <= wallMaxZ)
                 {
                     // Collision detected
                     return true;
@@ -124,14 +133,4 @@ class Player
             return false;
         }
 
-    private:
-        float headbob(float delta_time, float current_time)
-        {
-            float headbob_frequency = 0.7f;
-            float headbob_amount_y = 0.03f;
-
-            // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
-            float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
-            return bobbing;
-        }
 };
