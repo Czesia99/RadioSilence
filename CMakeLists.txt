@@ -9,9 +9,12 @@ project(${PROJECT_RADIOSILENCE} VERSION 0.1.0)
 
 find_package(OpenGL REQUIRED)
 
+set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+
 set(SRC ./src)
 set(INCLUDE ./include)
 set(MYGL ./src/mygl)
+set(CUTE_SOUND ./include/cute_sound.h)
 set(ASSIMP_DIR ./include/assimp)
 
 # set(TEXTURES ./textures)

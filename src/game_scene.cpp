@@ -1,15 +1,12 @@
 #include "game_scene.hpp"
 
-
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
-
     map.print_map_txt();
     map.load_map();
 
     // camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, 1.0f, true);
     player = Player(map.player_position, ctx.win_width, ctx.win_height);
-
 
     wall_shader = Shader("basic_light.vs", "map_spotlight.fs");
 

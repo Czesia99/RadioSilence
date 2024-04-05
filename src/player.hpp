@@ -1,4 +1,5 @@
 #include "mygl/camera_3D.hpp"
+#include "mygl/model.hpp"
 
 class Player
 {
@@ -7,9 +8,18 @@ class Player
         Clock clock;
         float velocity;
 
+        Shader torchlight_shader;
+        Model torchlight;
+
         Player(glm::vec3 position = {0.0f, 0.0f, 0.0f}, float win_width = 800, float win_height = 600)
         {
             player_camera = Camera3D(position, win_width, win_height, 1.0f, true);
+            torchlight_shader = Shader("basic_light.vs", "map_spotlight.fs");
+            torchlight = Model("../assets/models/torchlight/torchlight.obj");
+            torchlight.transform.scale *= 3;
+            torchlight.transform.position = player_camera.position;
+            torchlight.transform.position.z -= 0.3f;
+            // torchlight.transform.rotation -= 90.0f;
         }
 
         void update()
@@ -19,6 +29,28 @@ class Player
             {
                 player_camera.position.y = headbob(clock.delta_time, clock.current_time) + player_camera.initial_pos.y;
             }
+            // torchlight_shader.use();
+            // torchlight_shader.set_vec3("light.position", player_camera.position);
+            // torchlight_shader.set_vec3("light.direction", player_camera.front);
+            // torchlight_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
+            // torchlight_shader.set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
+            // torchlight_shader.set_vec3("viewPos", player_camera.position);
+
+            // // light properties
+            // torchlight_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
+            // torchlight_shader.set_vec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+            // torchlight_shader.set_vec3("light.specular", 0.1f, 0.1f, 0.1f);
+
+            // torchlight_shader.set_float("light.constant", 1.0f);
+            // torchlight_shader.set_float("light.linear", 0.22f);
+            // torchlight_shader.set_float("light.quadratic", 0.20f);
+
+            // //material properties
+            // torchlight_shader.set_float("material.shininess", 32.0f);
+            // torchlight.transform.position = player_camera.position;
+            // torchlight.transform.position.z -= 0.3f;
+            // torchlight.draw(torchlight_shader, player_camera);
         }
 
         void update_velocity(bool k_pressed, float delta_time)
@@ -49,7 +81,7 @@ class Player
     private:
         float headbob(float delta_time, float current_time)
         {
-            float headbob_frequency = 0.8f;
+            float headbob_frequency = 0.7f;
             float headbob_amount_y = 0.03f;
 
             // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
