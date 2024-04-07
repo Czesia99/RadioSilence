@@ -1,11 +1,7 @@
 #include "game_scene.hpp"
-#include <irrKlang.h>
-using namespace irrklang;
 
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
-    // ISoundEngine *SoundEngine = createIrrKlangDevice();
-    // SoundEngine->play2D("../assets/TANKSLIDE.mp3", true);
     map.print_map_txt();
     map.load_map();
 
