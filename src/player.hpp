@@ -21,6 +21,7 @@ class Player
         Player(Map &map, float win_width = 800, float win_height = 600) : my_map(map)
         {
             SoundEngine = createIrrKlangDevice();
+            SoundEngine->play2D("../assets/sfx/horror.wav", true);
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
             // torchlight_shader = Shader("basic_light.vs", "map_spotlight.fs");
             // torchlight = Model("../assets/models/torchlight/torchlight.obj");
@@ -105,13 +106,14 @@ class Player
             float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
 
             std::cout << bobbing << std::endl;
+
             if (bobbing >= 0.005 && step)
             {
                 step = false;
             }
             if (bobbing <= 0.005 && !step) {
                 step = true;
-                SoundEngine->play3D("../assets/footstep.wav", soundPos, false);
+                SoundEngine->play3D("../assets/sfx/footstep.wav", soundPos, false);
             }
 
             return bobbing;
