@@ -107,8 +107,6 @@ class Player
             // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
             float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
 
-            std::cout << bobbing << std::endl;
-
             if (bobbing >= 0.005 && step)
             {
                 step = false;

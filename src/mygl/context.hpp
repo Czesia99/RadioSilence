@@ -31,7 +31,8 @@ class Context
 
         void load_scene(IScene *scene)
         {
-            // current_scene->close_scene();
+            if (current_scene != nullptr)
+                current_scene->close_scene();
             current_scene = scene;
             current_scene->open_scene();
         }
@@ -65,7 +66,7 @@ class Context
         float aspect_ratio = win_width / win_height;
         const char *win_name; 
 
-        IScene *current_scene;
+        IScene *current_scene = nullptr;
         std::vector<IScene*> scenes;
     
     private:

@@ -22,9 +22,15 @@ void GameScene::open_scene()
 {
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    player->victory = false;
+    player->player_camera.position = map.player_position;
 }
 
-void GameScene::close_scene() {}
+void GameScene::close_scene() 
+{ 
+    return;
+}
 
 void GameScene::update()
 {
@@ -43,7 +49,7 @@ void GameScene::update()
     // light properties
     map_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
     map_shader.set_vec3("light.diffuse", 0.6f, 0.6f, 0.6f);
-    map_shader.set_vec3("light.specular", 0.5f, 0.5f, 0.5f);
+    map_shader.set_vec3("light.specular", 0.1f, 0.1f, 0.1f);
 
     map_shader.set_float("light.constant", 1.0f);
     map_shader.set_float("light.linear", 0.22f);

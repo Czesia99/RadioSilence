@@ -16,9 +16,12 @@ void MenuScene::store_scene_in_ctx()
     ctx.scenes.push_back(this);
 }
 
-void MenuScene::open_scene() {}
+void MenuScene::open_scene() 
+{
+    glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
 
-void MenuScene::close_scene() {}
+void MenuScene::close_scene() { return; }
 
 void MenuScene::update()
 {
@@ -29,8 +32,7 @@ void MenuScene::update()
     btn_shader.use();
     btn_shader.set_float("time", currentTime);
 
-    btn.render(btn_shader, camera);
-    
+    btn.render(btn_shader, camera); 
 }
 
 void MenuScene::scene_clear()
