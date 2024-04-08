@@ -43,7 +43,7 @@ class GameScene : public IScene {
 
         Map map;
         Shader light_shader;
-        Shader wall_shader;
+        Shader map_shader;
         
         Clock clock;
         glm::vec3 light_pos;

@@ -15,13 +15,14 @@ class Player
         Shader torchlight_shader;
         Model torchlight;
         Map &my_map;
-        ISoundEngine *SoundEngine;
+        // ISoundEngine *SoundEngine;
         bool step = false;
+        bool victory = false;
 
         Player(Map &map, float win_width = 800, float win_height = 600) : my_map(map)
         {
-            SoundEngine = createIrrKlangDevice();
-            SoundEngine->play2D("../assets/sfx/horror.wav", true);
+            // SoundEngine = createIrrKlangDevice();
+            // SoundEngine->play2D("../assets/sfx/horror.wav", true);
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
             // torchlight_shader = Shader("basic_light.vs", "map_spotlight.fs");
             // torchlight = Model("../assets/models/torchlight/torchlight.obj");
@@ -38,6 +39,7 @@ class Player
             {
                 player_camera.position.y = headbob(clock.delta_time, clock.current_time) + player_camera.initial_pos.y;
             }
+            is_victory();
             // torchlight_shader.use();
             // torchlight_shader.set_vec3("light.position", player_camera.position);
             // torchlight_shader.set_vec3("light.direction", player_camera.front);
@@ -113,10 +115,24 @@ class Player
             }
             if (bobbing <= 0.005 && !step) {
                 step = true;
-                SoundEngine->play3D("../assets/sfx/footstep.wav", soundPos, false);
+                // SoundEngine->play3D("../assets/sfx/footstep.wav", soundPos, false);
             }
 
             return bobbing;
+        }
+
+        void is_victory()
+        {
+            float offset = 0.11f;
+            float min_x = my_map.win_position.x - 0.4f - offset;
+            float max_x = my_map.win_position.x + 0.4f + offset;
+            float min_z = my_map.win_position.z - 0.4f - offset;
+            float max_z = my_map.win_position.z + 0.4f + offset;
+    
+            if (player_camera.position.x >= min_x && player_camera.position.x <= max_x && player_camera.position.z >= min_z && player_camera.position.z <= max_z)
+            {
+                victory = true;
+            }
         }
 
         bool collide(Camera3D_Movement direction)

@@ -9,11 +9,13 @@ class Map {
         std::vector<std::vector<char>> txt_map;
         std::vector<glm::vec3> walls_position;
         glm::vec3 player_position = {0.0f, 0.5f, 0.0f};
+        glm::vec3 win_position;
 
         Map()
         {
             read_map_file("../assets/map2.txt");
             stbi_set_flip_vertically_on_load(true);
+            cage = Model("../assets/models/cage/rustcage.obj");
             wall = Model("../assets/models/wall/wall.obj");
         }
 
@@ -81,12 +83,17 @@ class Map {
                     {
                         player_position = {position.x, player_position.y, position.z};
                     }
+                    if (element == 'w')
+                    {
+                        win_position = position;
+                    }
                     position.x += 1.0f;
                }
                position.x = 0.0f;
                position.z += 1.0f;
             }
-
+            cage.transform.position = win_position;
+            cage.transform.scale *= 0.5f;
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
         }
@@ -98,11 +105,13 @@ class Map {
                 wall.transform.position = pos;
                 wall.draw(shader, camera);
             }
+            cage.draw(shader, camera);
             floor.render(shader, camera);
             roof.render(shader, camera);
         }
 
     private:
+        Model cage;
         Model wall;
         Cube floor;
         Cube roof;

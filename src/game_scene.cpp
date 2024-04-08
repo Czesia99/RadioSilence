@@ -8,7 +8,7 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     // camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, 1.0f, true);
     player = new Player(map, ctx.win_width, ctx.win_height);
 
-    wall_shader = Shader("basic_light.vs", "map_spotlight.fs");
+    map_shader = Shader("basic_light.vs", "map_spotlight.fs");
 
     store_scene_in_ctx();
 }
@@ -30,29 +30,34 @@ void GameScene::update()
 {
     clock.update();
     player->update();
-    wall_shader.use();
+    map_shader.use();
     
     //spotlight properties
-    wall_shader.set_vec3("light.position", player->player_camera.position);
-    wall_shader.set_vec3("light.direction", player->player_camera.front);
-    wall_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
-    wall_shader.set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+    map_shader.set_vec3("light.position", player->player_camera.position);
+    map_shader.set_vec3("light.direction", player->player_camera.front);
+    map_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
+    map_shader.set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-    wall_shader.set_vec3("viewPos", player->player_camera.position);
+    map_shader.set_vec3("viewPos", player->player_camera.position);
 
     // light properties
-    wall_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
-    wall_shader.set_vec3("light.diffuse", 0.6f, 0.6f, 0.6f);
-    wall_shader.set_vec3("light.specular", 0.1f, 0.1f, 0.1f);
+    map_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
+    map_shader.set_vec3("light.diffuse", 0.6f, 0.6f, 0.6f);
+    map_shader.set_vec3("light.specular", 0.5f, 0.5f, 0.5f);
 
-    wall_shader.set_float("light.constant", 1.0f);
-    wall_shader.set_float("light.linear", 0.22f);
-    wall_shader.set_float("light.quadratic", 0.20f);
+    map_shader.set_float("light.constant", 1.0f);
+    map_shader.set_float("light.linear", 0.22f);
+    map_shader.set_float("light.quadratic", 0.20f);
 
     //material properties
-    wall_shader.set_float("material.shininess", 32.0f);
+    map_shader.set_float("material.shininess", 32.0f);
 
-    map.render(wall_shader, player->player_camera);
+    map.render(map_shader, player->player_camera);
+
+    if (player->victory == true)
+    {
+        ctx.load_scene_id(0);
+    }
 }
 
 void GameScene::scene_clear()
