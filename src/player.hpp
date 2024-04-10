@@ -75,23 +75,29 @@ class Player
 
         void process_keyboard(Camera3D_Movement direction, float delta_time, bool k_pressed)
         {
-            
-            // velocity = player_camera.movement_speed * delta_time;
             if (collide(direction))
             {
                 velocity = 0 * delta_time;
             } else {
                velocity = player_camera.movement_speed * delta_time; 
             }
-            // player_camera.velocity = player_camera.movement_speed * delta_time;
-            if (direction == FORWARD)
+
+            if (direction == FORWARD) {
                 player_camera.position += player_camera.front * velocity;
-            if (direction == BACKWARD)
+                my_map.player_position = player_camera.position;
+            }
+            if (direction == BACKWARD) {
                 player_camera.position -= player_camera.front * velocity;
-            if (direction == LEFT)
+                my_map.player_position = player_camera.position;
+            }
+            if (direction == LEFT) {
                 player_camera.position -= player_camera.right * velocity;
-            if (direction == RIGHT)
+                my_map.player_position = player_camera.position;
+            }
+            if (direction == RIGHT) {
                 player_camera.position += player_camera.right * velocity;
+                my_map.player_position = player_camera.position;
+            }
             if (player_camera.fps)
                 player_camera.position.y = player_camera.initial_pos.y;
         }

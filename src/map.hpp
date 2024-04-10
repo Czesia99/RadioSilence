@@ -10,6 +10,7 @@ class Map {
         std::vector<glm::vec3> walls_position;
         glm::vec3 player_position = {0.0f, 0.5f, 0.0f};
         glm::vec3 win_position;
+        glm::vec3 statue_position;
 
         Map()
         {
@@ -17,6 +18,7 @@ class Map {
             stbi_set_flip_vertically_on_load(true);
             cage = Model("../assets/models/cage/Cage.obj");
             wall = Model("../assets/models/wall/wall.obj");
+            statue = Model("../assets/models/statue2/BMMictlantecuhtliFigure02.obj");
         }
 
         void read_map_file(const char *path)
@@ -87,6 +89,10 @@ class Map {
                     {
                         win_position = position;
                     }
+                    if (element == 'S')
+                    {
+                        statue_position = position;
+                    }
                     position.x += 1.0f;
                }
                position.x = 0.0f;
@@ -94,6 +100,9 @@ class Map {
             }
             cage.transform.position = win_position;
             cage.transform.scale *= 0.5f;
+            statue.transform.position = statue_position;
+            statue.transform.scale *= 0.025f;
+            statue.transform.rotation.x += glm::radians(-90.0f);
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
         }
@@ -105,14 +114,21 @@ class Map {
                 wall.transform.position = pos;
                 wall.draw(shader, camera);
             }
+
             cage.draw(shader, camera);
+            statue.draw(shader, camera);
             floor.render(shader, camera);
             roof.render(shader, camera);
+            glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
+            float angle = atan2(direction_to_player.z, direction_to_player.x) - M_PI/2.0f;;
+            angle = glm::degrees(angle);
+            statue.transform.rotation.z = angle;
         }
 
     private:
         Model cage;
         Model wall;
+        Model statue;
         Cube floor;
         Cube roof;
 };
