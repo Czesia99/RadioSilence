@@ -15,7 +15,7 @@ class Map {
         {
             read_map_file("../assets/map2.txt");
             stbi_set_flip_vertically_on_load(true);
-            cage = Model("../assets/models/cage/rustcage.obj");
+            cage = Model("../assets/models/cage/Cage.obj");
             wall = Model("../assets/models/wall/wall.obj");
         }
 
