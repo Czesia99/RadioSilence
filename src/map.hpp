@@ -120,8 +120,8 @@ class Map {
             floor.render(shader, camera);
             roof.render(shader, camera);
             glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
-            float angle = atan2(direction_to_player.z, direction_to_player.x) - M_PI/2.0f;;
-            angle = glm::degrees(angle);
+            float angle = atan2(direction_to_player.x, direction_to_player.z) + glm::radians(-90.0f);
+            // angle = glm::degrees(angle);
             statue.transform.rotation.z = angle;
         }
 
