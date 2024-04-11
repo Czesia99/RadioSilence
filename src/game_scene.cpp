@@ -24,7 +24,7 @@ void GameScene::open_scene()
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     player->victory = false;
-    player->player_camera.position = map.player_position;
+    player->player_camera.position = map.player_start_position;
 }
 
 void GameScene::close_scene() 
