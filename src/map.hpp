@@ -18,10 +18,10 @@ class Map {
         Map()
         {
             read_map_file("../assets/map2.txt");
+            statue = Model("../assets/models/statue2/untitled.obj");
             stbi_set_flip_vertically_on_load(true);
-            cage = Model("../assets/models/cage/Cage.obj");
             wall = Model("../assets/models/wall/wall.obj");
-            statue = Model("../assets/models/statue2/BMMictlantecuhtliFigure02.obj");
+            cage = Model("../assets/models/cage/Cage.obj");
         }
 
         void read_map_file(const char *path)
@@ -94,7 +94,7 @@ class Map {
                     }
                     if (element == 'S')
                     {
-                        statue_position = position;
+                        statue_position = {position.x, 0.03, position.z};
                     }
                     position.x += 1.0f;
                }
@@ -104,8 +104,8 @@ class Map {
             cage.transform.position = win_position;
             cage.transform.scale *= 0.5f;
             statue.transform.position = statue_position;
-            statue.transform.scale *= 0.03f;
-            statue.transform.rotation.x += glm::radians(-90.0f);
+            statue.transform.scale *= 0.4f;
+            // statue.transform.rotation.x += glm::radians(-90.0f);
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
         }
@@ -124,8 +124,8 @@ class Map {
             roof.render(shader, camera);
             glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
             float angle = atan2(direction_to_player.x, direction_to_player.z) - glm::radians(+90.0f);
-            // statue.transform.rotation.y = angle;
-            statue.transform.rotation.z = angle;
+            statue.transform.rotation.y = angle;
+            // statue.transform.rotation.z = angle;
         }
 
     private:
