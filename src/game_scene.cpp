@@ -1,7 +1,19 @@
 #include "game_scene.hpp"
 
+#define MINIAUDIO_IMPLEMENTATION
+#include "../include/miniaudio.h"
+
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
+
+    result = ma_engine_init(NULL, &engine);
+    if (result != MA_SUCCESS) {
+        printf("Failed to initialize audio engine.");
+        return;
+    }
+
+    ma_engine_play_sound(&engine, "../assets/sfx/horror.wav", NULL);
+
     map.print_map_txt();
     map.load_map();
 
@@ -22,13 +34,17 @@ void GameScene::open_scene()
 {
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // sound = irrklang::createIrrKlangDevice();
 
     player->victory = false;
     player->player_camera.position = map.player_start_position;
+    // sound->play2D("../assets/sfx/horror.wav", false);
 }
 
 void GameScene::close_scene() 
-{ 
+{
+    // sound->drop();
+    // player->~Player();
     return;
 }
 

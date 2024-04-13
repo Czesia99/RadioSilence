@@ -11,7 +11,6 @@ find_package(OpenGL REQUIRED)
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
-
 set(SRC ./src)
 set(MYGL ./src/mygl)
 set(ASSIMP_DIR ./include/assimp)
@@ -21,11 +20,6 @@ set(ASSIMP_DIR ./include/assimp)
 
 # Add Assimp library
 add_subdirectory(include/assimp)
-
-# Add Irrklang library
-set(IRRKLANG_DIR ${CMAKE_SOURCE_DIR}/include/irrKlang)
-include_directories(${IRRKLANG_DIR}/include)
-link_directories(${IRRKLANG_DIR}/bin/linux-gcc-64)
 
 set(SRC_FILES
     ${MYGL}/glad.c
@@ -40,11 +34,7 @@ set(LINK_LIB
     glfw
     OpenGL::GL
     assimp
-    IrrKlang
-    # ikpMP3
-    # ikpFlac
 )
-
 # include_directories(${SHADERS})
 include_directories(${INCLUDE_DIR})
 add_executable(${PROJECT_RADIOSILENCE} ${SRC_FILES})

@@ -2,7 +2,6 @@
 
 #include "mygl/shader.h"
 #include "mygl/shape.hpp"
-// #include "mygl/camera_3D.hpp"
 #include "mygl/iscene.hpp"
 #include "mygl/context.hpp"
 #include "mygl/button.hpp"
@@ -13,6 +12,8 @@
 // #include "map.hpp"
 #include "player.hpp"
 
+// #include <irrKlang.h>
+#include "../include/miniaudio.h"
 class GameScene : public IScene {
     public:
         GameScene(Context &ctx);
@@ -49,4 +50,7 @@ class GameScene : public IScene {
         glm::vec3 light_pos;
 
         Shader modelShader;
+        ma_result result;
+        ma_engine engine;
+        // irrklang::ISoundEngine *sound;
 };

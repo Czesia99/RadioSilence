@@ -2,9 +2,6 @@
 #include "mygl/model.hpp"
 #include "map.hpp"
 
-#include <irrKlang.h>
-using namespace irrklang;
-
 class Player
 {
     public:
@@ -15,15 +12,13 @@ class Player
         Shader torchlight_shader;
         Model torchlight;
         Map &my_map;
-        // ISoundEngine *SoundEngine;
         bool step = false;
         bool victory = false;
 
         Player(Map &map, float win_width = 800, float win_height = 600) : my_map(map)
         {
-            // SoundEngine = createIrrKlangDevice();
-            // SoundEngine->play2D("../assets/sfx/horror.wav", true);
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
+
             // torchlight_shader = Shader("basic_light.vs", "map_spotlight.fs");
             // torchlight = Model("../assets/models/torchlight/torchlight.obj");
             // torchlight.transform.scale *= 3;
@@ -109,7 +104,7 @@ class Player
             float headbob_frequency = 0.7f;
             float headbob_amount_y = 0.03f;
             
-            vec3d soundPos = {player_camera.position.x, player_camera.position.y, player_camera.position.z};
+            // vec3d soundPos = {player_camera.position.x, player_camera.position.y, player_camera.position.z};
             // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
             float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
 
