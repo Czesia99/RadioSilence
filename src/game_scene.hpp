@@ -9,11 +9,11 @@
 #include "mygl/model.hpp"
 #include "mygl/clock.hpp"
 
-// #include "map.hpp"
+#include "map.hpp"
 #include "player.hpp"
 
-// #include <irrKlang.h>
 #include "../include/miniaudio.h"
+
 class GameScene : public IScene {
     public:
         GameScene(Context &ctx);

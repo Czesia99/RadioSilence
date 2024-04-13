@@ -2,6 +2,9 @@
 #include "mygl/model.hpp"
 #include "map.hpp"
 
+
+#include "../include/miniaudio.h"
+
 class Player
 {
     public:
@@ -14,7 +17,7 @@ class Player
         Map &my_map;
         bool step = false;
         bool victory = false;
-
+    
         Player(Map &map, float win_width = 800, float win_height = 600) : my_map(map)
         {
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
