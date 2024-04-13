@@ -1,19 +1,8 @@
 #include "game_scene.hpp"
 
-#define MINIAUDIO_IMPLEMENTATION
-#include "../include/miniaudio.h"
-
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
-
-    result = ma_engine_init(NULL, &engine);
-    if (result != MA_SUCCESS) {
-        printf("Failed to initialize audio engine.");
-        return;
-    }
-
-    ma_engine_play_sound(&engine, "../assets/sfx/horror.wav", NULL);
-
+    ma_engine_play_sound(&ctx.engine, "../assets/sfx/horror.wav", NULL);
     map.print_map_txt();
     map.load_map();
 

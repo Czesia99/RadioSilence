@@ -2,6 +2,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#define MINIAUDIO_IMPLEMENTATION
+#include <miniaudio.h>
+
 #include "mygl/context.hpp"
 #include "game_scene.hpp"
 #include "menu_scene.hpp"

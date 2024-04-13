@@ -12,8 +12,6 @@
 #include "map.hpp"
 #include "player.hpp"
 
-#include "../include/miniaudio.h"
-
 class GameScene : public IScene {
     public:
         GameScene(Context &ctx);
@@ -50,7 +48,4 @@ class GameScene : public IScene {
         glm::vec3 light_pos;
 
         Shader modelShader;
-        ma_result result;
-        ma_engine engine;
-        // irrklang::ISoundEngine *sound;
 };

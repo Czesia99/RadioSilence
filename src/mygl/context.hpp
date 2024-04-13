@@ -4,6 +4,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <miniaudio.h>
 
 #include "iscene.hpp"
 
@@ -17,6 +18,12 @@ class Context
             window = create_window();
             load_glad();
             set_callbacks();
+
+            result = ma_engine_init(NULL, &engine);
+            if (result != MA_SUCCESS) {
+                printf("Failed to initialize audio engine.");
+                // return;
+            }
         };
         //~Context();
 
@@ -68,6 +75,9 @@ class Context
 
         IScene *current_scene = nullptr;
         std::vector<IScene*> scenes;
+
+        ma_result result;
+        ma_engine engine;
     
     private:
         GLFWwindow *create_window() {
