@@ -150,6 +150,12 @@ void GameScene::left_click_callback(GLFWwindow* window, int button, int action, 
         else
             torchlight = true;
     }
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+        if (player->radio->radio_on)
+            player->radio->turn_off();
+        else
+            player->radio->turn_on();
+    }
 }
 
 void GameScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) 

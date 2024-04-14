@@ -19,6 +19,7 @@ class Radio
 
         bool player_dead = false;
         ma_engine &engine;
+        // ma_sound radio_sound;
 
         Radio(ma_engine &engine) : engine(engine)
         {
@@ -36,19 +37,21 @@ class Radio
 
             if (radio_on)
             {
-                ma_engine_play_sound(&engine, "../assets/sfx/radio1.wav", NULL);
+                
             }
         }
 
         void turn_on() 
         {
+            ma_engine_play_sound(&engine, "../assets/sfx/radio1.wav", NULL);
             activation_number += 1;
-
+            radio_on = true;
         }
 
         void turn_off()
         {
             listening_time = 0.0f;
+            radio_on = false;
         }
 
         float random_float(float min, float max)
