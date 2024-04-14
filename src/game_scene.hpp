@@ -37,6 +37,8 @@ class GameScene : public IScene {
         float lastX = ctx.win_width / 2.0f;
         float lastY = ctx.win_height / 2.0f;
         bool first_mouse = true;
+
+        bool torchlight = true;
     
         Player *player = nullptr;
 

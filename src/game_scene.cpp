@@ -23,11 +23,9 @@ void GameScene::open_scene()
 {
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    // sound = irrklang::createIrrKlangDevice();
 
     player->victory = false;
     player->player_camera.position = map.player_start_position;
-    // sound->play2D("../assets/sfx/horror.wav", false);
 }
 
 void GameScene::close_scene() 
@@ -47,14 +45,24 @@ void GameScene::update()
     map_shader.set_vec3("light.position", player->player_camera.position);
     map_shader.set_vec3("light.direction", player->player_camera.front);
     map_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
-    map_shader.set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+    map_shader.set_float("light.outerCutOff", glm::cos(glm::radians(16.5f)));
 
     map_shader.set_vec3("viewPos", player->player_camera.position);
 
     // light properties
-    map_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
-    map_shader.set_vec3("light.diffuse", 0.6f, 0.6f, 0.6f);
-    map_shader.set_vec3("light.specular", 0.1f, 0.1f, 0.1f);
+    if (torchlight)
+    {
+        map_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
+        map_shader.set_vec3("light.diffuse", 0.6f, 0.6f, 0.6f);
+        map_shader.set_vec3("light.specular", 0.1f, 0.1f, 0.1f);
+
+    }
+    else 
+    {
+        map_shader.set_vec3("light.ambient", 0.02f, 0.02f, 0.02f);
+        map_shader.set_vec3("light.diffuse", 0.0f, 0.0f, 0.0f);
+        map_shader.set_vec3("light.specular", 0.0f, 0.0f, 0.0f);
+    }
 
     map_shader.set_float("light.constant", 1.0f);
     map_shader.set_float("light.linear", 0.22f);
@@ -127,8 +135,15 @@ void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
 void GameScene::left_click_callback(GLFWwindow* window, int button, int action, int mods)
 {
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
+    double xpos, ypos;
+    glfwGetCursorPos(window, &xpos, &ypos);
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        ma_engine_play_sound(&ctx.engine, "../assets/sfx/torchlight_click.wav", NULL);
+        if (torchlight)
+            torchlight = false;
+        else
+            torchlight = true;
+    }
 }
 
 void GameScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) 
