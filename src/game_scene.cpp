@@ -7,7 +7,7 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     map.load_map();
 
     // camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, 1.0f, true);
-    player = new Player(map, ctx.win_width, ctx.win_height);
+    player = new Player(map, ctx.engine, ctx.win_width, ctx.win_height);
 
     map_shader = Shader("basic_light.vs", "map_spotlight.fs");
 
@@ -25,6 +25,7 @@ void GameScene::open_scene()
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     player->victory = false;
+    player->dead = false;
     player->player_camera.position = map.player_start_position;
 }
 
@@ -73,10 +74,15 @@ void GameScene::update()
 
     map.render(map_shader, player->player_camera);
 
-    if (player->victory == true)
+    if (player->victory)
     {
         ctx.load_scene_id(0);
     }
+
+    // if (player->dead)
+    // {
+    //     ctx.load_scene_id(0);
+    // }
 }
 
 void GameScene::scene_clear()

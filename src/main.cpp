@@ -14,8 +14,8 @@ int main()
     Context ctx;
     glfwSwapInterval(1); //vsync
 
-    MenuScene menu(ctx);
-    GameScene scene(ctx);
+    MenuScene menu(ctx); //idx 0
+    GameScene scene(ctx); // idx 1
 
     ctx.load_scene(ctx.scenes[0]);
     ctx.run();

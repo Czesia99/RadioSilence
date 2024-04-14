@@ -1,9 +1,9 @@
 #include "mygl/camera_3D.hpp"
 #include "mygl/model.hpp"
 #include "map.hpp"
+#include "radio.hpp"
 
-
-#include "../include/miniaudio.h"
+#include <miniaudio.h>
 
 class Player
 {
@@ -15,51 +15,32 @@ class Player
         Shader torchlight_shader;
         Model torchlight;
         Map &my_map;
+        ma_engine &engine;
+
         bool step = false;
         bool victory = false;
-    
-        Player(Map &map, float win_width = 800, float win_height = 600) : my_map(map)
+        bool dead = false;
+
+        Radio *radio;
+
+        Player(Map &map, ma_engine &engine, float win_width = 800, float win_height = 600) : my_map(map), engine(engine)
         {
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
-
-            // torchlight_shader = Shader("basic_light.vs", "map_spotlight.fs");
-            // torchlight = Model("../assets/models/torchlight/torchlight.obj");
-            // torchlight.transform.scale *= 3;
-            // torchlight.transform.position = player_camera.position;
-            // torchlight.transform.position.z -= 0.3f;
-            // torchlight.transform.rotation -= 90.0f;
+            radio = new Radio(engine);
         }
 
         void update()
         {
             clock.update();
+            radio->update();
             if (velocity > 0.0f)
             {
                 player_camera.position.y = headbob(clock.delta_time, clock.current_time) + player_camera.initial_pos.y;
             }
+
+
             is_victory();
-            // torchlight_shader.use();
-            // torchlight_shader.set_vec3("light.position", player_camera.position);
-            // torchlight_shader.set_vec3("light.direction", player_camera.front);
-            // torchlight_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
-            // torchlight_shader.set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
-
-            // torchlight_shader.set_vec3("viewPos", player_camera.position);
-
-            // // light properties
-            // torchlight_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
-            // torchlight_shader.set_vec3("light.diffuse", 1.0f, 1.0f, 1.0f);
-            // torchlight_shader.set_vec3("light.specular", 0.1f, 0.1f, 0.1f);
-
-            // torchlight_shader.set_float("light.constant", 1.0f);
-            // torchlight_shader.set_float("light.linear", 0.22f);
-            // torchlight_shader.set_float("light.quadratic", 0.20f);
-
-            // //material properties
-            // torchlight_shader.set_float("material.shininess", 32.0f);
-            // torchlight.transform.position = player_camera.position;
-            // torchlight.transform.position.z -= 0.3f;
-            // torchlight.draw(torchlight_shader, player_camera);
+            is_dead();
         }
 
         void update_velocity(bool k_pressed)
@@ -117,7 +98,7 @@ class Player
             }
             if (bobbing <= 0.005 && !step) {
                 step = true;
-                // SoundEngine->play3D("../assets/sfx/footstep.wav", soundPos, false);
+                // ma_engine_play_sound(&engine, "../assets/sfx/footstep.wav", NULL);
             }
 
             return bobbing;
@@ -135,6 +116,11 @@ class Player
             {
                 victory = true;
             }
+        }
+
+        void is_dead()
+        {
+            dead = &radio->player_dead;
         }
 
         bool collide(Camera3D_Movement direction)
