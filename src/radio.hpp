@@ -19,11 +19,16 @@ class Radio
 
         bool player_dead = false;
         Sound &sound_manager;
-        // ma_sound radio_sound;
+        ma_sound radio_sound_far;
+        ma_sound radio_sound_between;
+        ma_sound radio_sound_near;
 
         Radio(Sound &sound_manager) : sound_manager(sound_manager)
         {
             srand (time(NULL));
+            // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_far.wav", 0, NULL, NULL, &radio_sound_far);
+            // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_between.wav", 0, NULL, NULL, &radio_sound_between);
+            // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_between.wav", 0, NULL, NULL, &radio_sound_between);
             activation_number = 0;
             max_activation = random_int(7, 10);
             std::cout << "max activation = " <<  max_activation << std::endl;

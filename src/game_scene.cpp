@@ -2,7 +2,7 @@
 
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
-    // ma_engine_play_sound(&ctx.engine, "../assets/sfx/horror.wav", NULL);
+    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/horror.wav", NULL);
     map.print_map_txt();
     map.load_map();
 
@@ -60,7 +60,7 @@ void GameScene::update()
     }
     else 
     {
-        map_shader.set_vec3("light.ambient", 0.02f, 0.02f, 0.02f);
+        map_shader.set_vec3("light.ambient", 0.005f, 0.005f, 0.005f);
         map_shader.set_vec3("light.diffuse", 0.0f, 0.0f, 0.0f);
         map_shader.set_vec3("light.specular", 0.0f, 0.0f, 0.0f);
     }
