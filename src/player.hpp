@@ -3,8 +3,6 @@
 #include "map.hpp"
 #include "radio.hpp"
 
-#include <miniaudio.h>
-
 class Player
 {
     public:
@@ -15,7 +13,6 @@ class Player
         Shader torchlight_shader;
         Model torchlight;
         Map &my_map;
-        ma_engine &engine;
 
         bool step = false;
         bool victory = false;
@@ -23,10 +20,17 @@ class Player
 
         Radio *radio;
 
-        Player(Map &map, ma_engine &engine, float win_width = 800, float win_height = 600) : my_map(map), engine(engine)
+        Sound &sound_manager;
+        ma_sound step_sound;
+
+        Player(Map &map, Sound &sound_manager, float win_width = 800, float win_height = 600) : my_map(map), sound_manager(sound_manager)
         {
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
-            radio = new Radio(engine);
+            radio = new Radio(sound_manager);
+
+            sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/footstep.wav", 0, NULL, NULL, &step_sound);
+            ma_sound_set_volume(&step_sound, 0.2f);
+            // ma_sound_set_volume(&step_sound, 1.0f);
         }
 
         void update()
@@ -37,7 +41,6 @@ class Player
             {
                 player_camera.position.y = headbob(clock.delta_time, clock.current_time) + player_camera.initial_pos.y;
             }
-
 
             is_victory();
             is_dead();
@@ -88,7 +91,6 @@ class Player
             float headbob_frequency = 0.7f;
             float headbob_amount_y = 0.03f;
             
-            // vec3d soundPos = {player_camera.position.x, player_camera.position.y, player_camera.position.z};
             // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
             float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
 
@@ -98,7 +100,7 @@ class Player
             }
             if (bobbing <= 0.005 && !step) {
                 step = true;
-                // ma_engine_play_sound(&engine, "../assets/sfx/footstep.wav", NULL);
+                ma_sound_start(&step_sound);
             }
 
             return bobbing;

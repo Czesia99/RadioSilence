@@ -1,9 +1,9 @@
 #pragma once
 
 #include <glm/gtc/random.hpp>
-#include <miniaudio.h>
 
 #include "mygl/clock.hpp"
+#include "mygl/sound.hpp"
 #include "math.h"
 
 class Radio 
@@ -18,10 +18,10 @@ class Radio
         bool radio_on = false;
 
         bool player_dead = false;
-        ma_engine &engine;
+        Sound &sound_manager;
         // ma_sound radio_sound;
 
-        Radio(ma_engine &engine) : engine(engine)
+        Radio(Sound &sound_manager) : sound_manager(sound_manager)
         {
             srand (time(NULL));
             activation_number = 0;
@@ -43,7 +43,7 @@ class Radio
 
         void turn_on() 
         {
-            ma_engine_play_sound(&engine, "../assets/sfx/radio1.wav", NULL);
+            ma_engine_play_sound(&sound_manager.engine, "../assets/sfx/radio1.wav", NULL);
             activation_number += 1;
             radio_on = true;
         }

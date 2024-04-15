@@ -2,12 +2,12 @@
 
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
-    ma_engine_play_sound(&ctx.engine, "../assets/sfx/horror.wav", NULL);
+    // ma_engine_play_sound(&ctx.engine, "../assets/sfx/horror.wav", NULL);
     map.print_map_txt();
     map.load_map();
 
     // camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, 1.0f, true);
-    player = new Player(map, ctx.engine, ctx.win_width, ctx.win_height);
+    player = new Player(map, ctx.sound_manager, ctx.win_width, ctx.win_height);
 
     map_shader = Shader("basic_light.vs", "map_spotlight.fs");
 
@@ -144,7 +144,7 @@ void GameScene::left_click_callback(GLFWwindow* window, int button, int action, 
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        ma_engine_play_sound(&ctx.engine, "../assets/sfx/torchlight_click.wav", NULL);
+        ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/torchlight_click.wav", NULL);
         if (torchlight)
             torchlight = false;
         else
