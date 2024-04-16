@@ -9,7 +9,7 @@ class Clock
         float delta_time;
         float last_frame;
 
-        Clock() {update();};
+        Clock() { update(); };
 
         void update() {
             current_time = glfwGetTime();

@@ -79,10 +79,11 @@ void GameScene::update()
         ctx.load_scene_id(0);
     }
 
-    // if (player->dead)
-    // {
-    //     ctx.load_scene_id(0);
-    // }
+    if (player->dead)
+    {
+        std::cout << "player dead " << player->dead <<  std::endl;
+        ctx.load_scene_id(0);
+    }
 }
 
 void GameScene::scene_clear()

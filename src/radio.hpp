@@ -13,11 +13,11 @@ class Radio
         int max_activation;
     
         float listening_time;
-        float max_listening_time;
+        float max_listening_time = 7.0f;
 
-        bool radio_on = false;
+        bool radio_on;
 
-        bool player_dead = false;
+        bool player_dead;
         Sound &sound_manager;
         ma_fence fence;
         ma_sound radio_sound_far;
@@ -47,25 +47,28 @@ class Radio
             }
 
             ma_fence_wait(&fence);
-            // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_far.wav", 0, NULL, NULL, &radio_sound_far);
-            // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_between.wav", 0, NULL, NULL, &radio_sound_between);
-            // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_between.wav", 0, NULL, NULL, &radio_sound_between);
+            player_dead = false;
+            radio_on = false;
             activation_number = 0;
             max_activation = random_int(7, 10);
             std::cout << "max activation = " <<  max_activation << std::endl;
-            max_listening_time = 10.0f;
         };
 
         void update()
         {
-            if (activation_number > max_activation)
-                player_dead = true;
-
+            // if (activation_number > max_activation)
+            //     player_dead = true;
+            clock.update();
             if (radio_on)
             {
-                float distance = glm::distance(player_pos, win_pos);
-                std::cout << "DISTANCE = " << distance << std::endl;
-            }
+                std::cout << "radio on" << std::endl;
+                listening_time += clock.delta_time;
+                if (listening_time > max_listening_time)
+                {
+                    player_dead = true;
+                }
+                std::cout << listening_time << std::endl;
+            }            
         }
 
         void turn_on()
@@ -96,6 +99,9 @@ class Radio
             ma_sound_stop(&radio_sounds[2]);
         }
 
+    private:
+        Clock clock;
+
         float random_float(float min, float max)
         {
             assert(max > min); 
@@ -113,6 +119,4 @@ class Radio
 
             return (random*range) + min;
         }
-    private:
-        Clock clock;
 };

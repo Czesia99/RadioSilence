@@ -122,7 +122,7 @@ class Player
 
         void is_dead()
         {
-            dead = &radio->player_dead;
+            dead = radio->player_dead;
         }
 
         bool collide(Camera3D_Movement direction)
