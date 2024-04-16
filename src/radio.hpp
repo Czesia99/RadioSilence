@@ -18,20 +18,9 @@ class Radio
         bool radio_on;
 
         bool player_dead;
-        Sound &sound_manager;
-        ma_fence fence;
-        ma_sound radio_sound_far;
-        ma_sound radio_sound_between;
-        ma_sound radio_sound_near;
+
         glm::vec3 &player_pos;
         glm::vec3 &win_pos;
-
-        ma_sound radio_sounds[3];
-        const char *sound_files[3] = {
-            "../assets/sfx/radio_ultra_near.wav",
-            "../assets/sfx/radio_between.wav",
-            "../assets/sfx/radio_far.wav"
-        };
 
         Radio(Sound &sound_manager, glm::vec3 &player_pos, glm::vec3 &win_pos) : sound_manager(sound_manager), player_pos(player_pos), win_pos(win_pos)
         {
@@ -56,8 +45,9 @@ class Radio
 
         void update()
         {
-            // if (activation_number > max_activation)
-            //     player_dead = true;
+            if (activation_number > max_activation)
+                game_over();
+
             clock.update();
             if (radio_on)
             {
@@ -65,7 +55,7 @@ class Radio
                 listening_time += clock.delta_time;
                 if (listening_time > max_listening_time)
                 {
-                    player_dead = true;
+                    game_over();
                 }
                 std::cout << listening_time << std::endl;
             }            
@@ -87,6 +77,7 @@ class Radio
                 ma_sound_start(&radio_sounds[2]);
             }
             activation_number += 1;
+            std::cout << activation_number << std::endl;
             radio_on = true;
         }
 
@@ -99,8 +90,28 @@ class Radio
             ma_sound_stop(&radio_sounds[2]);
         }
 
+        void game_over()
+        {
+            player_dead = true;
+            activation_number = 0;
+            turn_off();
+        }
+
     private:
         Clock clock;
+        Sound &sound_manager;
+        ma_fence fence;
+        ma_sound radio_sound_far;
+        ma_sound radio_sound_between;
+        ma_sound radio_sound_near;
+
+        ma_sound radio_sounds[3];
+        const char *sound_files[3] = {
+            "../assets/sfx/radio_ultra_near.wav",
+            "../assets/sfx/radio_between.wav",
+            "../assets/sfx/radio_far.wav"
+        };
+
 
         float random_float(float min, float max)
         {

@@ -25,7 +25,7 @@ void GameScene::open_scene()
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     player->victory = false;
-    player->dead = false;
+    player->radio->player_dead = false;
     player->player_camera.position = map.player_start_position;
 }
 
@@ -77,6 +77,7 @@ void GameScene::update()
     if (player->victory)
     {
         ctx.load_scene_id(0);
+        player->radio->game_over();
     }
 
     if (player->dead)
