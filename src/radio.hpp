@@ -19,13 +19,34 @@ class Radio
 
         bool player_dead = false;
         Sound &sound_manager;
+        ma_fence fence;
         ma_sound radio_sound_far;
         ma_sound radio_sound_between;
         ma_sound radio_sound_near;
+        glm::vec3 &player_pos;
+        glm::vec3 &win_pos;
 
-        Radio(Sound &sound_manager) : sound_manager(sound_manager)
+        ma_sound radio_sounds[3];
+        const char *sound_files[3] = {
+            "../assets/sfx/radio_ultra_near.wav",
+            "../assets/sfx/radio_between.wav",
+            "../assets/sfx/radio_far.wav"
+        };
+
+        Radio(Sound &sound_manager, glm::vec3 &player_pos, glm::vec3 &win_pos) : sound_manager(sound_manager), player_pos(player_pos), win_pos(win_pos)
         {
             srand (time(NULL));
+            sound_manager.result = ma_fence_init(&fence);
+            if (sound_manager.result != MA_SUCCESS) {
+                std::cout << "can't intialize fence for radio sounds";
+            }
+
+            for (int i = 0; i < 3; i += 1)
+            {
+                ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &fence, &radio_sounds[i]);
+            }
+
+            ma_fence_wait(&fence);
             // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_far.wav", 0, NULL, NULL, &radio_sound_far);
             // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_between.wav", 0, NULL, NULL, &radio_sound_between);
             // sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/radio_between.wav", 0, NULL, NULL, &radio_sound_between);
@@ -42,13 +63,26 @@ class Radio
 
             if (radio_on)
             {
-                
+                float distance = glm::distance(player_pos, win_pos);
+                std::cout << "DISTANCE = " << distance << std::endl;
             }
         }
 
-        void turn_on() 
+        void turn_on()
         {
-            ma_engine_play_sound(&sound_manager.engine, "../assets/sfx/radio1.wav", NULL);
+            if (glm::distance(player_pos, win_pos) < 10.0f) 
+            {
+                ma_sound_seek_to_pcm_frame(&radio_sounds[0], 0);
+                ma_sound_start(&radio_sounds[0]);
+            }
+            else if (glm::distance(player_pos, win_pos) <= 20.0f) {
+                ma_sound_seek_to_pcm_frame(&radio_sounds[1], 0);
+                ma_sound_start(&radio_sounds[1]);
+            }
+            else {
+                ma_sound_seek_to_pcm_frame(&radio_sounds[2], 0);
+                ma_sound_start(&radio_sounds[2]);
+            }
             activation_number += 1;
             radio_on = true;
         }
@@ -57,6 +91,9 @@ class Radio
         {
             listening_time = 0.0f;
             radio_on = false;
+            ma_sound_stop(&radio_sounds[0]);
+            ma_sound_stop(&radio_sounds[1]);
+            ma_sound_stop(&radio_sounds[2]);
         }
 
         float random_float(float min, float max)

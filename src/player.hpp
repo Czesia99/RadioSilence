@@ -26,7 +26,7 @@ class Player
         Player(Map &map, Sound &sound_manager, float win_width = 800, float win_height = 600) : my_map(map), sound_manager(sound_manager)
         {
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
-            radio = new Radio(sound_manager);
+            radio = new Radio(sound_manager, map.player_position, map.win_position);
 
             sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/footstep.wav", 0, NULL, NULL, &step_sound);
             ma_sound_set_volume(&step_sound, 0.2f);

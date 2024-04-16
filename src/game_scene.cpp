@@ -2,7 +2,7 @@
 
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
-    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/horror.wav", NULL);
+    // ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/horror.wav", NULL);
     map.print_map_txt();
     map.load_map();
 
