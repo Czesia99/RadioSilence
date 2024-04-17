@@ -20,10 +20,10 @@ class Map {
         {
             read_map_file("../assets/map2.txt");
             statue = Model("../assets/models/statue2/untitled2.obj");
+            enemy = Model("../assets/models/enemy/monster.obj");
             stbi_set_flip_vertically_on_load(true);
             wall = Model("../assets/models/wall/wall.obj");
             cage = Model("../assets/models/cage/Cage.obj");
-            // enemy = Model("../assets/models/enemy/untitled.obj");
         }
         
         void render(Shader shader, const ICamera &camera)
@@ -38,7 +38,7 @@ class Map {
             statue.draw(shader, camera);
             floor.render(shader, camera);
             roof.render(shader, camera);
-            // enemy.draw(shader, camera);
+            enemy.draw(shader, camera);
             glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
             float angle = atan2(direction_to_player.x, direction_to_player.z) - glm::radians(+90.0f);
             statue.transform.rotation.y = angle;
@@ -95,8 +95,9 @@ class Map {
             statue.transform.position = statue_position;
             statue.transform.scale *= 0.4f;
 
-            // enemy.transform.position = enemy_position;
-            // enemy.transform.scale *= 2.0f;
+            enemy.transform.position = enemy_position;
+            enemy.transform.position.y += 0.3;
+            enemy.transform.scale *= 0.1f;
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
         }
@@ -117,7 +118,7 @@ class Map {
         Model cage;
         Model wall;
         Model statue;
-        // Model enemy;
+        Model enemy;
         Cube floor;
         Cube roof;
 
