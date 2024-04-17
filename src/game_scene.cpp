@@ -10,6 +10,7 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     player = new Player(map, ctx.sound_manager, ctx.win_width, ctx.win_height);
 
     map_shader = Shader("basic_light.vs", "map_spotlight.fs");
+    enemy = new Enemy(map);
 
     store_scene_in_ctx();
 }
@@ -73,6 +74,7 @@ void GameScene::update()
     map_shader.set_float("material.shininess", 32.0f);
 
     map.render(map_shader, player->player_camera);
+    enemy->render(map_shader, player->player_camera);
 
     if (player->victory)
     {

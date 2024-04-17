@@ -11,6 +11,7 @@
 
 #include "map.hpp"
 #include "player.hpp"
+#include "enemy.hpp"
 
 class GameScene : public IScene {
     public:
@@ -41,6 +42,7 @@ class GameScene : public IScene {
         bool torchlight = true;
     
         Player *player = nullptr;
+        Enemy *enemy = nullptr;
 
         Map map;
         Shader light_shader;
