@@ -14,6 +14,7 @@ class Map {
         glm::vec3 player_start_position = {0.0f, 0.5f, 0.0f};
         glm::vec3 win_position;
         glm::vec3 statue_position;
+        glm::vec3 enemy_position;
 
         Map()
         {
@@ -22,41 +23,25 @@ class Map {
             stbi_set_flip_vertically_on_load(true);
             wall = Model("../assets/models/wall/wall.obj");
             cage = Model("../assets/models/cage/Cage.obj");
-        }
-
-        void read_map_file(const char *path)
-        {
-            std::string line;
-            std::ifstream infile(path);
-
-            if (!infile.is_open())
-            {
-                std::cout << "can't open file" << std::endl;
-                exit(-1);
-            }
-
-            while (std::getline(infile, line)) {
-                std::vector<char> row;
-
-                for (char &c : line) {
-                    row.push_back(c);
-                }
-
-                txt_map.push_back(row);
-            }
+            // enemy = Model("../assets/models/enemy/untitled.obj");
         }
         
-        void print_map_txt()
+        void render(Shader shader, const ICamera &camera)
         {
-            std::cout << "in print map txt" << std::endl; 
-            for (int i = 0; i < txt_map.size(); i++)
+            for (auto &pos : walls_position)
             {
-                for (int j = 0; j < txt_map[i].size(); j++)
-                {
-                    std::cout << txt_map[i][j];
-                }
-                std::cout << std::endl;
+                wall.transform.position = pos;
+                wall.draw(shader, camera);
             }
+
+            cage.draw(shader, camera);
+            statue.draw(shader, camera);
+            floor.render(shader, camera);
+            roof.render(shader, camera);
+            // enemy.draw(shader, camera);
+            glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
+            float angle = atan2(direction_to_player.x, direction_to_player.z) - glm::radians(+90.0f);
+            statue.transform.rotation.y = angle;
         }
 
         void load_map() 
@@ -96,6 +81,10 @@ class Map {
                     {
                         statue_position = {position.x, 0.03, position.z};
                     }
+                    if (element == '&')
+                    {
+                        enemy_position = position;
+                    }
                     position.x += 1.0f;
                }
                position.x = 0.0f;
@@ -105,33 +94,52 @@ class Map {
             cage.transform.scale *= 0.5f;
             statue.transform.position = statue_position;
             statue.transform.scale *= 0.4f;
-            // statue.transform.rotation.x += glm::radians(-90.0f);
+
+            // enemy.transform.position = enemy_position;
+            // enemy.transform.scale *= 2.0f;
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
         }
-        
-        void render(Shader shader, const ICamera &camera)
+
+        void print_map_txt()
         {
-            for (auto &pos : walls_position)
+            std::cout << "in print map txt" << std::endl; 
+            for (int i = 0; i < txt_map.size(); i++)
             {
-                wall.transform.position = pos;
-                wall.draw(shader, camera);
+                for (int j = 0; j < txt_map[i].size(); j++)
+                {
+                    std::cout << txt_map[i][j];
+                }
+                std::cout << std::endl;
             }
-
-            cage.draw(shader, camera);
-            statue.draw(shader, camera);
-            floor.render(shader, camera);
-            roof.render(shader, camera);
-            glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
-            float angle = atan2(direction_to_player.x, direction_to_player.z) - glm::radians(+90.0f);
-            statue.transform.rotation.y = angle;
-            // statue.transform.rotation.z = angle;
         }
-
     private:
         Model cage;
         Model wall;
         Model statue;
+        // Model enemy;
         Cube floor;
         Cube roof;
+
+        void read_map_file(const char *path)
+        {
+            std::string line;
+            std::ifstream infile(path);
+
+            if (!infile.is_open())
+            {
+                std::cout << "can't open file" << std::endl;
+                exit(-1);
+            }
+
+            while (std::getline(infile, line)) {
+                std::vector<char> row;
+
+                for (char &c : line) {
+                    row.push_back(c);
+                }
+
+                txt_map.push_back(row);
+            }
+        }
 };

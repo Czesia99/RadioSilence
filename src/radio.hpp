@@ -16,7 +16,6 @@ class Radio
         float max_listening_time = 7.0f;
 
         bool radio_on;
-
         bool player_dead;
 
         glm::vec3 &player_pos;
@@ -96,7 +95,7 @@ class Radio
             activation_number = 0;
             turn_off();
         }
-
+        
     private:
         Clock clock;
         Sound &sound_manager;
@@ -111,7 +110,6 @@ class Radio
             "../assets/sfx/radio_between.wav",
             "../assets/sfx/radio_far.wav"
         };
-
 
         float random_float(float min, float max)
         {

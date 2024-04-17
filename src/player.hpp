@@ -30,7 +30,6 @@ class Player
 
             sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/footstep.wav", 0, NULL, NULL, &step_sound);
             ma_sound_set_volume(&step_sound, 0.2f);
-            // ma_sound_set_volume(&step_sound, 1.0f);
         }
 
         void update()
