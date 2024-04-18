@@ -41,6 +41,7 @@ void GameScene::update()
 {
     clock.update();
     player->update();
+    enemy->update();
     map_shader.use();
     
     //spotlight properties

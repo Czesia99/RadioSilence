@@ -67,7 +67,6 @@ class Camera3D : public ICamera {
             yaw   += xoffset;
             pitch += yoffset;
 
-            // make sure that when pitch is out of bounds, screen doesn't get flipped
             if (constrainPitch)
             {
                 if (pitch > 89.0f)
@@ -76,7 +75,6 @@ class Camera3D : public ICamera {
                     pitch = -89.0f;
             }
 
-            // update Front, Right and Up Vectors using the updated Euler angles
             update_camera_vectors();
         }
 
