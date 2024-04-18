@@ -126,17 +126,17 @@ class Player
 
         bool collide(Camera3D_Movement direction)
         {
-            glm::vec3 futurePos = player_camera.position;
+            glm::vec3 future_pos = player_camera.position;
             if (direction == FORWARD)
-                futurePos += player_camera.front * velocity;
+                future_pos += player_camera.front * velocity;
             if (direction == BACKWARD)
-                futurePos -= player_camera.front * velocity;
+                future_pos -= player_camera.front * velocity;
             if (direction == LEFT)
-                futurePos -= player_camera.right * velocity;
+                future_pos -= player_camera.right * velocity;
             if (direction == RIGHT)
-                futurePos += player_camera.right * velocity;
+                future_pos += player_camera.right * velocity;
 
-            for (auto& wall_pos : my_map.walls_position)
+            for (auto &wall_pos : my_map.walls_position)
             {
                 float offset = 0.11f;
                 float min_x = wall_pos.x - 0.5f - offset;
@@ -144,7 +144,7 @@ class Player
                 float min_z = wall_pos.z - 0.5f - offset;
                 float max_z = wall_pos.z + 0.5f + offset;
 
-                if (futurePos.x >= min_x && futurePos.x <= max_x && futurePos.z >= min_z && futurePos.z <= max_z)
+                if (future_pos.x >= min_x && future_pos.x <= max_x && future_pos.z >= min_z && future_pos.z <= max_z)
                 {
                     return true;
                 }
