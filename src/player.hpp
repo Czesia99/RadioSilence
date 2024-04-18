@@ -43,6 +43,8 @@ class Player
 
             is_victory();
             is_dead();
+
+            std::cout << "x: "<< player_camera.position.x << ", z: " << player_camera.position.z << std::endl;
         }
 
         void update_velocity(bool k_pressed)

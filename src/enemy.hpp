@@ -4,6 +4,9 @@
 #include "mygl/clock.hpp"
 #include "map.hpp"
 
+#include <cstdlib> // Include for rand() function
+#include <ctime> 
+
 class Enemy 
 {
     enum Enemy_Movement  {
@@ -16,6 +19,9 @@ class Enemy
     public:
         float movement_speed = 0.01f;
         float velocity;
+        float direction_timer;
+        float duration_interval = 30.0f;
+        bool direction_called = false;
 
         Enemy(Map &map) : map(map)
         {
@@ -36,8 +42,16 @@ class Enemy
         void update()
         {
             // std::cout << "In Enemy update" << std::endl;
-            // move_forward();
-            compute_direction();
+            move_forward();
+            direction_called = false;
+            direction_timer += clock.delta_time;
+
+            if (direction_timer >= duration_interval && !direction_called)
+            {
+                compute_direction();
+                direction_timer = 0.0f;
+                direction_called = true;
+            }
         }
 
         void move_forward()
@@ -49,6 +63,10 @@ class Enemy
 
         void change_direction(Enemy_Movement direction)
         {
+            if (direction == FORWARD)
+            {
+                move_forward();
+            }
             if (direction == BACKWARD) 
             {
                 model.transform.rotation.y += glm::radians(180.0f);
@@ -69,18 +87,36 @@ class Enemy
         void compute_direction()
         {
             glm::vec3 future_pos = model.transform.position;
-            future_pos += front * velocity + 0.5f;
+            glm::vec3 forward_pos = model.transform.position;
+            future_pos += front * velocity;
+            forward_pos += front * velocity + 0.5f;
+            
 
             bool left_blocked = is_wall_on_side(future_pos, LEFT);
             bool right_blocked = is_wall_on_side(future_pos, RIGHT);
-            //bool forward_blocked = is_wall_on_side(future_pos, FORWARD);
-
+            bool forward_blocked = is_wall_on_side(forward_pos, FORWARD);
+            std::vector<Enemy_Movement> available_directions;
+            if (!forward_blocked)
+                available_directions.push_back(FORWARD);
             if (!left_blocked)
                 available_directions.push_back(LEFT);
             if (!right_blocked)
                 available_directions.push_back(RIGHT);
 
 
+            if (available_directions.size() == 1)
+                change_direction(available_directions[0]);
+            else {
+                srand(static_cast<unsigned int>(time(nullptr)));
+                int random_index = rand() % available_directions.size();
+                change_direction(available_directions[random_index]);
+            }
+
+            for (auto &directions : available_directions)
+            {
+                std::cout << "number of directions =  " << available_directions.size() << std::endl;
+                std::cout << "direction: " << directions << std::endl;
+            }
             std::cout << "left wall = " << left_blocked << std::endl;
             std::cout << "right wall = " << right_blocked << std::endl;
             //std::cout << "forward wall = " << forward_blocked << std::endl;
@@ -94,9 +130,9 @@ class Enemy
             // Calculate future position on the side specified by the direction
             glm::vec3 future_pos_side;
             if (direction == LEFT)
-                future_pos_side = future_pos + glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
-            else if (direction == RIGHT)
                 future_pos_side = future_pos - glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
+            else if (direction == RIGHT)
+                future_pos_side = future_pos + glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
             std::cout << direction << std::endl;
             std::cout << future_pos_side.x << ", " << future_pos_side.z << std::endl;
             std::cout << "enemy pos = " << model.transform.position.x << ", " << model.transform.position.z << std::endl;
@@ -128,6 +164,4 @@ class Enemy
         glm::vec3 right = glm::vec3(-1.0f, 0.0f, 0.0f);
         glm::vec3 position;
         glm::vec3 initial_pos;
-
-        std::vector<Enemy_Movement> available_directions;
 };
