@@ -41,17 +41,17 @@ class Enemy
 
         void update()
         {
-            // std::cout << "In Enemy update" << std::endl;
-            move_forward();
-            direction_called = false;
-            direction_timer += clock.delta_time;
+            // // std::cout << "In Enemy update" << std::endl;
+            // move_forward();
+            // direction_called = false;
+            // direction_timer += clock.delta_time;
 
-            if (direction_timer >= duration_interval && !direction_called)
-            {
-                compute_direction();
-                direction_timer = 0.0f;
-                direction_called = true;
-            }
+            // if (direction_timer >= duration_interval && !direction_called)
+            // {
+            //     compute_direction();
+            //     direction_timer = 0.0f;
+            //     direction_called = true;
+            // }
         }
 
         void move_forward()

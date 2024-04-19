@@ -2,7 +2,6 @@
 
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
-    // ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/horror.wav", NULL);
     map.print_map_txt();
     map.load_map();
 
@@ -28,6 +27,7 @@ void GameScene::open_scene()
     player->victory = false;
     player->radio->player_dead = false;
     player->player_camera.position = map.player_start_position;
+    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", NULL);
 }
 
 void GameScene::close_scene() 
