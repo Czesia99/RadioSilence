@@ -32,6 +32,7 @@ class Enemy
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
+            // change_direction(RIGHT);
         }
 
         void render(Shader shader, Camera3D &camera)
@@ -41,6 +42,7 @@ class Enemy
 
         void update()
         {
+            compute_direction();
             // // std::cout << "In Enemy update" << std::endl;
             // move_forward();
             // direction_called = false;
@@ -63,10 +65,6 @@ class Enemy
 
         void change_direction(Enemy_Movement direction)
         {
-            if (direction == FORWARD)
-            {
-                move_forward();
-            }
             if (direction == BACKWARD) 
             {
                 model.transform.rotation.y += glm::radians(180.0f);
@@ -87,17 +85,21 @@ class Enemy
         void compute_direction()
         {
             glm::vec3 future_pos = model.transform.position;
-            glm::vec3 forward_pos = model.transform.position;
+            glm::vec3 forward_pos = model.transform.position + glm::normalize(front) * 0.5f;
             future_pos += front * velocity;
-            forward_pos += front * velocity + 0.5f;
             
+            bool forward_blocked = is_wall_on_side(forward_pos, FORWARD);
+            
+            if (!forward_blocked) {
+                std::cout << "forward not blocked" << std::endl;
+                move_forward();
+                return;
+            }
 
             bool left_blocked = is_wall_on_side(future_pos, LEFT);
             bool right_blocked = is_wall_on_side(future_pos, RIGHT);
-            bool forward_blocked = is_wall_on_side(forward_pos, FORWARD);
             std::vector<Enemy_Movement> available_directions;
-            if (!forward_blocked)
-                available_directions.push_back(FORWARD);
+
             if (!left_blocked)
                 available_directions.push_back(LEFT);
             if (!right_blocked)
@@ -119,31 +121,32 @@ class Enemy
             }
             std::cout << "left wall = " << left_blocked << std::endl;
             std::cout << "right wall = " << right_blocked << std::endl;
-            //std::cout << "forward wall = " << forward_blocked << std::endl;
-
-
+            std::cout << "forward wall = " << forward_blocked << std::endl;
 
         }
 
         bool is_wall_on_side(const glm::vec3& future_pos, Enemy_Movement direction)
         {
-            // Calculate future position on the side specified by the direction
+
+            std::cout << "future pos = x: " << future_pos.x << "z: " << future_pos.z << std::endl;
             glm::vec3 future_pos_side;
             if (direction == LEFT)
                 future_pos_side = future_pos - glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
             else if (direction == RIGHT)
                 future_pos_side = future_pos + glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
+            else if (direction == FORWARD)
+                future_pos_side = future_pos;
             std::cout << direction << std::endl;
             std::cout << future_pos_side.x << ", " << future_pos_side.z << std::endl;
             std::cout << "enemy pos = " << model.transform.position.x << ", " << model.transform.position.z << std::endl;
             // Check if there's a wall on the specified side
             for (auto& wall_pos : map.walls_position)
             {
-                float offset = 0.5f;
-                float wall_min_x = wall_pos.x - 0.5f; // Adjust with wall size if needed
-                float wall_max_x = wall_pos.x + 0.5f;
-                float wall_min_z = wall_pos.z - 0.5f;
-                float wall_max_z = wall_pos.z + 0.5f;
+                float offset = 0.11f;
+                float wall_min_x = wall_pos.x - 0.5f - offset; // Adjust with wall size if needed
+                float wall_max_x = wall_pos.x + 0.5f + offset;
+                float wall_min_z = wall_pos.z - 0.5f - offset;
+                float wall_max_z = wall_pos.z + 0.5f + offset;
 
                 // Check if future position on the specified side intersects with the wall
                 if (future_pos_side.x >= wall_min_x && future_pos_side.x <= wall_max_x &&
