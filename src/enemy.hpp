@@ -44,7 +44,7 @@ class Enemy
 
         void update()
         {
-            // compute_direction();
+            compute_direction();
             map.enemy_position = model.transform.position;
         }
 
@@ -52,7 +52,6 @@ class Enemy
         {
             velocity = movement_speed * clock.delta_time;
             model.transform.position += front * velocity;
-            std::cout << "( " << model.transform.position.x << "," << model.transform.position.z << " )" << std::endl;
         }
 
         void change_direction(Enemy_Movement direction)
@@ -122,23 +121,18 @@ class Enemy
                 future_pos_side = future_pos + glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
             else if (direction == FORWARD)
                 future_pos_side = future_pos;
-            std::cout << direction << std::endl;
-            std::cout << future_pos_side.x << ", " << future_pos_side.z << std::endl;
-            std::cout << "enemy pos = " << model.transform.position.x << ", " << model.transform.position.z << std::endl;
-            // Check if there's a wall on the specified side
+
             for (auto& wall_pos : map.walls_position)
             {
                 float offset = 0.11f;
-                float wall_min_x = wall_pos.x - 0.5f - offset; // Adjust with wall size if needed
+                float wall_min_x = wall_pos.x - 0.5f - offset;
                 float wall_max_x = wall_pos.x + 0.5f + offset;
                 float wall_min_z = wall_pos.z - 0.5f - offset;
                 float wall_max_z = wall_pos.z + 0.5f + offset;
 
-                // Check if future position on the specified side intersects with the wall
                 if (future_pos_side.x >= wall_min_x && future_pos_side.x <= wall_max_x &&
                     future_pos_side.z >= wall_min_z && future_pos_side.z <= wall_max_z)
                 {
-                    // Wall on the specified side
                     return true;
                 }
             }
