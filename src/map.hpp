@@ -14,7 +14,7 @@ class Map {
         glm::vec3 player_start_position = {0.0f, 0.5f, 0.0f};
         glm::vec3 win_position;
         glm::vec3 statue_position;
-        glm::vec3 ennemy_start_position;
+        glm::vec3 ennemy_start_position = {0.0f, 0.3f, 0.0f};
 
         Map()
         {
@@ -83,7 +83,7 @@ class Map {
                     }
                     if (element == '&')
                     {
-                        ennemy_start_position = position;
+                        ennemy_start_position = {position.x, 0.3, position.z};
                     }
                     position.x += 1.0f;
                }

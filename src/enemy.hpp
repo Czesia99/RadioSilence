@@ -23,15 +23,15 @@ class Enemy
         float duration_interval = 30.0f;
         bool direction_called = false;
         glm::vec3 position;
-        glm::vec3 initial_pos;
         Model model;
+        glm::vec3 initial_pos;
 
         Enemy(Map &map) : map(map)
         {
             stbi_set_flip_vertically_on_load(false);
             model = Model("../assets/models/enemy/monster.obj");
             initial_pos = map.ennemy_start_position;
-            model.transform.position = initial_pos;
+            model.transform.position = map.ennemy_start_position;
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
