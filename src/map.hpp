@@ -14,7 +14,8 @@ class Map {
         glm::vec3 player_start_position = {0.0f, 0.5f, 0.0f};
         glm::vec3 win_position;
         glm::vec3 statue_position;
-        glm::vec3 ennemy_start_position = {0.0f, 0.3f, 0.0f};
+        glm::vec3 enemy_position;
+        glm::vec3 enemy_start_position;
 
         Map()
         {
@@ -83,7 +84,7 @@ class Map {
                     }
                     if (element == '&')
                     {
-                        ennemy_start_position = {position.x, 0.3, position.z};
+                        enemy_start_position = {position.x, 0.3, position.z};
                     }
                     position.x += 1.0f;
                }
@@ -95,7 +96,7 @@ class Map {
             statue.transform.position = statue_position;
             statue.transform.scale *= 0.4f;
 
-            enemy.transform.position = ennemy_start_position;
+            enemy.transform.position = enemy_start_position;
             enemy.transform.position.y += 0.3;
             enemy.transform.scale *= 0.1f;
             std::cout << "size x = " << txt_map[0].size() << std::endl;

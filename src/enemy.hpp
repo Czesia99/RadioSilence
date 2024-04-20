@@ -30,8 +30,8 @@ class Enemy
         {
             stbi_set_flip_vertically_on_load(false);
             model = Model("../assets/models/enemy/monster.obj");
-            initial_pos = map.ennemy_start_position;
-            model.transform.position = map.ennemy_start_position;
+            initial_pos = map.enemy_start_position;
+            model.transform.position = map.enemy_start_position;
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
@@ -44,18 +44,8 @@ class Enemy
 
         void update()
         {
-            compute_direction();
-            // // std::cout << "In Enemy update" << std::endl;
-            // move_forward();
-            // direction_called = false;
-            // direction_timer += clock.delta_time;
-
-            // if (direction_timer >= duration_interval && !direction_called)
-            // {
-            //     compute_direction();
-            //     direction_timer = 0.0f;
-            //     direction_called = true;
-            // }
+            // compute_direction();
+            map.enemy_position = model.transform.position;
         }
 
         void move_forward()
@@ -119,16 +109,6 @@ class Enemy
                 int random_index = rand() % available_directions.size();
                 change_direction(available_directions[random_index]);
             }
-
-            for (auto &directions : available_directions)
-            {
-                std::cout << "number of directions =  " << available_directions.size() << std::endl;
-                std::cout << "direction: " << directions << std::endl;
-            }
-            std::cout << "left wall = " << left_blocked << std::endl;
-            std::cout << "right wall = " << right_blocked << std::endl;
-            std::cout << "forward wall = " << forward_blocked << std::endl;
-
         }
 
         bool is_wall_on_side(const glm::vec3& future_pos, Enemy_Movement direction)

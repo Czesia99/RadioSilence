@@ -29,7 +29,7 @@ class Player
             radio = new Radio(sound_manager, map.player_position, map.win_position);
 
             sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/footstep.wav", 0, NULL, NULL, &step_sound);
-            ma_sound_set_volume(&step_sound, 0.2f);
+            ma_sound_set_volume(&step_sound, 0.1f);
         }
 
         void update()
@@ -43,8 +43,6 @@ class Player
 
             is_victory();
             is_dead();
-
-            std::cout << "x: "<< player_camera.position.x << ", z: " << player_camera.position.z << std::endl;
         }
 
         void update_velocity(bool k_pressed)
@@ -65,24 +63,18 @@ class Player
                velocity = player_camera.movement_speed * delta_time; 
             }
 
-            if (direction == FORWARD) {
+            if (direction == FORWARD)
                 player_camera.position += player_camera.front * velocity;
-                map.player_position = player_camera.position;
-            }
-            if (direction == BACKWARD) {
+            if (direction == BACKWARD)
                 player_camera.position -= player_camera.front * velocity;
-                map.player_position = player_camera.position;
-            }
-            if (direction == LEFT) {
+            if (direction == LEFT)
                 player_camera.position -= player_camera.right * velocity;
-                map.player_position = player_camera.position;
-            }
-            if (direction == RIGHT) {
+            if (direction == RIGHT)
                 player_camera.position += player_camera.right * velocity;
-                map.player_position = player_camera.position;
-            }
             if (player_camera.fps)
                 player_camera.position.y = player_camera.initial_pos.y;
+
+            map.player_position = player_camera.position;
         }
 
     private:
@@ -92,7 +84,6 @@ class Player
             float headbob_frequency = 0.7f;
             float headbob_amount_y = 0.03f;
             
-            // float bobbing = glm::abs(glm::sin(current_time * headbob_frequency)) * headbob_amount_y;
             float bobbing = glm::abs(glm::sin(glm::pi<float>() * (current_time / headbob_frequency))) * headbob_amount_y;
 
             if (bobbing >= 0.005 && step)

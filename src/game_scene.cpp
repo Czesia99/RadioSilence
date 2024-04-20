@@ -5,7 +5,6 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     map.print_map_txt();
     map.load_map();
 
-    // camera = Camera3D(map.player_position, ctx.win_width, ctx.win_height, 1.0f, true);
     player = new Player(map, ctx.sound_manager, ctx.win_width, ctx.win_height);
 
     map_shader = Shader("basic_light.vs", "map_spotlight.fs");
@@ -27,7 +26,7 @@ void GameScene::open_scene()
     player->victory = false;
     player->radio->player_dead = false;
     player->player_camera.position = map.player_start_position;
-    enemy->model.transform.position = map.ennemy_start_position;
+    enemy->model.transform.position = map.enemy_start_position;
     ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", NULL);
 }
 
