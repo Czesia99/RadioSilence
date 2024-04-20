@@ -12,7 +12,7 @@ class Player
 
         Shader torchlight_shader;
         Model torchlight;
-        Map &my_map;
+        Map &map;
 
         bool step = false;
         bool victory = false;
@@ -23,7 +23,7 @@ class Player
         Sound &sound_manager;
         ma_sound step_sound;
 
-        Player(Map &map, Sound &sound_manager, float win_width = 800, float win_height = 600) : my_map(map), sound_manager(sound_manager)
+        Player(Map &map, Sound &sound_manager, float win_width = 800, float win_height = 600) : map(map), sound_manager(sound_manager)
         {
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
             radio = new Radio(sound_manager, map.player_position, map.win_position);
@@ -67,19 +67,19 @@ class Player
 
             if (direction == FORWARD) {
                 player_camera.position += player_camera.front * velocity;
-                my_map.player_position = player_camera.position;
+                map.player_position = player_camera.position;
             }
             if (direction == BACKWARD) {
                 player_camera.position -= player_camera.front * velocity;
-                my_map.player_position = player_camera.position;
+                map.player_position = player_camera.position;
             }
             if (direction == LEFT) {
                 player_camera.position -= player_camera.right * velocity;
-                my_map.player_position = player_camera.position;
+                map.player_position = player_camera.position;
             }
             if (direction == RIGHT) {
                 player_camera.position += player_camera.right * velocity;
-                my_map.player_position = player_camera.position;
+                map.player_position = player_camera.position;
             }
             if (player_camera.fps)
                 player_camera.position.y = player_camera.initial_pos.y;
@@ -110,10 +110,10 @@ class Player
         void is_victory()
         {
             float offset = 0.11f;
-            float min_x = my_map.win_position.x - 0.4f - offset;
-            float max_x = my_map.win_position.x + 0.4f + offset;
-            float min_z = my_map.win_position.z - 0.4f - offset;
-            float max_z = my_map.win_position.z + 0.4f + offset;
+            float min_x = map.win_position.x - 0.4f - offset;
+            float max_x = map.win_position.x + 0.4f + offset;
+            float min_z = map.win_position.z - 0.4f - offset;
+            float max_z = map.win_position.z + 0.4f + offset;
     
             if (player_camera.position.x >= min_x && player_camera.position.x <= max_x && player_camera.position.z >= min_z && player_camera.position.z <= max_z)
             {
@@ -138,7 +138,7 @@ class Player
             if (direction == RIGHT)
                 future_pos += player_camera.right * velocity;
 
-            for (auto &wall_pos : my_map.walls_position)
+            for (auto &wall_pos : map.walls_position)
             {
                 float offset = 0.11f;
                 float min_x = wall_pos.x - 0.5f - offset;

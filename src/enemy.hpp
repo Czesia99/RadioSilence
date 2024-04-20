@@ -22,17 +22,19 @@ class Enemy
         float direction_timer;
         float duration_interval = 30.0f;
         bool direction_called = false;
+        glm::vec3 position;
+        glm::vec3 initial_pos;
+        Model model;
 
         Enemy(Map &map) : map(map)
         {
             stbi_set_flip_vertically_on_load(false);
             model = Model("../assets/models/enemy/monster.obj");
-            initial_pos = map.enemy_position;
-            model.transform.position = map.enemy_position;
+            initial_pos = map.ennemy_start_position;
+            model.transform.position = initial_pos;
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
-            // change_direction(RIGHT);
         }
 
         void render(Shader shader, Camera3D &camera)
@@ -105,7 +107,11 @@ class Enemy
             if (!right_blocked)
                 available_directions.push_back(RIGHT);
 
-
+            if (available_directions.empty()) {
+                std::cout << "backward" << std::endl; 
+                change_direction(BACKWARD);
+                return;
+            }
             if (available_directions.size() == 1)
                 change_direction(available_directions[0]);
             else {
@@ -160,11 +166,8 @@ class Enemy
         }
 
     private:
-        Model model;
         Map &map;
         Clock clock;
         glm::vec3 front = glm::vec3(0.0f, 0.0f, 1.0f);
         glm::vec3 right = glm::vec3(-1.0f, 0.0f, 0.0f);
-        glm::vec3 position;
-        glm::vec3 initial_pos;
 };

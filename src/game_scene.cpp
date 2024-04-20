@@ -27,6 +27,7 @@ void GameScene::open_scene()
     player->victory = false;
     player->radio->player_dead = false;
     player->player_camera.position = map.player_start_position;
+    enemy->model.transform.position = map.ennemy_start_position;
     ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", NULL);
 }
 
