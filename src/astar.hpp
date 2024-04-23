@@ -20,9 +20,6 @@ class Node
 
         int hcost(const glm::ivec2 &a, const glm::ivec2 &b)
         {
-            // int dx = b.x - a.x;
-            // int dy = b.y - a.y;
-            // return std::sqrt(dx * dx + dy * dy);
             return std::abs(a.x - b.x) + std::abs(a.y - b.y);
         }
 };
@@ -30,10 +27,9 @@ class Node
 inline bool is_valid(const std::vector<std::vector<char>> &txt_map, int x, int y)
 {
     int rows = txt_map.size();
-    // std::cout << "rows = " << rows << std::endl;
     int cols = txt_map[0].size();
-    // std::cout << "cols = " << cols << std::endl;
-    return (x > 0 && x < rows && y > 0 && y < cols && txt_map[x][y] == ' ');
+
+    return (x > 0 && x < rows && y > 0 && y < cols && txt_map[y][x] == ' ');
 }
 
 inline bool is_destination(const Node &current, const Node &end)
@@ -44,14 +40,12 @@ inline bool is_destination(const Node &current, const Node &end)
 inline std::vector<glm::ivec2> get_path(Node *current_node)
 {
     std::vector<glm::ivec2> path;
-    std::cout << "CURRENT x: " << current_node->n_pos.x << std::endl;
-    std::cout << "PARENT = " << current_node->parent << std::endl;
-    std::cout << "PARENT = " << current_node->parent->n_pos.x << std::endl;
     while (current_node != nullptr)
     {
         path.push_back(current_node->n_pos);
         current_node = current_node->parent;
     }
+    path.pop_back();
     std::reverse(path.begin(), path.end());
     return path;
 }
@@ -81,7 +75,7 @@ inline std::vector<glm::ivec2> astar(Map &map, glm::ivec2 start_pos, glm::ivec2 
 
         for (auto &n : open)
         {
-            if (n->fcost() < current_node->fcost() || n->fcost() == current_node->fcost() && n->h_cost < current_node->h_cost)
+            if (n->f_cost < current_node->f_cost || n->f_cost == current_node->f_cost && n->h_cost < current_node->h_cost)
                 current_node = n;
         }
 
@@ -101,8 +95,11 @@ inline std::vector<glm::ivec2> astar(Map &map, glm::ivec2 start_pos, glm::ivec2 
         {
             glm::ivec2 neighbor_pos(current_node->n_pos.x + dir.x, current_node->n_pos.y + dir.y);
 
-            if (!is_valid(map.txt_map, neighbor_pos.x, neighbor_pos.y))
+            if (!is_valid(map.txt_map, neighbor_pos.x, neighbor_pos.y)) {
+                std::cout << "invalid: " << map.txt_map[neighbor_pos.x][neighbor_pos.y] << std::endl;
+                std::cout << "invalid pos x: " << neighbor_pos.x << " invalid pos y: " << neighbor_pos.y << std::endl;
                 continue;
+            }
             
             Node *neighbor = new Node(current_node, neighbor_pos);
 
@@ -113,17 +110,13 @@ inline std::vector<glm::ivec2> astar(Map &map, glm::ivec2 start_pos, glm::ivec2 
             neighbor->h_cost = neighbor->hcost(neighbor_pos, end_pos);
             neighbor->f_cost = neighbor->fcost();
 
-            // open.push_back(neighbor);
-            // auto it = std::find(open.begin(), open.end(), neighbor);
-            // if (it == open.end() && neighbor->g_cost > (*it)->g_cost)
-            // {
-            //     continue;
-            // }
-            // open.push_back(neighbor);
-            if (std::find(open.begin(), open.end(), neighbor) == open.end() || neighbor->f_cost < current_node->f_cost)
+            auto it = std::find(open.begin(), open.end(), neighbor);
+            if (it != open.end())
             {
-                open.push_back(neighbor);
+                if (neighbor->g_cost > (*it)->g_cost)
+                    continue;
             }
+            open.push_back(neighbor);
         }
     }
 
