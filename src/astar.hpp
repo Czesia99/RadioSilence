@@ -39,6 +39,7 @@ inline bool is_destination(const Node &current, const Node &end)
 
 inline std::vector<glm::ivec2> get_path(Node *current_node)
 {
+    std::cout << "get path" << std::endl;
     std::vector<glm::ivec2> path;
     while (current_node != nullptr)
     {
@@ -95,16 +96,15 @@ inline std::vector<glm::ivec2> astar(Map &map, glm::ivec2 start_pos, glm::ivec2 
         {
             glm::ivec2 neighbor_pos(current_node->n_pos.x + dir.x, current_node->n_pos.y + dir.y);
 
-            if (!is_valid(map.txt_map, neighbor_pos.x, neighbor_pos.y)) {
-                std::cout << "invalid: " << map.txt_map[neighbor_pos.x][neighbor_pos.y] << std::endl;
-                std::cout << "invalid pos x: " << neighbor_pos.x << " invalid pos y: " << neighbor_pos.y << std::endl;
+            if (!is_valid(map.txt_map, neighbor_pos.x, neighbor_pos.y))
                 continue;
-            }
             
             Node *neighbor = new Node(current_node, neighbor_pos);
 
             if (std::find(closed.begin(), closed.end(), neighbor) != closed.end())
+            {
                 continue;
+            }
 
             neighbor->g_cost = current_node->g_cost + 1;
             neighbor->h_cost = neighbor->hcost(neighbor_pos, end_pos);
@@ -113,8 +113,10 @@ inline std::vector<glm::ivec2> astar(Map &map, glm::ivec2 start_pos, glm::ivec2 
             auto it = std::find(open.begin(), open.end(), neighbor);
             if (it != open.end())
             {
-                if (neighbor->g_cost > (*it)->g_cost)
+                if (neighbor->g_cost >= (*it)->g_cost)
+                {
                     continue;
+                }
             }
             open.push_back(neighbor);
         }

@@ -35,8 +35,8 @@ class Enemy
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
-            std::cout << "map char = " << map.txt_map[2][1] << std::endl;
-            std::vector<glm::ivec2> path = astar(map,pos_tile(model.transform.position), {12, 3});
+            std::cout << "map char = " << map.txt_map[18][8] << std::endl;
+            std::vector<glm::ivec2> path = astar(map,pos_tile(model.transform.position), {21, 3});
         }
 
         void render(Shader shader, Camera3D &camera)
