@@ -3,8 +3,8 @@
 #include "mygl/model.hpp"
 #include "mygl/clock.hpp"
 #include "map.hpp"
-
-#include <cstdlib> // Include for rand() function
+#include "astar.hpp"
+#include <cstdlib>
 #include <ctime> 
 
 class Enemy 
@@ -35,6 +35,8 @@ class Enemy
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
+            std::cout << "map char = " << map.txt_map[2][1] << std::endl;
+            std::vector<glm::ivec2> path = astar(map,pos_tile(model.transform.position), {13, 3});
         }
 
         void render(Shader shader, Camera3D &camera)
@@ -44,8 +46,10 @@ class Enemy
 
         void update()
         {
-            compute_direction();
+            // compute_direction();
             map.enemy_position = model.transform.position;
+            glm::ivec2 tile = pos_tile(model.transform.position);
+            std::cout << "tile x: " << tile.x << " tile z: " << tile.y << std::endl;
         }
 
         void move_forward()
@@ -79,16 +83,19 @@ class Enemy
             glm::vec3 forward_pos = model.transform.position + glm::normalize(front) * 0.5f;
             future_pos += front * velocity;
             
-            bool forward_blocked = is_wall_on_side(forward_pos, FORWARD);
-            
+            bool forward_blocked = is_wall(forward_pos, FORWARD);
+            bool left_blocked = is_wall(future_pos, LEFT);
+            bool right_blocked = is_wall(future_pos, RIGHT);
+
             if (!forward_blocked) {
-                std::cout << "forward not blocked" << std::endl;
                 move_forward();
+                std::cout << "forward not blocked" << std::endl;
                 return;
             }
 
-            bool left_blocked = is_wall_on_side(future_pos, LEFT);
-            bool right_blocked = is_wall_on_side(future_pos, RIGHT);
+            // bool left_blocked = is_wall(future_pos, LEFT);
+            // bool right_blocked = is_wall(future_pos, RIGHT);
+
             std::vector<Enemy_Movement> available_directions;
 
             if (!left_blocked)
@@ -110,10 +117,8 @@ class Enemy
             }
         }
 
-        bool is_wall_on_side(const glm::vec3& future_pos, Enemy_Movement direction)
+        bool is_wall(const glm::vec3& future_pos, Enemy_Movement direction)
         {
-
-            std::cout << "future pos = x: " << future_pos.x << "z: " << future_pos.z << std::endl;
             glm::vec3 future_pos_side;
             if (direction == LEFT)
                 future_pos_side = future_pos - glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
@@ -137,6 +142,11 @@ class Enemy
                 }
             }
             return false;
+        }
+
+        glm::ivec2 pos_tile(glm::vec3 pos)
+        {
+            return {int(pos.x / 1) * 1, int(pos.z / 1) * 1};
         }
 
     private:

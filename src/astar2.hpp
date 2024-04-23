@@ -11,7 +11,11 @@ class Node
         int f_cost = 0;
         Node *parent = nullptr;
 
-        Node(Node *parent, glm::ivec2 pos) : parent(parent), n_pos(pos) {}
+        Node(Node *parent, glm::ivec2 pos)
+        {
+            parent = parent; 
+            n_pos = pos;
+        }
 
         int fcost()
         {
@@ -20,9 +24,6 @@ class Node
 
         int hcost(const glm::ivec2 &a, const glm::ivec2 &b)
         {
-            // int dx = b.x - a.x;
-            // int dy = b.y - a.y;
-            // return std::sqrt(dx * dx + dy * dy);
             return std::abs(a.x - b.x) + std::abs(a.y - b.y);
         }
 };
@@ -72,6 +73,7 @@ inline std::vector<glm::ivec2> astar(Map &map, glm::ivec2 start_pos, glm::ivec2 
     std::vector<Node*> open;
     std::vector<Node*> closed;
 
+    // Node *current_node;
     std::cout << "start node x: " << start_node.n_pos.x << " y:" << start_node.n_pos.y << std::endl;
     open.push_back(&start_node);
 
@@ -81,50 +83,15 @@ inline std::vector<glm::ivec2> astar(Map &map, glm::ivec2 start_pos, glm::ivec2 
 
         for (auto &n : open)
         {
-            if (n->fcost() < current_node->fcost() || n->fcost() == current_node->fcost() && n->h_cost < current_node->h_cost)
+            if (n->f_cost < current_node->f_cost || n->f_cost == current_node->f_cost && n->h_cost < current_node->h_cost)
                 current_node = n;
         }
 
-        open.erase(std::remove(open.begin(), open.end(), current_node), open.end());
         closed.push_back(current_node);
+        open.erase(std::remove(open.begin(), open.end(), current_node), open.end());
 
-        if (is_destination(*current_node, end_node))
-        {
-            std::cout << "path found" << std::endl;
-            print_path(get_path(current_node));
-            return (get_path(current_node));
-        }
 
-        const std::vector<glm::ivec2> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-        for (const auto &dir : directions)
-        {
-            glm::ivec2 neighbor_pos(current_node->n_pos.x + dir.x, current_node->n_pos.y + dir.y);
-
-            if (!is_valid(map.txt_map, neighbor_pos.x, neighbor_pos.y))
-                continue;
-            
-            Node *neighbor = new Node(current_node, neighbor_pos);
-
-            if (std::find(closed.begin(), closed.end(), neighbor) != closed.end())
-                continue;
-
-            neighbor->g_cost = current_node->g_cost + 1;
-            neighbor->h_cost = neighbor->hcost(neighbor_pos, end_pos);
-            neighbor->f_cost = neighbor->fcost();
-
-            // open.push_back(neighbor);
-            // auto it = std::find(open.begin(), open.end(), neighbor);
-            // if (it == open.end() && neighbor->g_cost > (*it)->g_cost)
-            // {
-            //     continue;
-            // }
-            // open.push_back(neighbor);
-            if (std::find(open.begin(), open.end(), neighbor) == open.end() || neighbor->f_cost < current_node->f_cost)
-            {
-                open.push_back(neighbor);
-            }
-        }
     }
 
     std::cout << "path not found" << std::endl;

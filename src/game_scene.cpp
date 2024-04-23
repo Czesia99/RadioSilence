@@ -85,6 +85,7 @@ void GameScene::update()
 
     if (player->dead)
     {
+        //screamer
         std::cout << "player dead " << player->dead <<  std::endl;
         ctx.load_scene_id(0);
     }
