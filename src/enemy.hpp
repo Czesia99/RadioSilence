@@ -3,7 +3,8 @@
 #include "mygl/model.hpp"
 #include "mygl/clock.hpp"
 #include "map.hpp"
-#include "astar.hpp"
+// #include "astar.hpp"
+#include "astar2.hpp"
 #include <cstdlib>
 #include <ctime> 
 
@@ -35,8 +36,8 @@ class Enemy
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
-            std::cout << "map char = " << map.txt_map[18][8] << std::endl;
-            std::vector<glm::ivec2> path = astar(map,pos_tile(model.transform.position), {21, 3});
+            std::cout << "map char = " << map.txt_map[9][7] << std::endl;
+            std::vector<glm::ivec2> path = astar2(map,pos_tile(model.transform.position), {18, 13});
         }
 
         void render(Shader shader, Camera3D &camera)
@@ -49,7 +50,7 @@ class Enemy
             // compute_direction();
             map.enemy_position = model.transform.position;
             glm::ivec2 tile = pos_tile(model.transform.position);
-            std::cout << "tile x: " << tile.x << " tile z: " << tile.y << std::endl;
+            // std::cout << "tile x: " << tile.x << " tile z: " << tile.y << std::endl;
         }
 
         void move_forward()
