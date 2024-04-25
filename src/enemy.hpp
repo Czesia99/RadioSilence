@@ -26,6 +26,7 @@ class Enemy
         Model model;
         glm::vec3 initial_pos;
         std::vector<glm::ivec2> path;
+        bool call_one = false;
 
         Enemy(Map &map) : map(map)
         {
@@ -48,6 +49,7 @@ class Enemy
         void update()
         {
             // compute_direction();
+            compute_direction2();
             map.enemy_position = model.transform.position;
             glm::ivec2 tile = tile_pos(model.transform.position);
             // std::cout << "tile x: " << tile.x << " tile z: " << tile.y << std::endl;
@@ -80,13 +82,28 @@ class Enemy
 
         // void compute_direction2()
         // {
-        //     for(auto &p : path)
-        //     {
-        //         glm::ivec2 pos = tile_pos(model.transform.position);
-        //         if (p.x < pos.x)
-        //         {
+        //     int it = 0;
+            
 
+        //     // move_forward();
+        //     glm::ivec2 pos = tile_pos(model.transform.position);
+        //     if (call_one == false)
+        //     {
+        //     //if player is on tile it++;
+        //         if (path[it].y < pos.y) //y is x
+        //         {
+        //             change_direction(BACKWARD);
+        //         } else {
+        //             change_direction(FORWARD);
         //         }
+
+        //         if (path[it].x < pos.x) //x is
+        //         {
+        //             change_direction(LEFT);
+        //         } else {
+        //             change_direction(RIGHT);
+        //         }
+        //         call_one = true;
         //     }
         // }
 
