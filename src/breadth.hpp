@@ -22,8 +22,7 @@ inline bool is_valid(const std::vector<std::vector<char>> &txt_map, int x, int y
 {
     int rows = txt_map.size();
     int cols = txt_map[0].size();
-    // std::cout << "rows" << rows << std::endl;
-    // std::cout << "cols" << cols << std::endl;
+
     return (x >= 0 && x < rows && y >= 0 && y < cols && txt_map[y][x] == ' ');
 }
 
@@ -51,8 +50,7 @@ inline std::vector<glm::ivec2> astar2(Map &map, glm::ivec2 start_pos, glm::ivec2
 
         if (current == end_pos)
             break;
-        // std::cout << "end pos x" << end_pos.x << "end pos y" << end_pos.y << std::endl;
-        // std::cout << current.x << std::endl;
+
         const std::vector<glm::ivec2> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         for (const auto &dir : directions)
@@ -65,10 +63,7 @@ inline std::vector<glm::ivec2> astar2(Map &map, glm::ivec2 start_pos, glm::ivec2
             if (came_from.find(next) == came_from.end()) // if doesn't exist
             {
                 frontier.push(next);
-                // std::cout << "NEXT X : " << next.x << " NEXT Y: " << next.y << std::endl;
-                // std::cout << "CURRENT X : " << current.x << " current Y: " << current.y << std::endl;
                 came_from.insert({next, current});
-                // came_from[next] = current;
             }
         }
 

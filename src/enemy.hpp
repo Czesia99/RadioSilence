@@ -3,8 +3,7 @@
 #include "mygl/model.hpp"
 #include "mygl/clock.hpp"
 #include "map.hpp"
-// #include "astar.hpp"
-#include "astar2.hpp"
+#include "breadth.hpp"
 #include <cstdlib>
 #include <ctime> 
 
