@@ -22,8 +22,9 @@ inline bool is_valid(const std::vector<std::vector<char>> &txt_map, int x, int y
 {
     int rows = txt_map.size();
     int cols = txt_map[0].size();
-
-    return (x >= 0 && x < rows && y >= 0 && y < cols && txt_map[y][x] == ' ');
+    // std::cout << "rows" << rows << std::endl;
+    // std::cout << "cols" << cols << std::endl;
+    return (x >= 0 && x < rows && y >= 0 && y < cols && txt_map[x][y] == ' ');
 }
 
 inline void print_path(std::vector<glm::ivec2> path)
@@ -35,14 +36,12 @@ inline void print_path(std::vector<glm::ivec2> path)
     }
 }
 
-inline std::vector<glm::ivec2> astar2(Map &map, glm::ivec2 start_pos, glm::ivec2 end_pos)
+inline std::vector<glm::ivec2> breadth(Map &map, glm::ivec2 start_pos, glm::ivec2 end_pos)
 {
     std::queue<glm::ivec2> frontier;
-
-    frontier.push(start_pos);
-
     std::unordered_map<glm::ivec2, glm::ivec2, KeyFuncs, KeyFuncs> came_from;
 
+    frontier.push(start_pos);
     
     do {
         glm::ivec2 current = frontier.front();
@@ -63,7 +62,7 @@ inline std::vector<glm::ivec2> astar2(Map &map, glm::ivec2 start_pos, glm::ivec2
             if (came_from.find(next) == came_from.end()) // if doesn't exist
             {
                 frontier.push(next);
-                came_from.insert({next, current});
+                came_from[next] = current;
             }
         }
 

@@ -25,6 +25,7 @@ class Enemy
         glm::vec3 position;
         Model model;
         glm::vec3 initial_pos;
+        std::vector<glm::ivec2> path;
 
         Enemy(Map &map) : map(map)
         {
@@ -35,8 +36,8 @@ class Enemy
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
-            std::cout << "map char = " << map.txt_map[9][7] << std::endl;
-            std::vector<glm::ivec2> path = astar2(map,pos_tile(model.transform.position), {18, 13});
+            std::cout << "map char = " << map.txt_map[3][6] << std::endl;
+            path = breadth(map,tile_pos(model.transform.position), {18, 12});
         }
 
         void render(Shader shader, Camera3D &camera)
@@ -48,7 +49,7 @@ class Enemy
         {
             // compute_direction();
             map.enemy_position = model.transform.position;
-            glm::ivec2 tile = pos_tile(model.transform.position);
+            glm::ivec2 tile = tile_pos(model.transform.position);
             // std::cout << "tile x: " << tile.x << " tile z: " << tile.y << std::endl;
         }
 
@@ -76,6 +77,18 @@ class Enemy
                 front = glm::vec3(glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(front, 1.0f));
             }
         }
+
+        // void compute_direction2()
+        // {
+        //     for(auto &p : path)
+        //     {
+        //         glm::ivec2 pos = tile_pos(model.transform.position);
+        //         if (p.x < pos.x)
+        //         {
+
+        //         }
+        //     }
+        // }
 
         void compute_direction()
         {
@@ -144,9 +157,12 @@ class Enemy
             return false;
         }
 
-        glm::ivec2 pos_tile(glm::vec3 pos)
+        glm::ivec2 tile_pos(glm::vec3 pos)
         {
-            return {int(pos.x / 1) * 1, int(pos.z / 1) * 1};
+            std::cout << "tile pos x = " << int(pos.x / 1) * 1 << "tile pos y" << int(pos.z / 1) * 1 << std::endl;
+            return {int(pos.z / 1) * 1, int(pos.x / 1) * 1}; 
+            //3D WORLD X = Y 2D WORLD
+            //3D WORLD Z = X 2D WORLD
         }
 
     private:
