@@ -27,6 +27,7 @@ class Enemy
         glm::vec3 initial_pos;
         std::vector<glm::ivec2> path;
         bool call_one = false;
+        int it = 0;
 
         Enemy(Map &map) : map(map)
         {
@@ -55,7 +56,7 @@ class Enemy
             map.enemy_position = model.transform.position;
             // glm::ivec2 tile = tile_pos(model.transform.position);
             // std::cout << "tile x: " << tile.x << " tile z: " << tile.y << std::endl;
-            std::cout << "enemy pos x: " << model.transform.position.x << " enemy pos z: " << model.transform.position.y << std::endl;
+            // std::cout << "enemy pos x: " << model.transform.position.x << " enemy pos z: " << model.transform.position.y << std::endl;
         }
 
         void move_forward()
@@ -85,63 +86,74 @@ class Enemy
 
         void compute_direction2()
         {
-            int it = 0;
-            
-        // glm::vec3 forward = glm::normalize(front);
-        // glm::ivec2 currentDirection = { forward.z, forward.x };
-
-        // glm::ivec2 targetDirection = path[it] - pos;
-        // glm::ivec2 rotatedDirection = { currentDirection.y, -currentDirection.x }; 
-        // int dotProduct = targetDirection.x * rotatedDirection.x + targetDirection.y * rotatedDirection.y;
+            glm::vec3 forward = glm::normalize(front);
+            glm::ivec2 currentDirection = {forward.z, forward.x };
+            glm::ivec2 pos = tile_pos(model.transform.position);
+            glm::ivec2 targetDirection = path[it] - pos;
+            glm::ivec2 rotatedDirection = { currentDirection.x, currentDirection.y};
+            std::cout << "rotated direction x: " << rotatedDirection.x << " y: " << rotatedDirection.y << std::endl;
+            int dotProduct = targetDirection.x * rotatedDirection.y + targetDirection.y * rotatedDirection.x;
+            //glm::dot(targetDirection, rotatedDirection);
             // move_forward();
-
+            std::cout << "target direction x: " << targetDirection.x << " , y: " << targetDirection.y << std::endl;
             if (on_tile(path[it])) {
                 it++;
                 call_one = false;
                 std::cout << "TRUE" << std::endl;
+                std::cout << "IT = " << it << std::endl;
+                std::cout << " PATH IT = " << path[it].x << " , "<< path[it].y << std::endl;
                 move_forward();
             }
             else {
                 move_forward();
-                std::cout << "FALSE" << std::endl;
+                // std::cout << "FALSE" << std::endl;
             }
+
             // if (glm::distance(glm::vec2(path[it]), {model.transform.position.z, model.transform.position.x}) >= 0.1f)
             // move_forward();
-
-            if (call_one == false)
-            {
-                glm::ivec2 pos = tile_pos(model.transform.position);
-                if (path[it].x < pos.x) {
-                    std::cout << "left" << std::endl;
-                    change_direction(LEFT);
-                } else if (path[it].x > pos.x) {
+            if (call_one == false) {
+                if (dotProduct > 0) {
                     std::cout << "right" << std::endl;
                     change_direction(RIGHT);
-                } else if (path[it].y < pos.y) {
-                    std::cout << "backward" << std::endl;
-                    change_direction(BACKWARD);
+                    call_one = true;
+                    return;
+                } else if (dotProduct < 0) {
+                    std::cout << "left" << std::endl;
+                    std::cout << "dotproduct" << dotProduct << std::endl;
+                    change_direction(LEFT);
+                    call_one = true;
+                    return;
                 } else {
                     std::cout << "forward" << std::endl;
+                    std::cout << "dotproduct" << dotProduct << std::endl;
                     change_direction(FORWARD);
+                    call_one = true;
+                    return;
                 }
-    
-                // if (path[it].y < pos.y) //y is x
-                // {
-                //     std::cout << "backward" << std::endl;
-                //     change_direction(BACKWARD);
-                //     call_one = true;
-                // } else {
-                //     std::cout << "forward" << std::endl;
-                //     change_direction(FORWARD);
-                //     call_one = true;
-                // }
-
             }
+            // if (call_one == false)
+            // {
+            //     pos = tile_pos(model.transform.position);
+            //     if (path[it].x < pos.x) {
+            //         std::cout << "left" << std::endl;
+            //         change_direction(LEFT);
+            //     } else if (path[it].x > pos.x) {
+            //         std::cout << "right" << std::endl;
+            //         change_direction(RIGHT);
+            //     } else if (path[it].y < pos.y) {
+            //         std::cout << "backward" << std::endl;
+            //         change_direction(BACKWARD);
+            //     } else {
+            //         std::cout << "forward" << std::endl;
+            //         change_direction(FORWARD);
+            //     }
+            // }
         }
 
         bool on_tile(glm::ivec2 path_tile)
         {
-            float offset = 0.11f;
+            std::cout << "path tile: " << path_tile.x << " , " << path_tile.y << std::endl;
+            float offset = 0.2f;
             float min_x = path_tile.y - offset;
             float max_x = path_tile.y + offset;
             float min_z = path_tile.x - offset;
@@ -157,8 +169,8 @@ class Enemy
 
         glm::ivec2 tile_pos(glm::vec3 pos)
         {
-            std::cout << "tile pos x = " << pos.z<< "tile pos y" << pos.x << std::endl;
-            std::cout << "tile pos x = " << int(pos.z / 1) * 1 << "tile pos y" << int(pos.x / 1) * 1 << std::endl;
+            // std::cout << "tile pos x = " << pos.z<< "tile pos y" << pos.x << std::endl;
+            // std::cout << "tile pos x = " << int(pos.z / 1) * 1 << "tile pos y" << int(pos.x / 1) * 1 << std::endl;
             return {int(pos.z / 1) * 1, int(pos.x / 1) * 1}; 
             //3D WORLD X = Y 2D WORLD
             //3D WORLD Z = X 2D WORLD

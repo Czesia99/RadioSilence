@@ -34,7 +34,7 @@ class Player
 
         glm::ivec2 tile_pos2(glm::vec3 pos)
         {
-            std::cout << "player tile pos x = " << int(pos.z / 1) * 1 << " player tile pos y" << int(pos.x / 1) * 1 << std::endl;
+            // std::cout << "player tile pos x = " << int(pos.z / 1) * 1 << " player tile pos y" << int(pos.x / 1) * 1 << std::endl;
             return {int(pos.z / 1) * 1, int(pos.x / 1) * 1}; 
             //3D WORLD X = Y 2D WORLD
             //3D WORLD Z = X 2D WORLD
@@ -52,7 +52,7 @@ class Player
             is_victory();
             is_dead();
 
-            std::cout << "player x: " << player_camera.position.x << " " << "player z: " << player_camera.position.z << std::endl;
+            // std::cout << "player x: " << player_camera.position.x << " " << "player z: " << player_camera.position.z << std::endl;
             tile_pos2(player_camera.position);
         }
 
