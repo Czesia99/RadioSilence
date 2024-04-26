@@ -17,7 +17,7 @@ class Enemy
     };
 
     public:
-        float movement_speed = 0.01f;
+        float movement_speed = 0.1f;
         float velocity;
         float direction_timer;
         float duration_interval = 30.0f;
@@ -37,7 +37,8 @@ class Enemy
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
-            std::cout << "map char = " << map.txt_map[3][6] << std::endl;
+            // change_direction(LEFT);
+            // std::cout << "map char = " << map.txt_map[3][6] << std::endl;
             path = breadth(map,tile_pos(model.transform.position), {18, 12});
         }
 
@@ -48,11 +49,13 @@ class Enemy
 
         void update()
         {
+            clock.update();
             // compute_direction();
             compute_direction2();
             map.enemy_position = model.transform.position;
-            glm::ivec2 tile = tile_pos(model.transform.position);
+            // glm::ivec2 tile = tile_pos(model.transform.position);
             // std::cout << "tile x: " << tile.x << " tile z: " << tile.y << std::endl;
+            std::cout << "enemy pos x: " << model.transform.position.x << " enemy pos z: " << model.transform.position.y << std::endl;
         }
 
         void move_forward()
@@ -80,103 +83,82 @@ class Enemy
             }
         }
 
-        // void compute_direction2()
-        // {
-        //     int it = 0;
-            
-
-        //     // move_forward();
-        //     glm::ivec2 pos = tile_pos(model.transform.position);
-        //     if (call_one == false)
-        //     {
-        //     //if player is on tile it++;
-        //         if (path[it].y < pos.y) //y is x
-        //         {
-        //             change_direction(BACKWARD);
-        //         } else {
-        //             change_direction(FORWARD);
-        //         }
-
-        //         if (path[it].x < pos.x) //x is
-        //         {
-        //             change_direction(LEFT);
-        //         } else {
-        //             change_direction(RIGHT);
-        //         }
-        //         call_one = true;
-        //     }
-        // }
-
-        void compute_direction()
+        void compute_direction2()
         {
-            glm::vec3 future_pos = model.transform.position;
-            glm::vec3 forward_pos = model.transform.position + glm::normalize(front) * 0.5f;
-            future_pos += front * velocity;
+            int it = 0;
             
-            bool forward_blocked = is_wall(forward_pos, FORWARD);
-            bool left_blocked = is_wall(future_pos, LEFT);
-            bool right_blocked = is_wall(future_pos, RIGHT);
+        // glm::vec3 forward = glm::normalize(front);
+        // glm::ivec2 currentDirection = { forward.z, forward.x };
 
-            if (!forward_blocked) {
+        // glm::ivec2 targetDirection = path[it] - pos;
+        // glm::ivec2 rotatedDirection = { currentDirection.y, -currentDirection.x }; 
+        // int dotProduct = targetDirection.x * rotatedDirection.x + targetDirection.y * rotatedDirection.y;
+            // move_forward();
+
+            if (on_tile(path[it])) {
+                it++;
+                call_one = false;
+                std::cout << "TRUE" << std::endl;
                 move_forward();
-                std::cout << "forward not blocked" << std::endl;
-                return;
             }
-
-            // bool left_blocked = is_wall(future_pos, LEFT);
-            // bool right_blocked = is_wall(future_pos, RIGHT);
-
-            std::vector<Enemy_Movement> available_directions;
-
-            if (!left_blocked)
-                available_directions.push_back(LEFT);
-            if (!right_blocked)
-                available_directions.push_back(RIGHT);
-
-            if (available_directions.empty()) {
-                std::cout << "backward" << std::endl; 
-                change_direction(BACKWARD);
-                return;
-            }
-            if (available_directions.size() == 1)
-                change_direction(available_directions[0]);
             else {
-                srand(static_cast<unsigned int>(time(nullptr)));
-                int random_index = rand() % available_directions.size();
-                change_direction(available_directions[random_index]);
+                move_forward();
+                std::cout << "FALSE" << std::endl;
+            }
+            // if (glm::distance(glm::vec2(path[it]), {model.transform.position.z, model.transform.position.x}) >= 0.1f)
+            // move_forward();
+
+            if (call_one == false)
+            {
+                glm::ivec2 pos = tile_pos(model.transform.position);
+                if (path[it].x < pos.x) {
+                    std::cout << "left" << std::endl;
+                    change_direction(LEFT);
+                } else if (path[it].x > pos.x) {
+                    std::cout << "right" << std::endl;
+                    change_direction(RIGHT);
+                } else if (path[it].y < pos.y) {
+                    std::cout << "backward" << std::endl;
+                    change_direction(BACKWARD);
+                } else {
+                    std::cout << "forward" << std::endl;
+                    change_direction(FORWARD);
+                }
+    
+                // if (path[it].y < pos.y) //y is x
+                // {
+                //     std::cout << "backward" << std::endl;
+                //     change_direction(BACKWARD);
+                //     call_one = true;
+                // } else {
+                //     std::cout << "forward" << std::endl;
+                //     change_direction(FORWARD);
+                //     call_one = true;
+                // }
+
             }
         }
 
-        bool is_wall(const glm::vec3& future_pos, Enemy_Movement direction)
+        bool on_tile(glm::ivec2 path_tile)
         {
-            glm::vec3 future_pos_side;
-            if (direction == LEFT)
-                future_pos_side = future_pos - glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
-            else if (direction == RIGHT)
-                future_pos_side = future_pos + glm::cross(front, glm::vec3(0, 1, 0)) * 0.5f;
-            else if (direction == FORWARD)
-                future_pos_side = future_pos;
-
-            for (auto& wall_pos : map.walls_position)
+            float offset = 0.11f;
+            float min_x = path_tile.y - offset;
+            float max_x = path_tile.y + offset;
+            float min_z = path_tile.x - offset;
+            float max_z = path_tile.x + offset;
+    
+            if (model.transform.position.x >= min_x && model.transform.position.x <= max_x && model.transform.position.z >= min_z && model.transform.position.z <= max_z)
             {
-                float offset = 0.11f;
-                float wall_min_x = wall_pos.x - 0.5f - offset;
-                float wall_max_x = wall_pos.x + 0.5f + offset;
-                float wall_min_z = wall_pos.z - 0.5f - offset;
-                float wall_max_z = wall_pos.z + 0.5f + offset;
-
-                if (future_pos_side.x >= wall_min_x && future_pos_side.x <= wall_max_x &&
-                    future_pos_side.z >= wall_min_z && future_pos_side.z <= wall_max_z)
-                {
-                    return true;
-                }
+                call_one = false;
+                return true;
             }
             return false;
         }
 
         glm::ivec2 tile_pos(glm::vec3 pos)
         {
-            std::cout << "tile pos x = " << int(pos.x / 1) * 1 << "tile pos y" << int(pos.z / 1) * 1 << std::endl;
+            std::cout << "tile pos x = " << pos.z<< "tile pos y" << pos.x << std::endl;
+            std::cout << "tile pos x = " << int(pos.z / 1) * 1 << "tile pos y" << int(pos.x / 1) * 1 << std::endl;
             return {int(pos.z / 1) * 1, int(pos.x / 1) * 1}; 
             //3D WORLD X = Y 2D WORLD
             //3D WORLD Z = X 2D WORLD

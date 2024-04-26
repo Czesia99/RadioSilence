@@ -32,6 +32,14 @@ class Player
             ma_sound_set_volume(&step_sound, 0.1f);
         }
 
+        glm::ivec2 tile_pos2(glm::vec3 pos)
+        {
+            std::cout << "player tile pos x = " << int(pos.z / 1) * 1 << " player tile pos y" << int(pos.x / 1) * 1 << std::endl;
+            return {int(pos.z / 1) * 1, int(pos.x / 1) * 1}; 
+            //3D WORLD X = Y 2D WORLD
+            //3D WORLD Z = X 2D WORLD
+        }
+
         void update()
         {
             clock.update();
@@ -45,7 +53,9 @@ class Player
             is_dead();
 
             std::cout << "player x: " << player_camera.position.x << " " << "player z: " << player_camera.position.z << std::endl;
+            tile_pos2(player_camera.position);
         }
+
 
         void update_velocity(bool k_pressed)
         {
