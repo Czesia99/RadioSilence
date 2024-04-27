@@ -25,6 +25,14 @@ class Player
 
         Player(Map &map, Sound &sound_manager, float win_width = 800, float win_height = 600) : map(map), sound_manager(sound_manager)
         {
+            // srand (time(NULL));
+            // sound_manager.result = ma_fence_init(&fence);
+
+            // for (int i = 0; i < 9; i += 1)
+            // {
+            //     ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &fence, &step_sounds[i]);
+            // }
+            // ma_fence_wait(&fence);
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
             radio = new Radio(sound_manager, map.player_position, map.win_position);
 
@@ -91,6 +99,21 @@ class Player
 
     private:
 
+        ma_fence fence;
+        ma_sound step_sounds[10];
+        const char *sound_files[10] = {
+            "../assets/sfx/footsteps/step1.wav",
+            "../assets/sfx/footsteps/step2.wav",
+            "../assets/sfx/footsteps/step3.wav",
+            "../assets/sfx/footsteps/step4.wav",
+            "../assets/sfx/footsteps/step5.wav",
+            "../assets/sfx/footsteps/step6.wav",
+            "../assets/sfx/footsteps/step7.wav",
+            "../assets/sfx/footsteps/step8.wav",
+            "../assets/sfx/footsteps/step9.wav",
+            "../assets/sfx/footsteps/step10.wav"
+        };
+
         float headbob(float delta_time, float current_time)
         {
             float headbob_frequency = 0.7f;
@@ -105,6 +128,9 @@ class Player
             if (bobbing <= 0.005 && !step) {
                 step = true;
                 ma_sound_start(&step_sound);
+                // int i = rand() / 10;
+                // ma_sound_seek_to_pcm_frame(&step_sounds[i], 0);
+                // ma_sound_start(&step_sounds[i]);
             }
 
             return bobbing;

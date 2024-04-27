@@ -28,6 +28,7 @@ class Enemy
         std::vector<glm::ivec2> path;
         bool call_one = false;
         int it = 0;
+        float angle;
 
         Enemy(Map &map) : map(map)
         {
@@ -37,6 +38,7 @@ class Enemy
             model.transform.position = map.enemy_start_position;
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
+            change_direction(LEFT);
             change_direction(LEFT);
             // change_direction(LEFT);
             // std::cout << "map char = " << map.txt_map[3][6] << std::endl;
@@ -89,19 +91,24 @@ class Enemy
             glm::vec3 forward = glm::normalize(front);
             glm::ivec2 currentDirection = {forward.z, forward.x };
             glm::ivec2 pos = tile_pos(model.transform.position);
-            glm::ivec2 targetDirection = path[it] - pos;
-            glm::ivec2 rotatedDirection = { currentDirection.x, currentDirection.y};
-            std::cout << "rotated direction x: " << rotatedDirection.x << " y: " << rotatedDirection.y << std::endl;
-            int dotProduct = targetDirection.x * rotatedDirection.y + targetDirection.y * rotatedDirection.x;
+            // glm::ivec2 target = glm::normalize(path[it]);
+            glm::vec2 direction = (path[it] - pos);
+            angle = (atan2(direction.y, direction.x));
+            std::cout << "angle = " << glm::degrees(angle) << std::endl;
+            // glm::ivec2 targetDirection = path[it] - pos;
+            // glm::ivec2 rotatedDirection = { currentDirection.y, -currentDirection.x};
+            // std::cout << "rotated direction x: " << rotatedDirection.x << " y: " << rotatedDirection.y << std::endl;
+            // int dotProduct = targetDirection.x * rotatedDirection.x + targetDirection.y * rotatedDirection.y;
             //glm::dot(targetDirection, rotatedDirection);
             // move_forward();
-            std::cout << "target direction x: " << targetDirection.x << " , y: " << targetDirection.y << std::endl;
+            // std::cout << "target direction x: " << targetDirection.x << " , y: " << targetDirection.y << std::endl;
             if (on_tile(path[it])) {
                 it++;
                 call_one = false;
                 std::cout << "TRUE" << std::endl;
                 std::cout << "IT = " << it << std::endl;
                 std::cout << " PATH IT = " << path[it].x << " , "<< path[it].y << std::endl;
+                // angle = atan2(direction.x, direction.y);
                 move_forward();
             }
             else {
@@ -109,28 +116,47 @@ class Enemy
                 // std::cout << "FALSE" << std::endl;
             }
 
-            // if (glm::distance(glm::vec2(path[it]), {model.transform.position.z, model.transform.position.x}) >= 0.1f)
-            // move_forward();
             if (call_one == false) {
-                if (dotProduct > 0) {
+                call_one = true;
+                std::cout << "angle = " << glm::degrees(angle) << std::endl;
+                if (glm::degrees(angle) == 45.0f) { //&& glm::degrees(angle) < 135.0f) {
                     std::cout << "right" << std::endl;
                     change_direction(RIGHT);
-                    call_one = true;
                     return;
-                } else if (dotProduct < 0) {
+                } else if (glm::degrees(angle) <= -45.0f && glm::degrees(angle) > -135.0f) {
                     std::cout << "left" << std::endl;
-                    std::cout << "dotproduct" << dotProduct << std::endl;
                     change_direction(LEFT);
-                    call_one = true;
+                    return;
+                } else if (glm::degrees(angle) >= 135.0f || glm::degrees(angle) < -135.0f) {
+                    std::cout << "backward" << std::endl;
                     return;
                 } else {
                     std::cout << "forward" << std::endl;
-                    std::cout << "dotproduct" << dotProduct << std::endl;
-                    change_direction(FORWARD);
-                    call_one = true;
                     return;
                 }
             }
+            // if (glm::distance(glm::vec2(path[it]), {model.transform.position.z, model.transform.position.x}) >= 0.1f)
+            // move_forward();
+            // if (call_one == false) {
+            //     if (glm::degrees(angle) == 90) {
+            //         std::cout << "right" << std::endl;
+            //         change_direction(RIGHT);
+            //         call_one = true;
+            //         return;
+            //     } else if (glm::degrees(angle) ==  ) {
+            //         std::cout << "left" << std::endl;
+            //         std::cout << "dotproduct" << dotProduct << std::endl;
+            //         change_direction(LEFT);
+            //         call_one = true;
+            //         return;
+            //     } else {
+            //         std::cout << "forward" << std::endl;
+            //         std::cout << "dotproduct" << dotProduct << std::endl;
+            //         change_direction(FORWARD);
+            //         call_one = true;
+            //         return;
+            //     }
+            // }
             // if (call_one == false)
             // {
             //     pos = tile_pos(model.transform.position);
@@ -153,7 +179,7 @@ class Enemy
         bool on_tile(glm::ivec2 path_tile)
         {
             std::cout << "path tile: " << path_tile.x << " , " << path_tile.y << std::endl;
-            float offset = 0.2f;
+            float offset = 0.001f;
             float min_x = path_tile.y - offset;
             float max_x = path_tile.y + offset;
             float min_z = path_tile.x - offset;
