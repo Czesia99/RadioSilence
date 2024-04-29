@@ -17,7 +17,7 @@ class Enemy
     };
 
     public:
-        float movement_speed = 0.1f;
+        float movement_speed = 0.3f;
         float velocity;
         float direction_timer;
         float duration_interval = 30.0f;
@@ -29,6 +29,7 @@ class Enemy
         bool call_one = false;
         int it = 0;
         float angle;
+        glm::ivec2 pos = tile_pos(model.transform.position);
 
         Enemy(Map &map) : map(map)
         {
@@ -104,7 +105,7 @@ class Enemy
         {
             glm::vec3 forward = glm::normalize(front);
             glm::vec2 currentDirection = {forward.z, forward.x };
-            glm::ivec2 pos = tile_pos(model.transform.position);
+            pos = tile_pos(model.transform.position);
             glm::vec2 direction = (path[it] - pos);
             // angle = atan2(direction.y, direction.x);
             angle = glm::degrees(atan2(direction.y, direction.x) - atan2(currentDirection.y, currentDirection.x));
@@ -200,15 +201,11 @@ class Enemy
             float max_x = path_tile.y + offset;
             float min_z = path_tile.x - offset;
             float max_z = path_tile.x + offset;
-
-            // std::cout << "min_x : " << min_x << std::endl;
-            // std::cout << "max_x : " << max_x << std::endl;
-            // std::cout << "min_z : " << min_z << std::endl;
-            // std::cout << "max_z : " << max_z << std::endl;
     
             if (model.transform.position.x >= min_x && model.transform.position.x <= max_x && model.transform.position.z >= min_z && model.transform.position.z <= max_z)
             {
                 call_one = false;
+                pos = path_tile;
                 return true;
             }
             return false;
