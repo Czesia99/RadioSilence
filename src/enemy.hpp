@@ -54,6 +54,10 @@ class Enemy
         {
             clock.update();
             // compute_direction();
+            // glm::ivec2 pos = tile_pos(model.transform.position);
+            // glm::vec2 direction = (path[it] - pos);
+            // angle = atan2(direction.y, direction.x);
+            // std::cout << "angle = " << glm::degrees(angle) << std::endl;
             compute_direction2();
             map.enemy_position = model.transform.position;
             // glm::ivec2 tile = tile_pos(model.transform.position);
@@ -86,15 +90,25 @@ class Enemy
             }
         }
 
+        void compute_direction3()
+        {
+            glm::vec3 forward = glm::normalize(front);
+            glm::ivec2 pos = tile_pos(model.transform.position);
+            glm::vec2 direction = (path[it] - pos);
+            glm::ivec2 currentDirection = {forward.z, forward.x };
+
+
+        }
+
         void compute_direction2()
         {
             glm::vec3 forward = glm::normalize(front);
-            glm::ivec2 currentDirection = {forward.z, forward.x };
+            glm::vec2 currentDirection = {forward.z, forward.x };
             glm::ivec2 pos = tile_pos(model.transform.position);
-            // glm::ivec2 target = glm::normalize(path[it]);
             glm::vec2 direction = (path[it] - pos);
-            angle = (atan2(direction.y, direction.x));
-            std::cout << "angle = " << glm::degrees(angle) << std::endl;
+            // angle = atan2(direction.y, direction.x);
+            angle = glm::degrees(atan2(direction.y, direction.x) - atan2(currentDirection.y, currentDirection.x));
+            // std::cout << "angle = " << glm::degrees(angle) << std::endl;
             // glm::ivec2 targetDirection = path[it] - pos;
             // glm::ivec2 rotatedDirection = { currentDirection.y, -currentDirection.x};
             // std::cout << "rotated direction x: " << rotatedDirection.x << " y: " << rotatedDirection.y << std::endl;
@@ -108,6 +122,10 @@ class Enemy
                 std::cout << "TRUE" << std::endl;
                 std::cout << "IT = " << it << std::endl;
                 std::cout << " PATH IT = " << path[it].x << " , "<< path[it].y << std::endl;
+                // pos = tile_pos(model.transform.position);
+                // direction = (path[it] - pos);
+                // angle = atan2(direction.y, -direction.x);
+                std::cout << "pos1 x: " << pos.x << " pos1 y: " << pos.y << std::endl;
                 // angle = atan2(direction.x, direction.y);
                 move_forward();
             }
@@ -118,72 +136,75 @@ class Enemy
 
             if (call_one == false) {
                 call_one = true;
-                std::cout << "angle = " << glm::degrees(angle) << std::endl;
-                if (glm::degrees(angle) == 45.0f) { //&& glm::degrees(angle) < 135.0f) {
-                    std::cout << "right" << std::endl;
-                    change_direction(RIGHT);
-                    return;
-                } else if (glm::degrees(angle) <= -45.0f && glm::degrees(angle) > -135.0f) {
-                    std::cout << "left" << std::endl;
-                    change_direction(LEFT);
-                    return;
-                } else if (glm::degrees(angle) >= 135.0f || glm::degrees(angle) < -135.0f) {
-                    std::cout << "backward" << std::endl;
-                    return;
+                // pos = tile_pos(model.transform.position);
+                direction = (path[it] - pos);
+                currentDirection = {forward.z, forward.x };
+                float dotProduct = glm::dot(direction, currentDirection);
+                std::cout << "pos1 x: " << pos.x << " pos1 y: " << pos.y << std::endl;
+                std::cout << "dot product : " << dotProduct << std::endl;
+                std::cout << "model pos x: " << model.transform.position.z << " model pos y: " << model.transform.position.x << std::endl;
+                if (dotProduct < -0.95f) {
+                    // Enemy is close to facing opposite direction
+                    change_direction(BACKWARD);
+                    // move_forward();
+                } else if (dotProduct > 0.95f) {
+                    // Enemy is close to facing same direction
+                    move_forward();
+                    // change_direction(BACKWARD);
                 } else {
-                    std::cout << "forward" << std::endl;
-                    return;
+                // Determine whether to turn left or right
+                    float crossProduct = direction.x * currentDirection.y - direction.y * currentDirection.x;
+                    if (crossProduct > 0.0f) {
+                        change_direction(RIGHT);
+                    } else {
+                        change_direction(LEFT);
+                    }
                 }
             }
-            // if (glm::distance(glm::vec2(path[it]), {model.transform.position.z, model.transform.position.x}) >= 0.1f)
-            // move_forward();
+
             // if (call_one == false) {
-            //     if (glm::degrees(angle) == 90) {
-            //         std::cout << "right" << std::endl;
-            //         change_direction(RIGHT);
-            //         call_one = true;
-            //         return;
-            //     } else if (glm::degrees(angle) ==  ) {
-            //         std::cout << "left" << std::endl;
-            //         std::cout << "dotproduct" << dotProduct << std::endl;
-            //         change_direction(LEFT);
-            //         call_one = true;
-            //         return;
-            //     } else {
-            //         std::cout << "forward" << std::endl;
-            //         std::cout << "dotproduct" << dotProduct << std::endl;
-            //         change_direction(FORWARD);
-            //         call_one = true;
-            //         return;
-            //     }
-            // }
-            // if (call_one == false)
-            // {
+            //     call_one = true;
             //     pos = tile_pos(model.transform.position);
-            //     if (path[it].x < pos.x) {
-            //         std::cout << "left" << std::endl;
-            //         change_direction(LEFT);
-            //     } else if (path[it].x > pos.x) {
+            //     direction = (path[it] - pos);
+            //     angle = atan2(direction.y, direction.x);
+            //     // std::cout << "angle on tile = " << glm::degrees(angle) << std::endl;
+            //     std::cout << "model pos z " << model.transform.position.z << " model pos x" << model.transform.position.x << std::endl;
+            //     std::cout << "in if angle = " << glm::degrees(angle) << std::endl;
+            //     std::cout << "pos x: " << pos.x << " pos y: " << pos.y << std::endl;
+            //     std::cout << "direction x: " << direction.x << " direction y : " << direction.y << std::endl;
+            //     if (glm::degrees(angle) > 45.0f && glm::degrees(angle) < 135.0f) { //&& glm::degrees(angle) < 135.0f) { //&& glm::degrees(angle) < 135.0f) { //&& glm::degrees(angle) < 135.0f) {
             //         std::cout << "right" << std::endl;
             //         change_direction(RIGHT);
-            //     } else if (path[it].y < pos.y) {
+            //         angle = 0;
+            //         return;
+            //     } else if (glm::degrees(angle) <= -45.0f && glm::degrees(angle) > -135.0f) {
+            //         std::cout << "left" << std::endl;
+            //         change_direction(LEFT);
+            //         return;
+            //     } else if (glm::degrees(angle) >= 135.0f || glm::degrees(angle) < -135.0f) {
             //         std::cout << "backward" << std::endl;
-            //         change_direction(BACKWARD);
+            //         // change_direction(BACKWARD);
+            //         return;
             //     } else {
             //         std::cout << "forward" << std::endl;
-            //         change_direction(FORWARD);
+            //         return;
             //     }
             // }
         }
 
         bool on_tile(glm::ivec2 path_tile)
         {
-            std::cout << "path tile: " << path_tile.x << " , " << path_tile.y << std::endl;
-            float offset = 0.001f;
+            // std::cout << "path tile: " << path_tile.x << " , " << path_tile.y << std::endl;
+            float offset = 0.01f;
             float min_x = path_tile.y - offset;
             float max_x = path_tile.y + offset;
             float min_z = path_tile.x - offset;
             float max_z = path_tile.x + offset;
+
+            // std::cout << "min_x : " << min_x << std::endl;
+            // std::cout << "max_x : " << max_x << std::endl;
+            // std::cout << "min_z : " << min_z << std::endl;
+            // std::cout << "max_z : " << max_z << std::endl;
     
             if (model.transform.position.x >= min_x && model.transform.position.x <= max_x && model.transform.position.z >= min_z && model.transform.position.z <= max_z)
             {
@@ -197,7 +218,7 @@ class Enemy
         {
             // std::cout << "tile pos x = " << pos.z<< "tile pos y" << pos.x << std::endl;
             // std::cout << "tile pos x = " << int(pos.z / 1) * 1 << "tile pos y" << int(pos.x / 1) * 1 << std::endl;
-            return {int(pos.z / 1) * 1, int(pos.x / 1) * 1}; 
+            return {int(pos.z / 1) * 1, int(pos.x / 1) * 1 }; 
             //3D WORLD X = Y 2D WORLD
             //3D WORLD Z = X 2D WORLD
         }
