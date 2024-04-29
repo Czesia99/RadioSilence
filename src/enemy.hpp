@@ -43,7 +43,7 @@ class Enemy
             change_direction(LEFT);
             // change_direction(LEFT);
             // std::cout << "map char = " << map.txt_map[3][6] << std::endl;
-            path = breadth(map,tile_pos(model.transform.position), {18, 12});
+            path = breadth(map,tile_pos(model.transform.position), {3, 11});
         }
 
         void render(Shader shader, Camera3D &camera)
@@ -59,7 +59,15 @@ class Enemy
             // glm::vec2 direction = (path[it] - pos);
             // angle = atan2(direction.y, direction.x);
             // std::cout << "angle = " << glm::degrees(angle) << std::endl;
-            compute_direction2();
+            if (it < path.size()) {
+                compute_direction2();
+
+            } else {
+                // path = breadth(map, tile_pos(model.transform.position), {0, 0});
+                // std::reverse(path.begin(), path.end());
+                // it = 0;
+            }
+
             map.enemy_position = model.transform.position;
             // glm::ivec2 tile = tile_pos(model.transform.position);
             // std::cout << "tile x: " << tile.x << " tile z: " << tile.y << std::endl;
@@ -127,6 +135,7 @@ class Enemy
                 // direction = (path[it] - pos);
                 // angle = atan2(direction.y, -direction.x);
                 std::cout << "pos1 x: " << pos.x << " pos1 y: " << pos.y << std::endl;
+                std::cout << "path size = " << path.size() << std::endl;
                 // angle = atan2(direction.x, direction.y);
                 move_forward();
             }
