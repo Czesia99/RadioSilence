@@ -116,6 +116,21 @@ class Map {
             }
         }
 
+        glm::ivec2 random_walkable_pos()
+        {
+            std::cout << "random walkable pos" << std::endl;
+            srand (time(NULL));
+            int rows = txt_map.size();
+            int cols = txt_map[0].size();
+            int x, y;
+            do {
+                x = (rand() % rows);
+                y = (rand() % cols);
+            } while (txt_map[x][y] != ' ');
+
+            return glm::ivec2 {x, y};
+        }
+
     private:
         Model cage;
         Model wall;

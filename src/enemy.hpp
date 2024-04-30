@@ -41,9 +41,7 @@ class Enemy
             model.transform.scale *= 0.1f;
             change_direction(LEFT);
             change_direction(LEFT);
-            // change_direction(LEFT);
-            // std::cout << "map char = " << map.txt_map[3][6] << std::endl;
-            path = breadth(map,tile_pos(model.transform.position), {3, 11});
+            path = breadth(map,tile_pos(model.transform.position), {11, 3});
         }
 
         void render(Shader shader, Camera3D &camera)
@@ -58,9 +56,13 @@ class Enemy
                 compute_direction();
 
             } else {
-                // path = breadth(map, tile_pos(model.transform.position), {0, 0});
+                
+                path = breadth(map, tile_pos(model.transform.position), map.random_walkable_pos());
+                glm::ivec2 tp = tile_pos(model.transform.position);
+                std::cout << "tile pos x = " << tp.x << " y = " << tp.y << std::endl;
+                call_one = false;
                 // std::reverse(path.begin(), path.end());
-                // it = 0;
+                it = 0;
             }
 
             map.enemy_position = model.transform.position;
@@ -122,14 +124,18 @@ class Enemy
                 std::cout << "dot product : " << dotProduct << std::endl;
                 std::cout << "model pos x: " << model.transform.position.z << " model pos y: " << model.transform.position.x << std::endl;
                 if (dotProduct < -0.95f) {
+                    std::cout << "backward" << std::endl;
                     change_direction(BACKWARD);
                 } else if (dotProduct > 0.95f) {
+                    std::cout << "forward" << std::endl;
                     move_forward();
                 } else {
                     float crossProduct = direction.x * currentDirection.y - direction.y * currentDirection.x;
                     if (crossProduct > 0.0f) {
+                        std::cout << "right" << std::endl;
                         change_direction(RIGHT);
                     } else {
+                        std::cout << "left" << std::endl;
                         change_direction(LEFT);
                     }
                 }
