@@ -30,6 +30,10 @@ void GameScene::open_scene()
     player->player_camera.position = map.player_start_position;
     enemy->model.transform.position = map.enemy_start_position;
     enemy->call_one = false;
+    clock.reset();
+    enemy->clock.reset();
+    //breadth new path
+    enemy->path.clear();
     map.enemy_position = map.enemy_start_position;
     enemy->it = 0;
     std::cout << "enemy start pos x = " << enemy->model.transform.position.z << " y = " << enemy->model.transform.position.x << std::endl;

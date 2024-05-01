@@ -30,6 +30,7 @@ class Enemy
         int it = 0;
         float angle;
         glm::ivec2 pos = tile_pos(model.transform.position);
+        Clock clock;
 
         Enemy(Map &map) : map(map)
         {
@@ -40,8 +41,8 @@ class Enemy
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             pos = tile_pos(model.transform.position);
-            change_direction(LEFT);
-            change_direction(LEFT);
+            // change_direction(LEFT);
+            // change_direction(LEFT);
             // path = breadth(map,tile_pos(model.transform.position), {11, 3});
         }
 
@@ -56,18 +57,19 @@ class Enemy
             if (it < path.size()) {
                 compute_direction();
             } else {
-                path = breadth(map, pos, {11, 3});
+                path = breadth(map, pos, map.random_walkable_pos());
                 call_one = false;
                 it = 0;
             }
             
-            std::cout << "model pos x: " << model.transform.position.z << " model pos y: " << model.transform.position.x << std::endl;
+            // std::cout << "model pos x: " << model.transform.position.z << " model pos y: " << model.transform.position.x << std::endl;
 
             map.enemy_position = model.transform.position;
         }
 
         void move_forward()
         {
+            // std::cout << "clock delta time = " << clock.delta_time << std::endl;
             velocity = movement_speed * clock.delta_time;
             model.transform.position += front * velocity;
         }
@@ -167,7 +169,7 @@ class Enemy
 
     private:
         Map &map;
-        Clock clock;
+        
         glm::vec3 front = glm::vec3(0.0f, 0.0f, 1.0f);
         glm::vec3 right = glm::vec3(-1.0f, 0.0f, 0.0f);
 };

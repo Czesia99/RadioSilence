@@ -16,4 +16,10 @@ class Clock
             delta_time = current_time - last_frame;
             last_frame = current_time;
         };
+
+        void reset() {
+            current_time = glfwGetTime();
+            delta_time = current_time - last_frame;
+            last_frame = current_time;
+        }
 };
