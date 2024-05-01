@@ -20,13 +20,19 @@ void GameScene::store_scene_in_ctx()
 
 void GameScene::open_scene()
 {
+    std::cout << "open scene " << std::endl;
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+    std::cout << "enemy start pos x = " << map.enemy_start_position.z << " y = " << map.enemy_start_position.x << std::endl;
     player->victory = false;
     player->radio->player_dead = false;
+    player->radio->listening_time = 0;
     player->player_camera.position = map.player_start_position;
     enemy->model.transform.position = map.enemy_start_position;
+    enemy->call_one = false;
+    map.enemy_position = map.enemy_start_position;
+    enemy->it = 0;
+    std::cout << "enemy start pos x = " << enemy->model.transform.position.z << " y = " << enemy->model.transform.position.x << std::endl;
     ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", NULL);
 }
 
@@ -43,7 +49,7 @@ void GameScene::update()
     player->update();
     enemy->update();
     map_shader.use();
-    
+
     //spotlight properties
     map_shader.set_vec3("light.position", player->player_camera.position);
     map_shader.set_vec3("light.direction", player->player_camera.front);

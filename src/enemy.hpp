@@ -39,9 +39,10 @@ class Enemy
             model.transform.position = map.enemy_start_position;
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
+            pos = tile_pos(model.transform.position);
             change_direction(LEFT);
             change_direction(LEFT);
-            path = breadth(map,tile_pos(model.transform.position), {11, 3});
+            // path = breadth(map,tile_pos(model.transform.position), {11, 3});
         }
 
         void render(Shader shader, Camera3D &camera)
@@ -54,16 +55,13 @@ class Enemy
             clock.update();
             if (it < path.size()) {
                 compute_direction();
-
             } else {
-                
-                path = breadth(map, tile_pos(model.transform.position), map.random_walkable_pos());
-                glm::ivec2 tp = tile_pos(model.transform.position);
-                std::cout << "tile pos x = " << tp.x << " y = " << tp.y << std::endl;
+                path = breadth(map, pos, {11, 3});
                 call_one = false;
-                // std::reverse(path.begin(), path.end());
                 it = 0;
             }
+            
+            std::cout << "model pos x: " << model.transform.position.z << " model pos y: " << model.transform.position.x << std::endl;
 
             map.enemy_position = model.transform.position;
         }
@@ -104,6 +102,7 @@ class Enemy
             if (on_tile(path[it])) {
                 it++;
                 call_one = false;
+                // pos = path[it];
                 std::cout << "TRUE" << std::endl;
                 std::cout << "IT = " << it << std::endl;
                 std::cout << " PATH IT = " << path[it].x << " , "<< path[it].y << std::endl;
@@ -128,7 +127,7 @@ class Enemy
                     change_direction(BACKWARD);
                 } else if (dotProduct > 0.95f) {
                     std::cout << "forward" << std::endl;
-                    move_forward();
+                    // move_forward();
                 } else {
                     float crossProduct = direction.x * currentDirection.y - direction.y * currentDirection.x;
                     if (crossProduct > 0.0f) {
@@ -161,7 +160,7 @@ class Enemy
 
         glm::ivec2 tile_pos(glm::vec3 pos)
         {
-            return {int(pos.z / 1) * 1, int(pos.x / 1) * 1 }; 
+            return {int(std::round(pos.z / 1)) * 1, int(std::round(pos.x / 1)) * 1 };
             //3D WORLD X = Y 2D WORLD
             //3D WORLD Z = X 2D WORLD
         }

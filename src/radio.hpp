@@ -54,9 +54,10 @@ class Radio
                 listening_time += clock.delta_time;
                 if (listening_time > max_listening_time)
                 {
+                    std::cout << "listening time"<< listening_time << std::endl;
                     game_over();
                 }
-                std::cout << listening_time << std::endl;
+                
             }            
         }
 

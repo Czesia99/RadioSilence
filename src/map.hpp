@@ -38,7 +38,6 @@ class Map {
             statue.draw(shader, camera);
             floor.render(shader, camera);
             roof.render(shader, camera);
-            enemy.draw(shader, camera);
             
             glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
             float angle = atan2(direction_to_player.x, direction_to_player.z) - glm::radians(+90.0f);
@@ -96,9 +95,6 @@ class Map {
             statue.transform.position = statue_position;
             statue.transform.scale *= 0.4f;
 
-            enemy.transform.position = enemy_start_position;
-            enemy.transform.position.y += 0.3;
-            enemy.transform.scale *= 0.1f;
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
         }
@@ -135,7 +131,6 @@ class Map {
         Model cage;
         Model wall;
         Model statue;
-        Model enemy;
         Cube floor;
         Cube roof;
 
