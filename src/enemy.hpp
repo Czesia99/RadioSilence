@@ -29,7 +29,7 @@ class Enemy
         bool call_one = false;
         int it = 0;
         float angle;
-        glm::ivec2 pos = tile_pos(model.transform.position);
+        glm::ivec2 pos;
         Clock clock;
 
         Enemy(Map &map) : map(map)
@@ -41,14 +41,22 @@ class Enemy
             model.transform.position.y += 0.3;
             model.transform.scale *= 0.1f;
             pos = tile_pos(model.transform.position);
-            // change_direction(LEFT);
-            // change_direction(LEFT);
-            // path = breadth(map,tile_pos(model.transform.position), {11, 3});
         }
 
         void render(Shader shader, Camera3D &camera)
         {
             model.draw(shader, camera);
+        }
+
+        void init()
+        {
+            model.transform.position = map.enemy_start_position;
+            call_one = false;
+            clock.reset();
+            it = 0;
+            pos = tile_pos(model.transform.position);
+            path.clear();
+            path = breadth(map, pos, map.random_walkable_pos());
         }
 
         void update()
@@ -62,14 +70,11 @@ class Enemy
                 it = 0;
             }
             
-            // std::cout << "model pos x: " << model.transform.position.z << " model pos y: " << model.transform.position.x << std::endl;
-
             map.enemy_position = model.transform.position;
         }
 
         void move_forward()
         {
-            // std::cout << "clock delta time = " << clock.delta_time << std::endl;
             velocity = movement_speed * clock.delta_time;
             model.transform.position += front * velocity;
         }

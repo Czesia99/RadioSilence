@@ -50,14 +50,12 @@ class Radio
             clock.update();
             if (radio_on)
             {
-                std::cout << "radio on" << std::endl;
                 listening_time += clock.delta_time;
                 if (listening_time > max_listening_time)
                 {
                     std::cout << "listening time"<< listening_time << std::endl;
                     game_over();
                 }
-                
             }            
         }
 
