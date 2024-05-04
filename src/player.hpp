@@ -63,7 +63,6 @@ class Player
             // std::cout << "player x: " << player_camera.position.x << " " << "player z: " << player_camera.position.z << std::endl;
         }
 
-
         void update_velocity(bool k_pressed)
         {
             if (!k_pressed) {

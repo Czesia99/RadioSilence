@@ -32,6 +32,8 @@ class Enemy
         glm::ivec2 pos;
         Clock clock;
 
+        bool scream = false;
+
         Enemy(Map &map) : map(map)
         {
             stbi_set_flip_vertically_on_load(false);
@@ -62,6 +64,12 @@ class Enemy
         void update()
         {
             clock.update();
+
+            if (scream == true)
+            {
+                return;
+            }
+
             if (it < path.size()) {
                 compute_direction();
             } else {

@@ -27,9 +27,11 @@ class GameScene : public IScene {
         void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) override;
         void framebuffer_size_callback(GLFWwindow* window, int width, int height) override;
 
+        void screamer();
+
     public:
         Context &ctx;
-
+        bool call_screamer = false;
     private:
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;

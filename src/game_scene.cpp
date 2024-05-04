@@ -37,6 +37,28 @@ void GameScene::close_scene()
     return;
 }
 
+void GameScene::screamer()
+{
+    if (call_screamer == false)
+    {
+        call_screamer = true;
+        // glm::vec3 scream_pos = {player->player_camera.front.x, player->player_camera.front.y, player->player_camera.front.z + 10.0f};
+        // player->player_camera.front.z += 10.0f;
+        enemy->model.transform.position = player->player_camera.position + player->player_camera.front;
+        enemy->model.transform.position.y -= 0.2f;
+        enemy->scream = true;
+        float dist = glm::distance(enemy->model.transform.position, player->player_camera.position + player->player_camera.front);
+        while (dist >= 4.0f)
+        {
+            dist = glm::distance(enemy->model.transform.position, player->player_camera.position);
+            std::cout << "move forward screamer" << std::endl;
+            enemy->move_forward();
+        }
+        // enemy->model.transform.position.y -= 0.2f;
+    }
+
+}
+
 void GameScene::update()
 {
     clock.update();
@@ -86,10 +108,12 @@ void GameScene::update()
     if (player->dead)
     {
         //screamer
-        std::cout << "player dead " << player->dead <<  std::endl;
-        ctx.load_scene_id(0);
+        // std::cout << "player dead " << player->dead <<  std::endl;
+        screamer();
+        // ctx.load_scene_id(0);
     }
 }
+
 
 void GameScene::scene_clear()
 {
