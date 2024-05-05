@@ -46,6 +46,7 @@ class Player
             radio->player_dead = false;
             radio->listening_time = 0.0f;
             player_camera.position = map.player_start_position;
+            map.player_position = map.player_start_position;
         }
 
         void update()

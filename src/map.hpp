@@ -40,7 +40,7 @@ class Map {
             roof.render(shader, camera);
             
             glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
-            float angle = atan2(direction_to_player.x, direction_to_player.z) - glm::radians(+90.0f);
+            float angle = atan2(direction_to_player.x, direction_to_player.z) - M_PI / 2.0f;
             statue.transform.rotation.y = angle;
         }
 

@@ -42,21 +42,17 @@ void GameScene::screamer()
     if (call_screamer == false)
     {
         call_screamer = true;
-        // glm::vec3 scream_pos = {player->player_camera.front.x, player->player_camera.front.y, player->player_camera.front.z + 10.0f};
-        // player->player_camera.front.z += 10.0f;
-        enemy->model.transform.position = player->player_camera.position + player->player_camera.front;
+        enemy->model.transform.position = player->player_camera.position + player->player_camera.front * 3.0f;
         enemy->model.transform.position.y -= 0.2f;
+        float dist = glm::distance(enemy->model.transform.position, player->player_camera.position);
+        glm::vec3 direction_to_player = glm::normalize(player->player_camera.position - enemy->model.transform.position);
+        glm::mat4 rotation_matrix = glm::lookAt(glm::vec3(0.0f), direction_to_player, glm::vec3(0.0f, 1.0f, 0.0f));
+        float angle = atan2(rotation_matrix[0][2], rotation_matrix[2][2]) - M_PI;
+        enemy->model.transform.rotation.y = angle;
+        enemy->front = -player->player_camera.front;
         enemy->scream = true;
-        float dist = glm::distance(enemy->model.transform.position, player->player_camera.position + player->player_camera.front);
-        while (dist >= 4.0f)
-        {
-            dist = glm::distance(enemy->model.transform.position, player->player_camera.position);
-            std::cout << "move forward screamer" << std::endl;
-            enemy->move_forward();
-        }
-        // enemy->model.transform.position.y -= 0.2f;
     }
-
+    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
 }
 
 void GameScene::update()
@@ -128,6 +124,9 @@ void GameScene::process_input()
     if (glfwGetKey(ctx.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(ctx.window, true);
 
+    if (call_screamer)
+        return;
+
     if (glfwGetKey(ctx.window, GLFW_KEY_W) == GLFW_PRESS) {
         k_pressed = true;
         player->process_keyboard(FORWARD, clock.delta_time, k_pressed);
@@ -150,6 +149,9 @@ void GameScene::process_input()
 
 void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
 {
+
+    if (call_screamer)
+        return;
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 

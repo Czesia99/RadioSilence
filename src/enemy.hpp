@@ -31,6 +31,7 @@ class Enemy
         float angle;
         glm::ivec2 pos;
         Clock clock;
+        glm::vec3 front = glm::vec3(0.0f, 0.0f, 1.0f);
 
         bool scream = false;
 
@@ -54,6 +55,7 @@ class Enemy
         {
             model.transform.position = map.enemy_start_position;
             call_one = false;
+            scream = false;
             clock.reset();
             it = 0;
             pos = tile_pos(model.transform.position);
@@ -67,6 +69,14 @@ class Enemy
 
             if (scream == true)
             {
+                movement_speed = 4.0f;
+                float dist = glm::distance(model.transform.position, map.player_position);
+                std::cout << "dist = " << dist << std::endl;
+                if (dist >= 0.3f)
+                {
+                    std::cout << "scream move forward" << std::endl;
+                    move_forward();
+                }
                 return;
             }
 
@@ -183,6 +193,5 @@ class Enemy
     private:
         Map &map;
         
-        glm::vec3 front = glm::vec3(0.0f, 0.0f, 1.0f);
         glm::vec3 right = glm::vec3(-1.0f, 0.0f, 0.0f);
 };
