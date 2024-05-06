@@ -56,11 +56,13 @@ class Enemy
             model.transform.position = map.enemy_start_position;
             call_one = false;
             scream = false;
+            movement_speed = 0.3f;
             clock.reset();
             it = 0;
             pos = tile_pos(model.transform.position);
             path.clear();
             path = breadth(map, pos, map.random_walkable_pos());
+            front = glm::vec3(0.0f, 0.0f, 1.0f);
         }
 
         void update()

@@ -26,7 +26,7 @@ void GameScene::open_scene()
     player->init();
     enemy->init();
     clock.reset();
-
+    call_screamer = false;
     ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", NULL);
 }
 
@@ -41,6 +41,7 @@ void GameScene::screamer()
 {
     if (call_screamer == false)
     {
+        timer = clock.current_time;
         call_screamer = true;
         enemy->model.transform.position = player->player_camera.position + player->player_camera.front * 3.0f;
         enemy->model.transform.position.y -= 0.2f;
@@ -52,7 +53,7 @@ void GameScene::screamer()
         enemy->front = -player->player_camera.front;
         enemy->scream = true;
     }
-    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
+    // ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
 }
 
 void GameScene::update()
@@ -103,10 +104,12 @@ void GameScene::update()
 
     if (player->dead)
     {
-        //screamer
-        // std::cout << "player dead " << player->dead <<  std::endl;
         screamer();
-        // ctx.load_scene_id(0);
+        std::cout << "t = " << timer << std::endl;
+        std::cout << "current time = " << clock.current_time << std::endl;
+
+        if (clock.current_time - timer >= 3.0f)
+            ctx.load_scene_id(0);
     }
 }
 
