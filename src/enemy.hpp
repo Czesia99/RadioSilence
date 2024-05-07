@@ -54,6 +54,7 @@ class Enemy
         void init()
         {
             model.transform.position = map.enemy_start_position;
+            model.transform.rotation.y = 0.0f;
             call_one = false;
             scream = false;
             movement_speed = 0.3f;
