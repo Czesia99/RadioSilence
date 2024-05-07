@@ -23,6 +23,8 @@ class Player
         Sound &sound_manager;
         ma_sound step_sound;
 
+        bool torchlight_on = true;
+
         Player(Map &map, Sound &sound_manager, float win_width = 800, float win_height = 600) : map(map), sound_manager(sound_manager)
         {
             // srand (time(NULL));
@@ -47,6 +49,7 @@ class Player
             radio->listening_time = 0.0f;
             player_camera.position = map.player_start_position;
             map.player_position = map.player_start_position;
+            torchlight_on = true;
         }
 
         void update()

@@ -122,9 +122,6 @@ class Radio
         int random_int(int min, int max)
         {
             assert(max > min); 
-            int random = (rand()) / RAND_MAX;
-            int range = max - min;
-
-            return (random*range) + min;
+            return (rand() % (max - min + 1) + min);
         }
 };

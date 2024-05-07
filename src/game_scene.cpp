@@ -27,7 +27,6 @@ void GameScene::open_scene()
     enemy->init();
     clock.reset();
     call_screamer = false;
-    torchlight = true;
     ma_engine_start(&ctx.sound_manager.engine);
     ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", NULL);
 }
@@ -53,7 +52,7 @@ void GameScene::screamer()
         float angle = atan2(rotation_matrix[0][2], rotation_matrix[2][2]) - M_PI;
         enemy->model.transform.rotation.y = angle;
         enemy->front = -player->player_camera.front;
-        torchlight = true;
+        player->torchlight_on = true;
         enemy->scream = true;
     }
     ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
@@ -75,7 +74,7 @@ void GameScene::update()
     map_shader.set_vec3("viewPos", player->player_camera.position);
 
     // light properties
-    if (torchlight)
+    if (player->torchlight_on)
     {
         map_shader.set_vec3("light.ambient", 0.05f, 0.05f, 0.05f);
         map_shader.set_vec3("light.diffuse", 0.6f, 0.6f, 0.6f);
@@ -183,10 +182,10 @@ void GameScene::left_click_callback(GLFWwindow* window, int button, int action, 
     glfwGetCursorPos(window, &xpos, &ypos);
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/torchlight_click.wav", NULL);
-        if (torchlight)
-            torchlight = false;
+        if (player->torchlight_on)
+            player->torchlight_on = false;
         else
-            torchlight = true;
+            player->torchlight_on = true;
     }
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
         if (player->radio->radio_on)
