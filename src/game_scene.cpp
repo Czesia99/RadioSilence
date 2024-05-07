@@ -27,12 +27,14 @@ void GameScene::open_scene()
     enemy->init();
     clock.reset();
     call_screamer = false;
+    torchlight = true;
+    ma_engine_start(&ctx.sound_manager.engine);
     ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", NULL);
 }
 
 void GameScene::close_scene() 
 {
-    // sound->drop();
+    ma_engine_stop(&ctx.sound_manager.engine);
     // player->~Player();
     return;
 }
@@ -51,9 +53,10 @@ void GameScene::screamer()
         float angle = atan2(rotation_matrix[0][2], rotation_matrix[2][2]) - M_PI;
         enemy->model.transform.rotation.y = angle;
         enemy->front = -player->player_camera.front;
+        torchlight = true;
         enemy->scream = true;
     }
-    // ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
+    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
 }
 
 void GameScene::update()
