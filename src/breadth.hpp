@@ -65,7 +65,6 @@ inline std::vector<glm::ivec2> breadth(Map &map, glm::ivec2 start_pos, glm::ivec
                 came_from[next] = current;
             }
         }
-
     } while (!frontier.empty());
 
     glm::ivec2 current = end_pos;

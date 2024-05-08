@@ -59,6 +59,7 @@ class Context
                 glfwSwapBuffers(window);
                 glfwPollEvents();
             }
+            ma_engine_uninit(&sound_manager.engine);
         }
 
         GLFWwindow *window;

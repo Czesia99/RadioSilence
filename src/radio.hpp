@@ -110,15 +110,6 @@ class Radio
             "../assets/sfx/radio_far.wav"
         };
 
-        float random_float(float min, float max)
-        {
-            assert(max > min); 
-            float random = ((float) rand()) / (float) RAND_MAX;
-            float range = max - min;
-
-            return (random*range) + min;
-        }
-
         int random_int(int min, int max)
         {
             assert(max > min); 

@@ -99,6 +99,16 @@ class Player
             map.player_position = player_camera.position;
         }
 
+        // void in_enemy_range()
+        // {
+        //     std::cout << "==== DETECT PLAYER ====" << std::endl;
+        //     std::cout << "map enemy pos x = " << map.enemy_position.z << ", y = " << map.enemy_position.x << std::endl;
+        //     std::cout << "map player pos x = " << map.player_position.z << ", y = " << map.player_position.x << std::endl;
+
+
+
+        // }
+
     private:
 
         ma_fence fence;

@@ -32,12 +32,7 @@ class GameScene : public IScene {
     public:
         Context &ctx;
         bool call_screamer = false;
-        float timer;
     private:
-        float deltaTime = 0.0f;
-        float lastFrame = 0.0f;
-        double currentTime = 0.0f;
-
         float lastX = ctx.win_width / 2.0f;
         float lastY = ctx.win_height / 2.0f;
         bool first_mouse = true;
@@ -53,4 +48,6 @@ class GameScene : public IScene {
         glm::vec3 light_pos;
 
         Shader modelShader;
+    
+        float scream_start_time;
 };

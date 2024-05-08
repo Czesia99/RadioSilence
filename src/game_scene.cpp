@@ -5,9 +5,8 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     map.print_map_txt();
     map.load_map();
 
-    player = new Player(map, ctx.sound_manager, ctx.win_width, ctx.win_height);
-
     map_shader = Shader("basic_light.vs", "map_spotlight.fs");
+    player = new Player(map, ctx.sound_manager, ctx.win_width, ctx.win_height);
     enemy = new Enemy(map);
 
     store_scene_in_ctx();
@@ -42,18 +41,9 @@ void GameScene::screamer()
 {
     if (call_screamer == false)
     {
-        timer = clock.current_time;
         call_screamer = true;
-        enemy->model.transform.position = player->player_camera.position + player->player_camera.front * 3.0f;
-        enemy->model.transform.position.y -= 0.2f;
-        float dist = glm::distance(enemy->model.transform.position, player->player_camera.position);
-        glm::vec3 direction_to_player = glm::normalize(player->player_camera.position - enemy->model.transform.position);
-        glm::mat4 rotation_matrix = glm::lookAt(glm::vec3(0.0f), direction_to_player, glm::vec3(0.0f, 1.0f, 0.0f));
-        float angle = atan2(rotation_matrix[0][2], rotation_matrix[2][2]) - M_PI;
-        enemy->model.transform.rotation.y = angle;
-        enemy->front = -player->player_camera.front;
-        player->torchlight_on = true;
-        enemy->scream = true;
+        scream_start_time = clock.current_time;
+        enemy->scream_setup(*player);
     }
     ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
 }
@@ -104,13 +94,13 @@ void GameScene::update()
         player->radio->game_over();
     }
 
-    if (player->dead)
+    if (player->dead || enemy->scream)
     {
         screamer();
-        std::cout << "t = " << timer << std::endl;
-        std::cout << "current time = " << clock.current_time << std::endl;
+        // std::cout << "t = " << timer << std::endl;
+        // std::cout << "current time = " << clock.current_time << std::endl;
 
-        if (clock.current_time - timer >= 3.0f)
+        if (clock.current_time - scream_start_time >= 3.0f)
             ctx.load_scene_id(0);
     }
 }
@@ -157,6 +147,7 @@ void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
     if (call_screamer)
         return;
+
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
