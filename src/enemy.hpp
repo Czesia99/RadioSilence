@@ -18,6 +18,7 @@ class Enemy
 
     public:
         bool scream = false;
+        bool see_player = false;
 
         Enemy(Map &map) : map(map)
         {
@@ -43,6 +44,7 @@ class Enemy
             model.transform.position = map.enemy_start_position;
             model.transform.rotation.y = 0.0f;
             choose_direction = false;
+            see_player = false;
             scream = false;
             movement_speed = 0.3f;
             it = 0;
@@ -78,7 +80,7 @@ class Enemy
             map.enemy_position = model.transform.position;
         }
 
-        void scream_setup(Player &player)
+        void screamer(Player &player)
         {
             player.torchlight_on = true;
             model.transform.position = player.player_camera.position + player.player_camera.front * 3.0f;
@@ -94,8 +96,6 @@ class Enemy
             movement_speed = 4.0f;
             scream = true;
         }
-
-
 
         glm::ivec2 tile_pos(glm::vec3 pos)
         {
@@ -114,7 +114,8 @@ class Enemy
                 std::vector<glm::ivec2> p = breadth(map, path_pos, tile_pos(map.player_position));
                 if (p.size() <= 5)
                 {
-                    scream = true;
+                    see_player = true;
+                    // scream = true;
                 }
             }
         }

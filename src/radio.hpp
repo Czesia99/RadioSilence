@@ -91,7 +91,7 @@ class Radio
         void game_over()
         {
             player_dead = true;
-            activation_number = 0;
+            // activation_number = 0;
             turn_off();
         }
         

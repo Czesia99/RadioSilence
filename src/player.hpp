@@ -47,9 +47,10 @@ class Player
             victory = false;
             radio->player_dead = false;
             radio->listening_time = 0.0f;
+            radio->activation_number = 0;
             player_camera.position = map.player_start_position;
-            map.player_position = map.player_start_position;
             torchlight_on = true;
+            map.player_position = map.player_start_position;
         }
 
         void update()

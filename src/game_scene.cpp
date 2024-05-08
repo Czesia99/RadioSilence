@@ -37,17 +37,6 @@ void GameScene::close_scene()
     return;
 }
 
-void GameScene::screamer()
-{
-    if (call_screamer == false)
-    {
-        call_screamer = true;
-        scream_start_time = clock.current_time;
-        enemy->scream_setup(*player);
-    }
-    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
-}
-
 void GameScene::update()
 {
     clock.update();
@@ -94,7 +83,15 @@ void GameScene::update()
         player->radio->game_over();
     }
 
-    if (player->dead || enemy->scream)
+    if (enemy->see_player && player->torchlight_on)
+    {
+        screamer();
+    
+        if (clock.current_time - scream_start_time >= 3.0f)
+            ctx.load_scene_id(0);
+    }
+
+    if (player->dead)
     {
         screamer();
         // std::cout << "t = " << timer << std::endl;
@@ -105,6 +102,16 @@ void GameScene::update()
     }
 }
 
+void GameScene::screamer()
+{
+    if (call_screamer == false)
+    {
+        call_screamer = true;
+        scream_start_time = clock.current_time;
+        enemy->screamer(*player);
+    }
+    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
+}
 
 void GameScene::scene_clear()
 {
