@@ -120,7 +120,6 @@ void GameScene::screamer()
         ma_sound_seek_to_pcm_frame(&scream_sound, 0);
         ma_sound_start(&scream_sound);
     }
-    // ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
 }
 
 void GameScene::scene_clear()

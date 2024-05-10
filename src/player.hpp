@@ -20,26 +20,21 @@ class Player
 
         Radio *radio;
 
-        Sound &sound_manager;
-        ma_sound step_sound;
+        
 
         bool torchlight_on = true;
 
         Player(Map &map, Sound &sound_manager, float win_width = 800, float win_height = 600) : map(map), sound_manager(sound_manager)
         {
-            // srand (time(NULL));
-            // sound_manager.result = ma_fence_init(&fence);
-
-            // for (int i = 0; i < 9; i += 1)
-            // {
-            //     ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &fence, &step_sounds[i]);
-            // }
-            // ma_fence_wait(&fence);
+            for (int i = 0; i < 9; i += 1)
+            {
+                ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &sound_manager.fence, &step_sounds[i]);
+            }
+            ma_fence_wait(&sound_manager.fence);
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
             radio = new Radio(sound_manager, map.player_position, map.win_position);
 
-            sound_manager.result = ma_sound_init_from_file(&sound_manager.engine, "../assets/sfx/footstep.wav", 0, NULL, NULL, &step_sound);
-            ma_sound_set_volume(&step_sound, 0.1f);
+            // ma_sound_set_volume(&step_sound, 0.1f);
         }
 
         void init()
@@ -100,21 +95,10 @@ class Player
             map.player_position = player_camera.position;
         }
 
-        // void in_enemy_range()
-        // {
-        //     std::cout << "==== DETECT PLAYER ====" << std::endl;
-        //     std::cout << "map enemy pos x = " << map.enemy_position.z << ", y = " << map.enemy_position.x << std::endl;
-        //     std::cout << "map player pos x = " << map.player_position.z << ", y = " << map.player_position.x << std::endl;
-
-
-
-        // }
-
     private:
-
-        ma_fence fence;
-        ma_sound step_sounds[10];
-        const char *sound_files[10] = {
+        Sound &sound_manager;
+        ma_sound step_sounds[9];
+        const char *sound_files[9] = {
             "../assets/sfx/footsteps/step1.wav",
             "../assets/sfx/footsteps/step2.wav",
             "../assets/sfx/footsteps/step3.wav",
@@ -123,7 +107,6 @@ class Player
             "../assets/sfx/footsteps/step6.wav",
             "../assets/sfx/footsteps/step7.wav",
             "../assets/sfx/footsteps/step8.wav",
-            "../assets/sfx/footsteps/step9.wav",
             "../assets/sfx/footsteps/step10.wav"
         };
 
@@ -140,10 +123,12 @@ class Player
             }
             if (bobbing <= 0.005 && !step) {
                 step = true;
-                ma_sound_start(&step_sound);
+                // ma_sound_start(&step_sound);
                 // int i = rand() / 10;
-                // ma_sound_seek_to_pcm_frame(&step_sounds[i], 0);
-                // ma_sound_start(&step_sounds[i]);
+                int rand = random_int(0, 8);
+                std::cout << "rand = " << rand << std::endl;
+                ma_sound_seek_to_pcm_frame(&step_sounds[rand], 0);
+                ma_sound_start(&step_sounds[rand]);
             }
 
             return bobbing;
@@ -194,5 +179,11 @@ class Player
                 }
             }
             return false;
+        }
+
+        int random_int(int min, int max)
+        {
+            assert(max > min); 
+            return (rand() % (max - min + 1) + min);
         }
 };
