@@ -4,6 +4,7 @@
 #include "mygl/clock.hpp"
 #include "map.hpp"
 #include "breadth.hpp"
+// #include "mygl/sound.hpp"
 #include <cstdlib>
 #include <ctime> 
 
@@ -19,11 +20,15 @@ class Enemy
     public:
         bool scream = false;
         bool see_player = false;
+        ma_sound noise;
+        
 
-        Enemy(Map &map) : map(map)
+        const char *sf = "../assets/sfx/enemy_sound.wav";
+        Enemy(Map &map, Sound &sm) : map(map)
         {
             stbi_set_flip_vertically_on_load(false);
-
+            ma_sound_init_from_file(&sm.engine, sf, MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &sm.fence, &noise);
+            // ma_sound_set_pinned_listener_index(&noise, listenerIndex);
             model = Model("../assets/models/enemy/monster.obj");
 
             model.transform.position = map.enemy_start_position;
@@ -52,11 +57,14 @@ class Enemy
             path_pos = tile_pos(model.transform.position);
             path.clear();
             path = breadth(map, path_pos, map.random_walkable_pos());
+            ma_sound_start(&noise);
+            ma_sound_set_looping(&noise, true);
         }
 
         void update()
         {
             clock.update();
+            update_sound_position();
 
             if (scream == true)
             {
@@ -228,5 +236,17 @@ class Enemy
                     }
                 }
             }
+        }
+    
+        void update_sound_position()
+        {
+            // ma_vec3 enemyPosition = {model.transform.position.x, model.transform.position.y, model.transform.position.z};
+            ma_sound_set_position(&noise, model.transform.position.x, model.transform.position.y, model.transform.position.z);
+            float distance = glm::distance(map.player_position, model.transform.position);
+
+            float maxDistance = 5.0f;
+            float volume = 3.0f - glm::clamp(distance / maxDistance, 0.0f, 3.0f);
+            std::cout << "volume = " << volume << std::endl;
+            ma_sound_set_volume(&noise, volume);
         }
 };

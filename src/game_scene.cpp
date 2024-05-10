@@ -7,10 +7,10 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
 
     map_shader = Shader("basic_light.vs", "map_spotlight.fs");
     player = new Player(map, ctx.sound_manager, ctx.win_width, ctx.win_height);
-    enemy = new Enemy(map);
+    enemy = new Enemy(map, ctx.sound_manager);
 
     ma_sound_init_from_file(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &ctx.sound_manager.fence, &scream_sound);
-
+    ma_sound_init_from_file(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &ctx.sound_manager.fence, &ambiance_sound);    
     store_scene_in_ctx();
 }
 
@@ -29,7 +29,8 @@ void GameScene::open_scene()
     clock.reset();
     call_screamer = false;
     ma_engine_start(&ctx.sound_manager.engine);
-    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", NULL);
+    ma_sound_start(&ambiance_sound);
+    ma_sound_set_looping(&ambiance_sound, true);
 }
 
 void GameScene::close_scene() 

@@ -7,10 +7,7 @@ class Player
 {
     public:
         Camera3D player_camera;
-        Clock clock;
-        float velocity;
 
-        Shader torchlight_shader;
         Model torchlight;
         Map &map;
 
@@ -20,21 +17,15 @@ class Player
 
         Radio *radio;
 
-        
-
         bool torchlight_on = true;
 
         Player(Map &map, Sound &sound_manager, float win_width = 800, float win_height = 600) : map(map), sound_manager(sound_manager)
         {
-            for (int i = 0; i < 9; i += 1)
-            {
-                ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &sound_manager.fence, &step_sounds[i]);
-            }
+            load_sounds();
+            // sound_manager.load_sounds(sound_files, step_sounds);
             ma_fence_wait(&sound_manager.fence);
             player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
             radio = new Radio(sound_manager, map.player_position, map.win_position);
-
-            // ma_sound_set_volume(&step_sound, 0.1f);
         }
 
         void init()
@@ -96,15 +87,17 @@ class Player
         }
 
     private:
+        Clock clock;
         Sound &sound_manager;
-        ma_sound step_sounds[9];
-        const char *sound_files[9] = {
+        ma_sound step_sounds[8];
+        float velocity;
+
+        const char *sound_files[8] = {
             "../assets/sfx/footsteps/step1.wav",
             "../assets/sfx/footsteps/step2.wav",
             "../assets/sfx/footsteps/step3.wav",
             "../assets/sfx/footsteps/step4.wav",
             "../assets/sfx/footsteps/step5.wav",
-            "../assets/sfx/footsteps/step6.wav",
             "../assets/sfx/footsteps/step7.wav",
             "../assets/sfx/footsteps/step8.wav",
             "../assets/sfx/footsteps/step10.wav"
@@ -123,9 +116,7 @@ class Player
             }
             if (bobbing <= 0.005 && !step) {
                 step = true;
-                // ma_sound_start(&step_sound);
-                // int i = rand() / 10;
-                int rand = random_int(0, 8);
+                int rand = random_int(0, 7);
                 std::cout << "rand = " << rand << std::endl;
                 ma_sound_seek_to_pcm_frame(&step_sounds[rand], 0);
                 ma_sound_start(&step_sounds[rand]);
@@ -179,6 +170,14 @@ class Player
                 }
             }
             return false;
+        }
+
+        void load_sounds()
+        {
+            for (int i = 0; i < 8; i += 1)
+            {
+                ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &sound_manager.fence, &step_sounds[i]);
+            }
         }
 
         int random_int(int min, int max)

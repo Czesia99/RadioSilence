@@ -25,11 +25,7 @@ class Radio
         {
             srand (time(NULL));
 
-            for (int i = 0; i < 3; i += 1)
-            {
-                ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &sound_manager.fence, &radio_sounds[i]);
-            }
-            ma_fence_wait(&sound_manager.fence);
+            load_sounds();
             player_dead = false;
             radio_on = false;
             activation_number = 0;
@@ -104,6 +100,15 @@ class Radio
             "../assets/sfx/radio_between.wav",
             "../assets/sfx/radio_far.wav"
         };
+
+        void load_sounds()
+        {
+            for (int i = 0; i < 3; i += 1)
+            {
+                ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &sound_manager.fence, &radio_sounds[i]);
+            }
+            ma_fence_wait(&sound_manager.fence);
+        }
 
         int random_int(int min, int max)
         {
