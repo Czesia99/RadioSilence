@@ -7,6 +7,7 @@ class Sound {
     public:
         ma_engine engine;
         ma_result result;
+        ma_fence fence;
 
         std::vector<ma_sound> sounds;
 
@@ -16,6 +17,11 @@ class Sound {
             if (result != MA_SUCCESS) {
                 printf("Failed to initialize audio engine.");
                 return;
+            }
+
+            result = ma_fence_init(&fence);
+            if (result != MA_SUCCESS) {
+                std::cout << "can't intialize fence for radio sounds";
             }
         }
 

@@ -9,6 +9,8 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     player = new Player(map, ctx.sound_manager, ctx.win_width, ctx.win_height);
     enemy = new Enemy(map);
 
+    ma_sound_init_from_file(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &ctx.sound_manager.fence, &scream_sound);
+
     store_scene_in_ctx();
 }
 
@@ -87,8 +89,11 @@ void GameScene::update()
     {
         screamer();
     
-        if (clock.current_time - scream_start_time >= 3.0f)
+        if (clock.current_time - scream_start_time >= 3.0f) 
+        {
+            ma_sound_stop(&scream_sound);
             ctx.load_scene_id(0);
+        }
     }
 
     if (player->dead)
@@ -97,8 +102,11 @@ void GameScene::update()
         // std::cout << "t = " << timer << std::endl;
         // std::cout << "current time = " << clock.current_time << std::endl;
 
-        if (clock.current_time - scream_start_time >= 3.0f)
+        if (clock.current_time - scream_start_time >= 3.0f) 
+        {
+            ma_sound_stop(&scream_sound);
             ctx.load_scene_id(0);
+        }
     }
 }
 
@@ -109,8 +117,10 @@ void GameScene::screamer()
         call_screamer = true;
         scream_start_time = clock.current_time;
         enemy->screamer(*player);
+        ma_sound_seek_to_pcm_frame(&scream_sound, 0);
+        ma_sound_start(&scream_sound);
     }
-    ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
+    // ma_engine_play_sound(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", NULL);
 }
 
 void GameScene::scene_clear()

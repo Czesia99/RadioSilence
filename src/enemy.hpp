@@ -23,6 +23,7 @@ class Enemy
         Enemy(Map &map) : map(map)
         {
             stbi_set_flip_vertically_on_load(false);
+
             model = Model("../assets/models/enemy/monster.obj");
 
             model.transform.position = map.enemy_start_position;

@@ -50,4 +50,5 @@ class GameScene : public IScene {
         Shader modelShader;
     
         float scream_start_time;
+        ma_sound scream_sound;
 };

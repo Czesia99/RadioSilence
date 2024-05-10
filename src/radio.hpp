@@ -24,17 +24,12 @@ class Radio
         Radio(Sound &sound_manager, glm::vec3 &player_pos, glm::vec3 &win_pos) : sound_manager(sound_manager), player_pos(player_pos), win_pos(win_pos)
         {
             srand (time(NULL));
-            sound_manager.result = ma_fence_init(&fence);
-            if (sound_manager.result != MA_SUCCESS) {
-                std::cout << "can't intialize fence for radio sounds";
-            }
 
             for (int i = 0; i < 3; i += 1)
             {
-                ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &fence, &radio_sounds[i]);
+                ma_sound_init_from_file(&sound_manager.engine, sound_files[i], MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &sound_manager.fence, &radio_sounds[i]);
             }
-
-            ma_fence_wait(&fence);
+            ma_fence_wait(&sound_manager.fence);
             player_dead = false;
             radio_on = false;
             activation_number = 0;
@@ -98,10 +93,10 @@ class Radio
     private:
         Clock clock;
         Sound &sound_manager;
-        ma_fence fence;
-        ma_sound radio_sound_far;
-        ma_sound radio_sound_between;
-        ma_sound radio_sound_near;
+        
+        // ma_sound radio_sound_far;
+        // ma_sound radio_sound_between;
+        // ma_sound radio_sound_near;
 
         ma_sound radio_sounds[3];
         const char *sound_files[3] = {
