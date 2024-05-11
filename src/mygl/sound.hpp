@@ -25,7 +25,6 @@ class Sound {
             if (result != MA_SUCCESS) {
                 std::cout << "can't intialize fence for radio sounds";
             }
-
             // ma_spatializer_listener_set_position(&listener, );
         }
 

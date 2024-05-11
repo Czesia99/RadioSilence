@@ -23,7 +23,7 @@ class Enemy
         ma_sound noise;
         
 
-        const char *sf = "../assets/sfx/enemy_sound.wav";
+        const char *sf = "../assets/sfx/enemy_noise.wav";
         Enemy(Map &map, Sound &sm) : map(map)
         {
             stbi_set_flip_vertically_on_load(false);
@@ -242,11 +242,28 @@ class Enemy
         {
             // ma_vec3 enemyPosition = {model.transform.position.x, model.transform.position.y, model.transform.position.z};
             ma_sound_set_position(&noise, model.transform.position.x, model.transform.position.y, model.transform.position.z);
+            // ma_sound_set_velocity(&noise, velocity, velocity, velocity);
             float distance = glm::distance(map.player_position, model.transform.position);
 
+            float minDistance = 1.0f;
             float maxDistance = 5.0f;
-            float volume = 3.0f - glm::clamp(distance / maxDistance, 0.0f, 3.0f);
+            // float volume = 4.0f -  glm::clamp(distance / maxDistance, 0.0f, 4.0f);
+            float volume = 8.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 8.0f);
             std::cout << "volume = " << volume << std::endl;
-            ma_sound_set_volume(&noise, volume);
+            std::cout << "distance = " << distance << std::endl;
+
+                // float volume = 0.0f;
+                // if (distance <= minDistance) {
+                //     // At or below minimum distance, set volume to maximum
+                //     volume = 4.0f;
+                // } else if (distance >= maxDistance) {
+                //     // At or beyond maximum distance, set volume to minimum
+                //     volume = 0.0f;
+                // } else {
+                //     // Linearly interpolate volume between minimum and maximum distance
+                //     volume = 4.0f - ((distance - minDistance) / (maxDistance - minDistance));
+                // }
+
+                ma_sound_set_volume(&noise, volume);
         }
 };

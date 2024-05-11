@@ -19,7 +19,7 @@ class Map {
 
         Map()
         {
-            read_map_file("../assets/map2.txt");
+            read_map_file("../assets/map3.txt");
             statue = Model("../assets/models/statue2/untitled2.obj");
             // statue = Model("../assets/models/statue4/untitled.obj");
             stbi_set_flip_vertically_on_load(true);
