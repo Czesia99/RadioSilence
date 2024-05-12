@@ -249,8 +249,8 @@ class Enemy
             float maxDistance = 5.0f;
             // float volume = 4.0f -  glm::clamp(distance / maxDistance, 0.0f, 4.0f);
             float volume = 8.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 8.0f);
-            std::cout << "volume = " << volume << std::endl;
-            std::cout << "distance = " << distance << std::endl;
+            // std::cout << "volume = " << volume << std::endl;
+            // std::cout << "distance = " << distance << std::endl;
 
                 // float volume = 0.0f;
                 // if (distance <= minDistance) {

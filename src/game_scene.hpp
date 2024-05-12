@@ -43,6 +43,7 @@ class GameScene : public IScene {
         Map map;
         Shader light_shader;
         Shader map_shader;
+        Shader floor_shader;
         
         Clock clock;
         glm::vec3 light_pos;
@@ -52,4 +53,6 @@ class GameScene : public IScene {
         float scream_start_time;
         ma_sound scream_sound;
         ma_sound ambiance_sound;
+
+        unsigned int cookie_mask_id;
 };

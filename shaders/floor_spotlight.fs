@@ -35,6 +35,20 @@ uniform Light light;
 
 uniform vec2 viewPort;
 
+float easeOutQuart(float x) {
+    return 1.0 - pow(1.0 - x, 2.0);
+}
+
+float easeInQuart(float x) {
+    return x * x * x * x;
+}
+
+float czm_luminance(vec3 rgb)
+{
+    const vec3 W = vec3(0.2125, 0.7154, 0.0721);
+    return dot(rgb, W);
+}
+
 void main()
 {
     // ambient
@@ -77,11 +91,12 @@ void main()
     diffuse  *= attenuation;
     specular *= attenuation;
 
-
-
     vec3 result = ambient + diffuse + specular;
 
-    float color_num = 20;
+    // float luminance = czm_luminance(result);
+    // result = result * easeOutQuart(luminance);
+
+    float color_num = 32;
     vec3 final = floor(result * (color_num - 1.0) + 0.5) / (color_num - 1.0);
 
     FragColor = vec4(final, 1.0);

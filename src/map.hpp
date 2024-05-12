@@ -27,7 +27,7 @@ class Map {
             cage = Model("../assets/models/cage/Cage.obj");
         }
         
-        void render(Shader shader, const ICamera &camera)
+        void render(Shader shader, Shader shader2, const ICamera &camera)
         {
             for (auto &pos : walls_position)
             {
@@ -37,7 +37,7 @@ class Map {
 
             cage.draw(shader, camera);
             statue.draw(shader, camera);
-            floor.render(shader, camera);
+            floor.render(shader2, camera);
             roof.render(shader, camera);
             
             glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
@@ -134,7 +134,8 @@ class Map {
         Model statue;
         Cube floor;
         Cube roof;
-
+        Shader floor_shader;
+  
         void read_map_file(const char *path)
         {
             std::string line;
