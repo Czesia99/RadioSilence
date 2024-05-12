@@ -28,6 +28,7 @@ set(SRC_FILES
     ${SRC}/main.cpp
     ${SRC}/game_scene.cpp
     ${SRC}/menu_scene.cpp
+    ${SRC}/texture.cpp
 )
 
 set(LINK_LIB

@@ -52,6 +52,7 @@ class Player
             is_dead();
 
             // std::cout << "player x: " << player_camera.position.x << " " << "player z: " << player_camera.position.z << std::endl;
+            // std::cout << "win distance = " << glm::distance(map.player_position, map.win_position) << std::endl;
         }
 
         void update_velocity(bool k_pressed)

@@ -1,39 +1,5 @@
 #include "game_scene.hpp"
 
-void load_texture(const char *file, unsigned int &texture)
-{
-    glGenTextures(1, &texture);
-    
-    int width, height, nrComponents;
-    unsigned char *data = stbi_load(file, &width, &height, &nrComponents, 0);
-    if (data)
-    {
-        GLenum format;
-        if (nrComponents == 1)
-            format = GL_RED;
-        else if (nrComponents == 3)
-            format = GL_RGB;
-        else if (nrComponents == 4)
-            format = GL_RGBA;
-
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER); //second argument was GL_REPEAT
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); //second argument was GL_REPEAT
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Texture failed to load at path: " << file << std::endl;
-        stbi_image_free(data);
-    }
-}
-
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
     map.print_map_txt();
@@ -88,8 +54,8 @@ void GameScene::update()
     //spotlight properties
     map_shader.set_vec3("light.position", player->player_camera.position);
     map_shader.set_vec3("light.direction", player->player_camera.front);
-    map_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
-    map_shader.set_float("light.outerCutOff", glm::cos(glm::radians(16.5f)));
+    map_shader.set_float("light.cutOff",   glm::cos(glm::radians(10.0f)));
+    map_shader.set_float("light.outerCutOff", glm::cos(glm::radians(12.0f)));
 
     map_shader.set_vec3("viewPos", player->player_camera.position);
 
@@ -115,6 +81,7 @@ void GameScene::update()
     //material properties
     map_shader.set_float("material.shininess", 32.0f);
 
+    //torchlight mask
     map_shader.set_vec2("viewPort", ctx.win_width, ctx.win_height);
     map_shader.set_int("light.flashlight", 2);
     glActiveTexture(GL_TEXTURE2);
@@ -123,8 +90,8 @@ void GameScene::update()
     floor_shader.use();
     floor_shader.set_vec3("light.position", player->player_camera.position);
     floor_shader.set_vec3("light.direction", player->player_camera.front);
-    floor_shader.set_float("light.cutOff",   glm::cos(glm::radians(12.5f)));
-    floor_shader.set_float("light.outerCutOff", glm::cos(glm::radians(16.5f)));
+    floor_shader.set_float("light.cutOff",   glm::cos(glm::radians(10.0f)));
+    floor_shader.set_float("light.outerCutOff", glm::cos(glm::radians(12.0f)));
 
     floor_shader.set_vec3("viewPos", player->player_camera.position);
 
@@ -150,6 +117,7 @@ void GameScene::update()
     //material properties
     floor_shader.set_float("material.shininess", 32.0f);
 
+    //torchlight mask
     floor_shader.set_vec2("viewPort", ctx.win_width, ctx.win_height);
     floor_shader.set_int("light.flashlight", 2);
     glActiveTexture(GL_TEXTURE2);
@@ -264,6 +232,9 @@ void GameScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
 void GameScene::left_click_callback(GLFWwindow* window, int button, int action, int mods)
 {
+    if (call_screamer)
+        return;
+
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {

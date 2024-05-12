@@ -12,6 +12,7 @@
 #include "map.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
+#include "texture.hpp"
 
 class GameScene : public IScene {
     public:

@@ -199,13 +199,12 @@ class Enemy
             if (on_tile(path[it])) {
                 it++;
                 choose_direction = false;
-                // pos = path[it];
                 std::cout << "TRUE" << std::endl;
                 std::cout << "IT = " << it << std::endl;
                 std::cout << " PATH IT = " << path[it].x << " , "<< path[it].y << std::endl;
                 std::cout << "pos1 x: " << path_pos.x << " pos1 y: " << path_pos.y << std::endl;
                 std::cout << "path size = " << path.size() << std::endl;
-                detect_player();
+                // detect_player();
                 move_forward();
             }
             else {

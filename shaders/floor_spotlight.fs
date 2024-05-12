@@ -78,7 +78,7 @@ void main()
     uv *= 0.5;
     uv += 0.5;
 
-    intensity = length(vec3(texture(light.flashlight, uv)));
+    intensity *= length(vec3(texture(light.flashlight, uv)));
 
     diffuse  *= intensity;
     specular *= intensity;
