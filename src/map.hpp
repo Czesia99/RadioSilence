@@ -15,15 +15,16 @@ class Map {
         glm::vec3 win_position;
         glm::vec3 statue_position;
         glm::vec3 statue2_position;
+        glm::vec3 statue3_position;
         glm::vec3 enemy_position;
         glm::vec3 enemy_start_position;
 
         Map()
         {
             read_map_file("../assets/map2.txt");
-            statue = Model("../assets/models/statue2/untitled2.obj");
+            statue = Model("../assets/models/statue/untitled2.obj");
+            statue2 = Model("../assets/models/statue2/untitled.obj");
             stbi_set_flip_vertically_on_load(true);
-            statue2 = Model("../assets/models/statue4/untitled.obj");
             wall = Model("../assets/models/wall/wall.obj");
             cage = Model("../assets/models/cage/Cage.obj");
         }
@@ -45,6 +46,10 @@ class Map {
             glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
             float angle = atan2(direction_to_player.x, direction_to_player.z) - M_PI / 2.0f;
             statue.transform.rotation.y = angle;
+        
+            glm::vec3 direction_to_player2 = glm::normalize(player_position - statue2_position);
+            float angle2 = atan2(direction_to_player2.x, direction_to_player2.z);
+            statue2.transform.rotation.y = angle2;
         }
 
         void load_map() 
@@ -86,7 +91,7 @@ class Map {
                     }
                     if (element == 'B')
                     {
-                        statue2_position = {0.0f, 0.03f, 0.0f};
+                        statue2_position = {position.x, 0.03f, position.z};
                     }
                     if (element == '&')
                     {
@@ -104,7 +109,7 @@ class Map {
             statue.transform.scale *= 0.4f;
 
             statue2.transform.position = statue2_position;
-            statue2.transform.scale *= 3.0f;
+            statue2.transform.scale *= 0.5f;
 
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
