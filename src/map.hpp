@@ -40,8 +40,11 @@ class Map {
             cage.draw(shader, camera);
             statue.draw(shader, camera);
             statue2.draw(shader, camera);
+
+            floor.transform.position = floor_position;
             floor.render(shader2, camera);
-            roof.render(shader, camera);
+            floor.transform.position = roof_position;
+            floor.render(shader2, camera);
             
             glm::vec3 direction_to_player = glm::normalize(player_position - statue_position);
             float angle = atan2(direction_to_player.x, direction_to_player.z) - M_PI / 2.0f;
@@ -61,13 +64,8 @@ class Map {
             floor.transform.scale.y *= 0.1f;
             floor.transform.position.x += txt_map[0].size() / 2;
             floor.transform.position.z += txt_map.size() / 2;
-
-            roof.transform.scale.x *= txt_map[0].size();
-            roof.transform.scale.z *= txt_map.size();
-            roof.transform.scale.y *= 0.1f;
-            roof.transform.position.x += txt_map[0].size() / 2;
-            roof.transform.position.z += txt_map.size() / 2;
-            roof.transform.position.y += 2.0f;
+            floor_position = {floor.transform.position.x, floor.transform.position.y, floor.transform.position.z};
+            roof_position = {floor.transform.position.x, floor.transform.position.y + 2.0f, floor.transform.position.z};
 
             for (const auto &row : txt_map)
             {
@@ -148,8 +146,11 @@ class Map {
         Model wall;
         Model statue;
         Model statue2;
+        Model statue3;
+
         Cube floor;
-        Cube roof;
+        glm::vec3 floor_position;
+        glm::vec3 roof_position;
         Shader floor_shader;
   
         void read_map_file(const char *path)
