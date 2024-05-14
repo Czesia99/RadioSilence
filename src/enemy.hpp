@@ -69,10 +69,8 @@ class Enemy
             if (scream == true)
             {
                 float dist = glm::distance(model.transform.position, map.player_position);
-                std::cout << "dist = " << dist << std::endl;
                 if (dist >= 0.3f)
                 {
-                    std::cout << "scream move forward" << std::endl;
                     move_forward();
                 }
                 return;
@@ -115,16 +113,12 @@ class Enemy
 
         void detect_player()
         {
-            //add torchlight detection and radio
-            std::cout << "==== DETECT PLAYER ====" << std::endl;
-            std::cout << "distance p / e = " << glm::distance(map.player_position, map.enemy_position) << std::endl;
             if (glm::distance(map.player_position, map.enemy_position) <= 5.0f)
             {
                 std::vector<glm::ivec2> p = breadth(map, path_pos, tile_pos(map.player_position));
                 if (p.size() <= 5)
                 {
                     see_player = true;
-                    // scream = true;
                 }
             }
         }
@@ -199,11 +193,6 @@ class Enemy
             if (on_tile(path[it])) {
                 it++;
                 choose_direction = false;
-                std::cout << "TRUE" << std::endl;
-                std::cout << "IT = " << it << std::endl;
-                std::cout << " PATH IT = " << path[it].x << " , "<< path[it].y << std::endl;
-                std::cout << "pos1 x: " << path_pos.x << " pos1 y: " << path_pos.y << std::endl;
-                std::cout << "path size = " << path.size() << std::endl;
                 detect_player();
                 move_forward();
             }
@@ -219,7 +208,6 @@ class Enemy
                 float dotProduct = glm::dot(direction, currentDirection);
 
                 if (dotProduct < -0.95f) {
-                    std::cout << "backward" << std::endl;
                     change_direction(BACKWARD);
                 } else if (dotProduct > 0.95f) {
                     std::cout << "forward" << std::endl;
@@ -227,10 +215,8 @@ class Enemy
                 } else {
                     float crossProduct = direction.x * currentDirection.y - direction.y * currentDirection.x;
                     if (crossProduct > 0.0f) {
-                        std::cout << "right" << std::endl;
                         change_direction(RIGHT);
                     } else {
-                        std::cout << "left" << std::endl;
                         change_direction(LEFT);
                     }
                 }
@@ -239,30 +225,12 @@ class Enemy
     
         void update_sound_position()
         {
-            // ma_vec3 enemyPosition = {model.transform.position.x, model.transform.position.y, model.transform.position.z};
             ma_sound_set_position(&noise, model.transform.position.x, model.transform.position.y, model.transform.position.z);
-            // ma_sound_set_velocity(&noise, velocity, velocity, velocity);
             float distance = glm::distance(map.player_position, model.transform.position);
 
             float minDistance = 1.0f;
             float maxDistance = 5.0f;
-            // float volume = 4.0f -  glm::clamp(distance / maxDistance, 0.0f, 4.0f);
             float volume = 8.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 8.0f);
-            // std::cout << "volume = " << volume << std::endl;
-            // std::cout << "distance = " << distance << std::endl;
-
-                // float volume = 0.0f;
-                // if (distance <= minDistance) {
-                //     // At or below minimum distance, set volume to maximum
-                //     volume = 4.0f;
-                // } else if (distance >= maxDistance) {
-                //     // At or beyond maximum distance, set volume to minimum
-                //     volume = 0.0f;
-                // } else {
-                //     // Linearly interpolate volume between minimum and maximum distance
-                //     volume = 4.0f - ((distance - minDistance) / (maxDistance - minDistance));
-                // }
-
-                ma_sound_set_volume(&noise, volume);
+            ma_sound_set_volume(&noise, volume);
         }
 };
