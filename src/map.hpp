@@ -16,6 +16,7 @@ class Map {
         glm::vec3 statue_position;
         glm::vec3 statue2_position;
         glm::vec3 statue3_position;
+        glm::vec3 statue4_position;
         glm::vec3 enemy_position;
         glm::vec3 enemy_start_position;
 
@@ -25,6 +26,7 @@ class Map {
             statue = Model("../assets/models/statue/untitled2.obj");
             statue2 = Model("../assets/models/statue2/untitled.obj");
             statue3 = Model("../assets/models/statue3/untitled.obj");
+            statue4 = Model("../assets/models/statue4/untitled.obj");
             stbi_set_flip_vertically_on_load(true);
             wall = Model("../assets/models/wall/wall.obj");
             cage = Model("../assets/models/cage/Cage.obj");
@@ -42,6 +44,7 @@ class Map {
             statue.draw(shader, camera);
             statue2.draw(shader, camera);
             statue3.draw(shader, camera);
+            statue4.draw(shader, camera);
 
             floor.transform.position = floor_position;
             floor.render(shader2, camera);
@@ -59,6 +62,10 @@ class Map {
             glm::vec3 direction_to_player3 = glm::normalize(player_position - statue3_position);
             float angle3 = atan2(direction_to_player3.x, direction_to_player3.z) - M_PI;
             statue3.transform.rotation.y = angle3;
+
+            glm::vec3 direction_to_player4 = glm::normalize(player_position - statue4_position);
+            float angle4 = atan2(direction_to_player4.x, direction_to_player4.z) - M_PI / 2;
+            statue4.transform.rotation.y = angle4;
         }
 
         void load_map() 
@@ -101,6 +108,10 @@ class Map {
                     {
                         statue3_position = {position.x, 0.03f, position.z};
                     }
+                    if (element == 'D')
+                    {
+                        statue4_position = {position.x, 0.05f, position.z};
+                    }
                     if (element == '&')
                     {
                         enemy_start_position = {position.x, 0.3, position.z};
@@ -120,6 +131,10 @@ class Map {
             statue2.transform.scale *= 0.5f;
 
             statue3.transform.position = statue3_position;
+
+            statue4.transform.position = statue4_position;
+            statue4.transform.scale *= 0.5f;
+
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
         }
@@ -158,6 +173,7 @@ class Map {
         Model statue;
         Model statue2;
         Model statue3;
+        Model statue4;
 
         Cube floor;
         glm::vec3 floor_position;

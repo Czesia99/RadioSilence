@@ -193,7 +193,7 @@ class Enemy
             if (on_tile(path[it])) {
                 it++;
                 choose_direction = false;
-                detect_player();
+                // detect_player();
                 move_forward();
             }
             else {
