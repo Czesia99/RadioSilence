@@ -24,6 +24,7 @@ class Map {
             read_map_file("../assets/map2.txt");
             statue = Model("../assets/models/statue/untitled2.obj");
             statue2 = Model("../assets/models/statue2/untitled.obj");
+            statue3 = Model("../assets/models/statue3/untitled.obj");
             stbi_set_flip_vertically_on_load(true);
             wall = Model("../assets/models/wall/wall.obj");
             cage = Model("../assets/models/cage/Cage.obj");
@@ -40,6 +41,7 @@ class Map {
             cage.draw(shader, camera);
             statue.draw(shader, camera);
             statue2.draw(shader, camera);
+            statue3.draw(shader, camera);
 
             floor.transform.position = floor_position;
             floor.render(shader2, camera);
@@ -53,6 +55,10 @@ class Map {
             glm::vec3 direction_to_player2 = glm::normalize(player_position - statue2_position);
             float angle2 = atan2(direction_to_player2.x, direction_to_player2.z);
             statue2.transform.rotation.y = angle2;
+
+            glm::vec3 direction_to_player3 = glm::normalize(player_position - statue3_position);
+            float angle3 = atan2(direction_to_player3.x, direction_to_player3.z) - M_PI;
+            statue3.transform.rotation.y = angle3;
         }
 
         void load_map() 
@@ -91,6 +97,10 @@ class Map {
                     {
                         statue2_position = {position.x, 0.03f, position.z};
                     }
+                    if (element == 'C')
+                    {
+                        statue3_position = {position.x, 0.03f, position.z};
+                    }
                     if (element == '&')
                     {
                         enemy_start_position = {position.x, 0.3, position.z};
@@ -109,6 +119,7 @@ class Map {
             statue2.transform.position = statue2_position;
             statue2.transform.scale *= 0.5f;
 
+            statue3.transform.position = statue3_position;
             std::cout << "size x = " << txt_map[0].size() << std::endl;
             std::cout << "size y = " << txt_map.size() << std::endl;
         }
