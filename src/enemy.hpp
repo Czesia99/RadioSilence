@@ -193,7 +193,7 @@ class Enemy
             if (on_tile(path[it])) {
                 it++;
                 choose_direction = false;
-                // detect_player();
+                detect_player();
                 move_forward();
             }
             else {
@@ -230,7 +230,7 @@ class Enemy
 
             float minDistance = 1.0f;
             float maxDistance = 5.0f;
-            float volume = 8.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 8.0f);
+            float volume = 12.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 12.0f);
             ma_sound_set_volume(&noise, volume);
         }
 };

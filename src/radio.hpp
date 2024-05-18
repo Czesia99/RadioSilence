@@ -47,19 +47,20 @@ class Radio
                     std::cout << "listening time"<< listening_time << std::endl;
                     game_over();
                 }
-            }            
+            }
+            std::cout << "win distance = " << glm::distance(player_pos, win_pos) << std::endl;         
         }
 
         void turn_on()
         {
-            std::cout << "win distance = " << glm::distance(player_pos, win_pos) << std::endl;
+            
 
             if (glm::distance(player_pos, win_pos) < 10.0f) 
             {
                 ma_sound_seek_to_pcm_frame(&radio_sounds[0], 0);
                 ma_sound_start(&radio_sounds[0]);
             }
-            else if (glm::distance(player_pos, win_pos) <= 35.0f) {
+            else if (glm::distance(player_pos, win_pos) <= 30.0f) {
                 ma_sound_seek_to_pcm_frame(&radio_sounds[1], 0);
                 ma_sound_start(&radio_sounds[1]);
             }
