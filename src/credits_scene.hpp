@@ -7,9 +7,9 @@
 #include "texture.hpp"
 #include "stb_image.h"
 
-class MenuScene : public IScene {
+class CreditsScene : public IScene {
     public:
-        MenuScene(Context &ctx);
+        CreditsScene(Context &ctx);
         void store_scene_in_ctx() override;
         void open_scene() override;
         void close_scene() override;
@@ -29,8 +29,7 @@ class MenuScene : public IScene {
         float lastFrame = 0.0f;
 
         CameraOrtho camera;
-        Shader btn_shader;
-        Button play_btn;
-        Button quit_btn;
-        Button credit_btn;
+        Shader credits_shader;
+        Rectangle shape;
+        unsigned int credits_texture;
 };

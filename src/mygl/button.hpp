@@ -10,6 +10,8 @@ class Button {
         unsigned int texture;
         // Transform transform;
 
+        bool hover = false;
+
     public:
         Button(float posx = 0, float posy = 0, float width = 150, float height = 100) : button_posx(posx), button_posy(posy), button_width(width), button_height(height)
         {
@@ -24,12 +26,15 @@ class Button {
             shape.render(shader, camera);
         };
 
-        bool is_clicked(double xpos, double ypos) 
+        bool is_hovered(double xpos, double ypos) 
         {
-            return (xpos >= shape.transform.position.x - shape.transform.scale.x / 2 && 
+            if (xpos >= shape.transform.position.x - shape.transform.scale.x / 2 && 
                     xpos <= shape.transform.position.x + shape.transform.scale.x / 2 && 
-                    ypos >= shape.transform.position.y - shape.transform.scale.x / 2 && 
-                    ypos <= shape.transform.position.y + shape.transform.scale.x / 2);
+                    ypos >= shape.transform.position.y - shape.transform.scale.y / 2 && 
+                    ypos <= shape.transform.position.y + shape.transform.scale.y / 2) {hover = true;}
+            else hover = false;
+
+            return hover;
         }
 
     private:

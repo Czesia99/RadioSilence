@@ -4,13 +4,15 @@ MenuScene::MenuScene(Context &ctx) : ctx(ctx)
 {
     camera = CameraOrtho(glm::vec3(0.0f, 0.0f, 0.0f), ctx.win_width, ctx.win_height);
 
-    // btn = Button(ctx.win_width / 2, ctx.win_height / 2, 100.0f, 50.0f);
-    btn = Button(0.0f, 200.0f, 100.0f, 50.0f);
+    play_btn = Button(0.0f, 200.0f, 200.0f, 80.0f);
+    quit_btn = Button(0.0f,  100.0f, 200.0f, 80.0f);
+    credit_btn = Button(0.0f,  0.0f, 200.0f, 80.0f);
     stbi_set_flip_vertically_on_load(true);
-    load_texture("../assets/textures/play_button.png", btn.texture);
-    btn_shader = Shader("shader.vs", "shader.fs");
+    load_texture("../assets/textures/play_button.png", play_btn.texture);
+    load_texture("../assets/textures/quit_button.png", quit_btn.texture);
+    load_texture("../assets/textures/credits_button.png", credit_btn.texture);
+    btn_shader = Shader("button.vs", "button.fs");
     
-
     store_scene_in_ctx();
 }
 
@@ -35,11 +37,20 @@ void MenuScene::update()
     btn_shader.use();
     
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, btn.texture);
-    btn_shader.set_int("texture1", 0);
-    // btn_shader.set_float("time", currentTime);
+    glBindTexture(GL_TEXTURE_2D, play_btn.texture);
+    btn_shader.set_int("texture0", 0);
+    btn_shader.set_bool("hovered", play_btn.hover);
+    play_btn.render(btn_shader, camera);
 
-    btn.render(btn_shader, camera); 
+    // btn_shader.set_int("texture0", 0);
+    glBindTexture(GL_TEXTURE_2D, quit_btn.texture);
+    btn_shader.set_bool("hovered", quit_btn.hover);
+    quit_btn.render(btn_shader, camera);
+
+    // btn_shader.set_int("texture0", 0);
+    glBindTexture(GL_TEXTURE_2D, credit_btn.texture);
+    btn_shader.set_bool("hovered", credit_btn.hover);
+    credit_btn.render(btn_shader, camera);
 }
 
 void MenuScene::scene_clear()
@@ -51,7 +62,7 @@ void MenuScene::scene_clear()
 void MenuScene::process_input()
 {
     if (glfwGetKey(ctx.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(ctx.window, true);
+        glfwSetWindowShouldClose(ctx.window, true);
 }
 
 void MenuScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
@@ -62,10 +73,9 @@ void MenuScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     ypos = ctx.win_height - ypos;
     ypos -= ctx.win_height / 2;
 
-    // if (btn.is_clicked(xpos, ypos))
-    // {
-        
-    // }
+    play_btn.is_hovered(xpos, ypos);
+    quit_btn.is_hovered(xpos, ypos);
+    credit_btn.is_hovered(xpos, ypos);
 }
 
 void MenuScene::left_click_callback(GLFWwindow* window, int button, int action, int mods) 
@@ -75,11 +85,15 @@ void MenuScene::left_click_callback(GLFWwindow* window, int button, int action, 
     xpos -= ctx.win_width / 2;
     ypos = ctx.win_height - ypos;
     ypos -= ctx.win_height / 2;
-    
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        if(btn.is_clicked(xpos, ypos)) {
-            std::cout<< "button clicked !" << std::endl;
+        if(play_btn.hover) {
             ctx.load_scene_id(1);
+        }
+        if(quit_btn.hover) {
+            glfwSetWindowShouldClose(ctx.window, true);
+        }
+        if(credit_btn.hover) {
+            ctx.load_scene_id(2);
         }
     }
 }
