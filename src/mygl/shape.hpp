@@ -68,17 +68,17 @@ class Rectangle {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
-            glBufferData(GL_ARRAY_BUFFER, rectangle_vertices.size() * sizeof(float), rectangle_vertices.data(), GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(rectangle_vertices), rectangle_vertices, GL_STATIC_DRAW);
 
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
             glEnableVertexAttribArray(0);
 
-            // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-            // glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
         }
 
-        void render(Shader shader, const ICamera &camera) 
+        void render(Shader shader, const ICamera &camera)
         {
             shader.use();
             glm::mat4 mat = transform.get_model_matrix();
@@ -90,7 +90,7 @@ class Rectangle {
             shader.set_mat4("view", view);
 
             glBindVertexArray(vao);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+            // glDrawArrays(GL_TRIANGLES, 0, 3);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
 
@@ -102,16 +102,16 @@ class Rectangle {
         unsigned int vao;
         unsigned int vbo;
 
-        std::vector<float> rectangle_vertices = {
-            0.5f,  0.5f, 0.0f, // top right
-            0.5f, -0.5f, 0.0f, // bottom right
-            -0.5f, -0.5f, 0.0f,// bottom left
-            -0.5f,  0.5f, 0.0f,// top left 
+        float rectangle_vertices[20] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,// bottom left
+            0.5f, -0.5f, 0.0f,  1.0f, 0.0f,// bottom right
+            0.5f,  0.5f, 0.0f,  1.0f, 1.0f,// top right
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,// top left 
         };
     
-        std::vector<unsigned int> indices = {  // note that we start from 0!
-            0, 1, 3,   // first triangle
-            1, 2, 3    // second triangle
+        uint indices[6] = {  // note that we start from 0!
+            0, 1, 2,   // first triangle
+            0, 2, 3    // second triangle
         };
 };
 

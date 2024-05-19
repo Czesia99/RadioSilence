@@ -1,13 +1,13 @@
 #version 460 core
 
 out vec4 FragColor;
-// in vec3 ourColor;
+in vec2 TexCoords;
 in vec3 ourPosition;
 
-uniform float time;
+//uniform float time;
+uniform sampler2D texture1;
 
 void main()
 {
-   vec3 animatedColor = vec3(0.5 + 0.5 * sin(time), 0.5 + 0.5 * sin(time + 2.0), 0.5 + 0.5 * sin(time + 4.0));
-   FragColor = vec4(animatedColor, 1.0);
+   FragColor = texture(texture1, TexCoords);
 }

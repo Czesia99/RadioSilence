@@ -6,7 +6,10 @@ MenuScene::MenuScene(Context &ctx) : ctx(ctx)
 
     // btn = Button(ctx.win_width / 2, ctx.win_height / 2, 100.0f, 50.0f);
     btn = Button(0.0f, 200.0f, 100.0f, 50.0f);
+    stbi_set_flip_vertically_on_load(true);
+    load_texture("../assets/textures/play_button.png", btn.texture);
     btn_shader = Shader("shader.vs", "shader.fs");
+    
 
     store_scene_in_ctx();
 }
@@ -30,7 +33,11 @@ void MenuScene::update()
     lastFrame = currentTime;
 
     btn_shader.use();
-    btn_shader.set_float("time", currentTime);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, btn.texture);
+    btn_shader.set_int("texture1", 0);
+    // btn_shader.set_float("time", currentTime);
 
     btn.render(btn_shader, camera); 
 }

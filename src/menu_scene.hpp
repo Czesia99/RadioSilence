@@ -4,6 +4,8 @@
 #include "mygl/iscene.hpp"
 #include "mygl/context.hpp"
 #include "mygl/button.hpp"
+#include "texture.hpp"
+#include "stb_image.h"
 
 class MenuScene : public IScene {
     public:
