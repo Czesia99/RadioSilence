@@ -48,7 +48,6 @@ class Radio
                     game_over();
                 }
             }
-            std::cout << "win distance = " << glm::distance(player_pos, win_pos) << std::endl;         
         }
 
         void turn_on()

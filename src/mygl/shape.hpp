@@ -96,6 +96,7 @@ class Rectangle {
 
     public:
         Transform transform;
+        unsigned int texture;
 
     private:
         unsigned int ebo;

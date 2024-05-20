@@ -56,4 +56,5 @@ class GameScene : public IScene {
         ma_sound ambiance_sound;
 
         unsigned int cookie_mask_id;
+        unsigned int fbo;
 };

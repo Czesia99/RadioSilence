@@ -30,7 +30,9 @@ class MenuScene : public IScene {
 
         CameraOrtho camera;
         Shader btn_shader;
+        Shader bg_shader;
         Button play_btn;
         Button quit_btn;
         Button credit_btn;
+        Rectangle bg;
 };

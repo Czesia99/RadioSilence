@@ -35,6 +35,19 @@ uniform Light light;
 
 uniform vec2 viewPort;
 
+uniform float time;
+
+// float noise(vec2 pos, float evolve) {
+    
+//     // Loop the evolution (over a very long period of time).
+//     float e = fract((evolve*0.01));
+    
+//     float cx  = pos.x*e;
+//     float cy  = pos.y*e;
+    
+//     return fract(23.0*fract(2.0/fract(fract(cx*2.4/cy*23.0+pow(abs(cy/22.4),3.3))*fract(cx*evolve/pow(abs(cy),0.050)))));
+// }
+
 void main()
 {
     // ambient
@@ -78,11 +91,12 @@ void main()
     specular *= attenuation;
 
 
-
     vec3 result = ambient + diffuse + specular;
 
     float color_num = 20;
     vec3 final = floor(result * (color_num - 1.0) + 0.5) / (color_num - 1.0);
 
+    // vec3 noise_color = vec3(noise(gl_FragCoord.xy, time));
+    // mix(final, noise_color, 0.5)
     FragColor = vec4(final, 1.0);
 }

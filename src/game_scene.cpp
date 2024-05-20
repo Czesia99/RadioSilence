@@ -51,6 +51,7 @@ void GameScene::update()
 
     map_shader.use();
 
+    map_shader.set_float("time", clock.current_time);
     //spotlight properties
     map_shader.set_vec3("light.position", player->player_camera.position);
     map_shader.set_vec3("light.direction", player->player_camera.front);
