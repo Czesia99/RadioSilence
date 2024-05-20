@@ -8,10 +8,10 @@ MenuScene::MenuScene(Context &ctx) : ctx(ctx)
     quit_btn = Button(-400.0f,  0.0f, 200.0f, 80.0f);
     credit_btn = Button(-400.0f,  -100.0f, 200.0f, 80.0f);
     stbi_set_flip_vertically_on_load(true);
+    load_texture("../assets/textures/menu_bg.png", bg.texture);
     load_texture("../assets/textures/play_button.png", play_btn.texture);
     load_texture("../assets/textures/quit_button.png", quit_btn.texture);
     load_texture("../assets/textures/credits_button.png", credit_btn.texture);
-    load_texture("../assets/textures/menu_bg.png", bg.texture);
 
     float bg_ar = 1665.0f / 1369.0f;
     float scale_factor;
@@ -22,11 +22,10 @@ MenuScene::MenuScene(Context &ctx) : ctx(ctx)
     else {
         scale_factor = ctx.win_width / 1665.0f;
     }
-        
+
     bg.transform.scale.x = 1665.0f * scale_factor;
     bg.transform.scale.y = 1369.0f * scale_factor;
 
-     
     btn_shader = Shader("button.vs", "button.fs");
     bg_shader = Shader("bg_texture.vs", "bg_texture.fs");
     
@@ -40,6 +39,7 @@ void MenuScene::store_scene_in_ctx()
 
 void MenuScene::open_scene() 
 {
+    glDisable(GL_DEPTH_TEST);
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
@@ -47,10 +47,7 @@ void MenuScene::close_scene() { return; }
 
 void MenuScene::update()
 {
-    double currentTime = glfwGetTime();
-    deltaTime = currentTime - lastFrame;
-    lastFrame = currentTime;
-
+    clock.update();
     glActiveTexture(GL_TEXTURE0);
     
     glBindTexture(GL_TEXTURE_2D, bg.texture);
@@ -58,22 +55,18 @@ void MenuScene::update()
 
     btn_shader.use();
     btn_shader.set_int("texture0", 0);
-
+    
     glBindTexture(GL_TEXTURE_2D, play_btn.texture);
     btn_shader.set_bool("hovered", play_btn.hover);
     play_btn.render(btn_shader, camera);
 
-    // btn_shader.set_int("texture0", 0);
     glBindTexture(GL_TEXTURE_2D, quit_btn.texture);
     btn_shader.set_bool("hovered", quit_btn.hover);
     quit_btn.render(btn_shader, camera);
 
-    // btn_shader.set_int("texture0", 0);
     glBindTexture(GL_TEXTURE_2D, credit_btn.texture);
     btn_shader.set_bool("hovered", credit_btn.hover);
     credit_btn.render(btn_shader, camera);
-
-
 }
 
 void MenuScene::scene_clear()
@@ -82,11 +75,7 @@ void MenuScene::scene_clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void MenuScene::process_input()
-{
-    if (glfwGetKey(ctx.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(ctx.window, true);
-}
+void MenuScene::process_input() {}
 
 void MenuScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
 {
@@ -121,10 +110,7 @@ void MenuScene::left_click_callback(GLFWwindow* window, int button, int action, 
     }
 }
 
-void MenuScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {} 
-// {
-//     camera.process_mouse_scroll(static_cast<float>(yoffset));
-// }
+void MenuScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {}
 
 void MenuScene::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {

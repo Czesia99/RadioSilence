@@ -121,6 +121,7 @@ void GameScene::update()
     //torchlight mask
     floor_shader.set_vec2("viewPort", ctx.win_width, ctx.win_height);
     floor_shader.set_int("light.flashlight", 2);
+
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, cookie_mask_id);
 
@@ -147,9 +148,6 @@ void GameScene::update()
     if (player->dead)
     {
         screamer();
-        // std::cout << "t = " << timer << std::endl;
-        // std::cout << "current time = " << clock.current_time << std::endl;
-
         if (clock.current_time - scream_start_time >= 3.0f) 
         {
             ma_sound_stop(&scream_sound);
@@ -181,7 +179,10 @@ void GameScene::process_input()
     bool k_pressed = false;
 
     if (glfwGetKey(ctx.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(ctx.window, true);
+    {
+        ctx.load_scene_id(1);
+
+    }
 
     if (call_screamer)
         return;

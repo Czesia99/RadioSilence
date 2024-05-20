@@ -4,6 +4,7 @@
 #include "mygl/iscene.hpp"
 #include "mygl/context.hpp"
 #include "mygl/button.hpp"
+#include "mygl/clock.hpp"
 #include "texture.hpp"
 #include "stb_image.h"
 
@@ -25,8 +26,7 @@ class MenuScene : public IScene {
         Context &ctx;
     
     private:
-        float deltaTime = 0.0f;	// time between current frame and last frame
-        float lastFrame = 0.0f;
+        Clock clock;
 
         CameraOrtho camera;
         Shader btn_shader;
