@@ -1,34 +1,38 @@
-#include "credits_scene.hpp"
+#include "ycube_scene.hpp"
 
-CreditsScene::CreditsScene(Context &ctx) : ctx(ctx)
+YCubeScene::YCubeScene(Context &ctx) : ctx(ctx)
 {
     camera = CameraOrtho(glm::vec3(0.0f, 0.0f, 0.0f), ctx.win_width, ctx.win_height);
 
     stbi_set_flip_vertically_on_load(true);
-    load_texture("../assets/textures/credits4.png", credits_texture);
+    load_texture("../assets/textures/ycube.png", credits_texture);
     shape.transform.scale.x = ctx.win_width;
     shape.transform.scale.y = ctx.win_height;
     credits_shader = Shader("button.vs", "button.fs");
     store_scene_in_ctx();
 }
 
-void CreditsScene::store_scene_in_ctx()
+void YCubeScene::store_scene_in_ctx()
 {
     ctx.scenes.push_back(this);
 }
 
-void CreditsScene::open_scene() 
+void YCubeScene::open_scene() 
 {
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    start_time = 0.0f;
 }
 
-void CreditsScene::close_scene() { return; }
+void YCubeScene::close_scene() { return; }
 
-void CreditsScene::update()
+void YCubeScene::update()
 {
-    double currentTime = glfwGetTime();
-    deltaTime = currentTime - lastFrame;
-    lastFrame = currentTime;
+    clock.update();
+
+    if (clock.current_time - start_time >= 4.0f)
+    {
+        ctx.load_scene_id(1);
+    }
 
     credits_shader.use();
 
@@ -38,19 +42,19 @@ void CreditsScene::update()
     shape.render(credits_shader, camera);
 }
 
-void CreditsScene::scene_clear()
+void YCubeScene::scene_clear()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void CreditsScene::process_input()
+void YCubeScene::process_input()
 {
     if (glfwGetKey(ctx.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(ctx.window, true);
 }
 
-void CreditsScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
+void YCubeScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
 {
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
@@ -59,7 +63,7 @@ void CreditsScene::mouse_callback(GLFWwindow* window, double xposIn, double ypos
     ypos -= ctx.win_height / 2;
 }
 
-void CreditsScene::left_click_callback(GLFWwindow* window, int button, int action, int mods) 
+void YCubeScene::left_click_callback(GLFWwindow* window, int button, int action, int mods) 
 {
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
@@ -71,12 +75,12 @@ void CreditsScene::left_click_callback(GLFWwindow* window, int button, int actio
     }
 }
 
-void CreditsScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {} 
+void YCubeScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {} 
 // {
 //     camera.process_mouse_scroll(static_cast<float>(yoffset));
 // }
 
-void CreditsScene::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void YCubeScene::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
     camera.width = width;

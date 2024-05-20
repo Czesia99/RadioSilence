@@ -128,7 +128,7 @@ void GameScene::update()
 
     if (player->victory)
     {
-        ctx.load_scene_id(0);
+        ctx.load_scene_id(1);
         player->radio->game_over();
     }
 
@@ -139,7 +139,7 @@ void GameScene::update()
         if (clock.current_time - scream_start_time >= 3.0f) 
         {
             ma_sound_stop(&scream_sound);
-            ctx.load_scene_id(0);
+            ctx.load_scene_id(1);
         }
     }
 
@@ -152,7 +152,7 @@ void GameScene::update()
         if (clock.current_time - scream_start_time >= 3.0f) 
         {
             ma_sound_stop(&scream_sound);
-            ctx.load_scene_id(0);
+            ctx.load_scene_id(1);
         }
     }
 }

@@ -87,13 +87,13 @@ void MenuScene::left_click_callback(GLFWwindow* window, int button, int action, 
     ypos -= ctx.win_height / 2;
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         if(play_btn.hover) {
-            ctx.load_scene_id(1);
+            ctx.load_scene_id(2);
         }
         if(quit_btn.hover) {
             glfwSetWindowShouldClose(ctx.window, true);
         }
         if(credit_btn.hover) {
-            ctx.load_scene_id(2);
+            ctx.load_scene_id(3);
         }
     }
 }
