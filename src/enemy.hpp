@@ -28,7 +28,6 @@ class Enemy
         {
             stbi_set_flip_vertically_on_load(false);
             ma_sound_init_from_file(&sm.engine, sf, MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &sm.fence, &noise);
-            // ma_sound_set_pinned_listener_index(&noise, listenerIndex);
             model = Model("../assets/models/enemy/monster.obj");
 
             model.transform.position = map.enemy_start_position;
@@ -228,9 +227,9 @@ class Enemy
             ma_sound_set_position(&noise, model.transform.position.x, model.transform.position.y, model.transform.position.z);
             float distance = glm::distance(map.player_position, model.transform.position);
 
-            float minDistance = 1.0f;
+            float minDistance = 0.0f;
             float maxDistance = 5.0f;
-            float volume = 12.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 12.0f);
+            float volume = 10.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 10.0f);
             ma_sound_set_volume(&noise, volume);
         }
 };
