@@ -20,6 +20,7 @@ class Enemy
     public:
         bool scream = false;
         bool see_player = false;
+        bool near = false;
         ma_sound noise;
         
 
@@ -50,6 +51,7 @@ class Enemy
             model.transform.rotation.y = 0.0f;
             choose_direction = false;
             see_player = false;
+            near = false;
             scream = false;
             movement_speed = 0.3f;
             it = 0;
@@ -221,15 +223,31 @@ class Enemy
                 }
             }
         }
-    
+
+        float map_range(float value, float min1, float max1, float min2, float max2) 
+        {
+            return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+        }
+
+        float clamp(float n, float lower, float upper)
+        {
+            return n <= lower ? lower : n >= upper ? upper : n;
+        }
+
         void update_sound_position()
         {
             ma_sound_set_position(&noise, model.transform.position.x, model.transform.position.y, model.transform.position.z);
             float distance = glm::distance(map.player_position, model.transform.position);
 
-            float minDistance = 0.0f;
-            float maxDistance = 5.0f;
-            float volume = 10.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 10.0f);
+            float min_distance = 4.0f;
+            float max_distance = 10.0f;
+
+            float clamped_distance = clamp(distance, min_distance, max_distance);
+            float normalized_distance = map_range(clamped_distance, min_distance, max_distance, 0.0f, 1.0f);
+
+            // map_range()
+
+            float volume = map_range(normalized_distance, 1.0f, 0.0f, 0.0f, 12.0f); //10.0f - glm::clamp((distance - minDistance) / (maxDistance - minDistance), 0.0f, 10.0f);
             ma_sound_set_volume(&noise, volume);
         }
 };

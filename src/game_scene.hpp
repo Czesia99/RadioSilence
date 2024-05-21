@@ -28,6 +28,7 @@ class GameScene : public IScene {
         void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) override;
         void framebuffer_size_callback(GLFWwindow* window, int width, int height) override;
 
+        void shader_config();
         void screamer();
 
     public:
@@ -42,6 +43,8 @@ class GameScene : public IScene {
         Enemy *enemy = nullptr;
 
         Map map;
+        Shader shader;
+        Shader screen_shader;
         Shader light_shader;
         Shader map_shader;
         Shader floor_shader;
@@ -56,5 +59,20 @@ class GameScene : public IScene {
         ma_sound ambiance_sound;
 
         unsigned int cookie_mask_id;
-        unsigned int fbo;
+    
+        unsigned int framebuffer;
+        unsigned int textureColorbuffer;
+        unsigned int rbo;
+        unsigned int quad_vao;
+        unsigned int quad_vbo;
+        float quadVertices[24] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+            // positions   // texCoords
+            -1.0f,  1.0f,  0.0f, 1.0f,
+            -1.0f, -1.0f,  0.0f, 0.0f,
+            1.0f, -1.0f,  1.0f, 0.0f,
+
+            -1.0f, 1.0f,  0.0f, 1.0f,
+            1.0f, -1.0f,  1.0f, 0.0f,
+            1.0f,  1.0f,  1.0f, 1.0f
+        };
 };

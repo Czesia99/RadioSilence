@@ -24,7 +24,8 @@ class Player
             load_sounds();
             // sound_manager.load_sounds(sound_files, step_sounds);
             ma_fence_wait(&sound_manager.fence);
-            player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
+            player_camera = Camera3D(map.player_position, 860.0f, 520.0f, 1.0f, true);
+            // player_camera = Camera3D(map.player_position, win_width, win_height, 1.0f, true);
             radio = new Radio(sound_manager, map.player_position, map.win_position);
         }
 
@@ -118,7 +119,6 @@ class Player
             if (bobbing <= 0.005 && !step) {
                 step = true;
                 int rand = random_int(0, 7);
-                std::cout << "rand = " << rand << std::endl;
                 ma_sound_seek_to_pcm_frame(&step_sounds[rand], 0);
                 ma_sound_start(&step_sounds[rand]);
             }

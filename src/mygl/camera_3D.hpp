@@ -41,7 +41,7 @@ class Camera3D : public ICamera {
 
         glm::mat4 get_projection_matrix() const
         {
-            return glm::perspective(glm::radians(fov), 860.0f / 520.0f, 0.1f, 100.0f);
+            return glm::perspective(glm::radians(fov), width / height, 0.1f, 100.0f);
         }
 
         void process_keyboard(Camera3D_Movement direction, float delta_time)

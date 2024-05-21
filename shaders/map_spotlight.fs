@@ -93,7 +93,7 @@ void main()
 
     vec3 result = ambient + diffuse + specular;
 
-    float color_num = 20;
+    float color_num = 16;
     vec3 final = floor(result * (color_num - 1.0) + 0.5) / (color_num - 1.0);
 
     // vec3 noise_color = vec3(noise(gl_FragCoord.xy, time));
