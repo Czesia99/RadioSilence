@@ -31,6 +31,8 @@ class GameScene : public IScene {
         void shader_config();
         void screamer();
 
+        void init_framebuffer();
+
     public:
         Context &ctx;
         bool call_screamer = false;

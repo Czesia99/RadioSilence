@@ -31,6 +31,16 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
+    // init_framebuffer();
+}
+
+void GameScene::store_scene_in_ctx()
+{
+    ctx.scenes.push_back(this);
+}
+
+void GameScene::init_framebuffer()
+{
     shader.use();
     shader.set_int("texture1", 0);
 
@@ -57,16 +67,12 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void GameScene::store_scene_in_ctx()
-{
-    ctx.scenes.push_back(this);
-}
-
 void GameScene::open_scene()
 {
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+    init_framebuffer();
     player->init();
     enemy->init();
     clock.reset();
@@ -206,7 +212,7 @@ void GameScene::update()
     float distance = glm::distance(map.player_position, map.enemy_position);
 
     float min_distance = 4.0f;
-    float max_distance = 7.0f;
+    float max_distance = 10.0f;
 
     float clamped_distance = clamp(distance, min_distance, max_distance);
     float normalized_distance = map_range(clamped_distance, min_distance, max_distance, 0.0f, 1.0f);
@@ -356,4 +362,14 @@ void GameScene::framebuffer_size_callback(GLFWwindow* window, int width, int hei
     player->player_camera.height = height;
     ctx.win_width = width;
     ctx.win_height = height;
+
+    // glDeleteVertexArrays(1, &cubeVAO);
+    // glDeleteVertexArrays(1, &planeVAO);
+    // glDeleteVertexArrays(1, &quad_vao);
+    // glDeleteBuffers(1, &cubeVBO);
+    // glDeleteBuffers(1, &planeVBO);
+    // glDeleteBuffers(1, &quadVBO);
+    glDeleteRenderbuffers(1, &rbo);
+    glDeleteFramebuffers(1, &framebuffer);
+    init_framebuffer();
 }
