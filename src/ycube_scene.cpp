@@ -20,7 +20,7 @@ void YCubeScene::store_scene_in_ctx()
 void YCubeScene::open_scene() 
 {
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    start_time = 0.0f;
+    start_time = clock.current_time;
 }
 
 void YCubeScene::close_scene() { return; }
@@ -70,7 +70,7 @@ void YCubeScene::left_click_callback(GLFWwindow* window, int button, int action,
     xpos -= ctx.win_width / 2;
     ypos = ctx.win_height - ypos;
     ypos -= ctx.win_height / 2;
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
         ctx.load_scene_id(1);
     }
 }

@@ -67,7 +67,7 @@ void CreditsScene::left_click_callback(GLFWwindow* window, int button, int actio
     ypos = ctx.win_height - ypos;
     ypos -= ctx.win_height / 2;
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        ctx.load_scene_id(1);
+        ctx.load_scene_id(2);
     }
 }
 

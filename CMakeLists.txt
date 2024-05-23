@@ -30,6 +30,7 @@ set(SRC_FILES
     ${SRC}/menu_scene.cpp
     ${SRC}/credits_scene.cpp
     ${SRC}/ycube_scene.cpp
+    ${SRC}/instructions_scene.cpp
     ${SRC}/texture.cpp
 )
 

@@ -228,7 +228,7 @@ void GameScene::update()
 
     if (player->victory)
     {
-        ctx.load_scene_id(1);
+        ctx.load_scene_id(2);
         player->radio->game_over();
     }
 
@@ -239,7 +239,7 @@ void GameScene::update()
         if (clock.current_time - scream_start_time >= 3.0f) 
         {
             ma_sound_stop(&scream_sound);
-            ctx.load_scene_id(1);
+            ctx.load_scene_id(2);
         }
     }
 
@@ -249,7 +249,7 @@ void GameScene::update()
         if (clock.current_time - scream_start_time >= 3.0f) 
         {
             ma_sound_stop(&scream_sound);
-            ctx.load_scene_id(1);
+            ctx.load_scene_id(2);
         }
     }
 }
@@ -278,7 +278,7 @@ void GameScene::process_input()
 
     if (glfwGetKey(ctx.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
-        ctx.load_scene_id(1);
+        ctx.load_scene_id(2);
     }
 
     if (call_screamer)

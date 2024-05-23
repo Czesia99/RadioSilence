@@ -10,16 +10,18 @@
 #include "menu_scene.hpp"
 #include "credits_scene.hpp"
 #include "ycube_scene.hpp"
+#include "instructions_scene.hpp"
 
 int main()
 {
     Context ctx;
     glfwSwapInterval(1); //vsync
 
-    YCubeScene splashscreen(ctx);
-    MenuScene menu(ctx); //idx 0
-    GameScene scene(ctx); // idx 1
-    CreditsScene credits(ctx); //idx 2
+    YCubeScene splashscreen(ctx); // idx 0
+    InstructionsScene instructions(ctx); //idx 1
+    MenuScene menu(ctx); //idx 2
+    GameScene scene(ctx); // idx 3
+    CreditsScene credits(ctx); //idx 4
     
 
     ctx.load_scene(ctx.scenes[0]);
