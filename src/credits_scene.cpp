@@ -47,7 +47,7 @@ void CreditsScene::scene_clear()
 void CreditsScene::process_input()
 {
     if (glfwGetKey(ctx.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(ctx.window, true);
+        ctx.load_scene_id(2);
 }
 
 void CreditsScene::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
@@ -66,7 +66,7 @@ void CreditsScene::left_click_callback(GLFWwindow* window, int button, int actio
     xpos -= ctx.win_width / 2;
     ypos = ctx.win_height - ypos;
     ypos -= ctx.win_height / 2;
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
         ctx.load_scene_id(2);
     }
 }

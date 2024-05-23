@@ -22,7 +22,6 @@ int main()
     MenuScene menu(ctx); //idx 2
     GameScene scene(ctx); // idx 3
     CreditsScene credits(ctx); //idx 4
-    
 
     ctx.load_scene(ctx.scenes[0]);
     ctx.run();

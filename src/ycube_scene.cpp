@@ -70,9 +70,9 @@ void YCubeScene::left_click_callback(GLFWwindow* window, int button, int action,
     xpos -= ctx.win_width / 2;
     ypos = ctx.win_height - ypos;
     ypos -= ctx.win_height / 2;
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
-        ctx.load_scene_id(1);
-    }
+    // if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+    //     ctx.load_scene_id(1);
+    // }
 }
 
 void YCubeScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {} 

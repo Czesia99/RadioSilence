@@ -41,6 +41,18 @@ void MenuScene::open_scene()
 {
     glDisable(GL_DEPTH_TEST);
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    float bg_ar = 1665.0f / 1369.0f;
+    float scale_factor;
+
+    if (ctx.aspect_ratio > bg_ar) {
+        scale_factor = ctx.win_height / 1369.0f;
+    }
+    else {
+        scale_factor = ctx.win_width / 1665.0f;
+    }
+
+    bg.transform.scale.x = 1665.0f * scale_factor;
+    bg.transform.scale.y = 1369.0f * scale_factor;
 }
 
 void MenuScene::close_scene() { return; }

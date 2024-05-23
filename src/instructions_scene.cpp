@@ -6,22 +6,8 @@ InstructionsScene::InstructionsScene(Context &ctx) : ctx(ctx)
 
     stbi_set_flip_vertically_on_load(true);
     load_texture("../assets/textures/instructions.png", instructions_texture);
-    shape.transform.scale.x = ctx.win_width;
-    shape.transform.scale.y = ctx.win_height;
-    credits_shader = Shader("button.vs", "button.fs");
-
-
-    store_scene_in_ctx();
-}
-
-void InstructionsScene::store_scene_in_ctx()
-{
-    ctx.scenes.push_back(this);
-}
-
-void InstructionsScene::open_scene() 
-{
-    glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    // shape.transform.scale.x = ctx.win_width;
+    // shape.transform.scale.y = ctx.win_height;
     float bg_ar = 800.0f / 600.0f;
     float scale_factor;
 
@@ -34,7 +20,18 @@ void InstructionsScene::open_scene()
 
     shape.transform.scale.x = 800.0f * scale_factor;
     shape.transform.scale.y = 600.0f * scale_factor;
+    credits_shader = Shader("button.vs", "button.fs");
+    store_scene_in_ctx();
+}
 
+void InstructionsScene::store_scene_in_ctx()
+{
+    ctx.scenes.push_back(this);
+}
+
+void InstructionsScene::open_scene() 
+{
+    glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     clock.update();
     start_time = clock.current_time;
     std::cout << "start time instructions = " << start_time << std::endl;
@@ -88,9 +85,9 @@ void InstructionsScene::left_click_callback(GLFWwindow* window, int button, int 
     xpos -= ctx.win_width / 2;
     ypos = ctx.win_height - ypos;
     ypos -= ctx.win_height / 2;
-    // if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-    //     ctx.load_scene_id(2);
-    // }
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        ctx.load_scene_id(2);
+    }
 }
 
 void InstructionsScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {}
