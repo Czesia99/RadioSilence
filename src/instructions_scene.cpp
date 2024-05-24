@@ -43,7 +43,6 @@ void InstructionsScene::update()
 {
     clock.update();
 
-    std::cout << "clock current = " << clock.current_time << std::endl;
     if (clock.current_time - start_time >= 6.0f)
     {
         ctx.load_scene_id(2);

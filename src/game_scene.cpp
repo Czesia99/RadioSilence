@@ -220,7 +220,13 @@ void GameScene::update()
     // map_range()
 
     float noise_intensity = map_range(1.0f - normalized_distance, 0.0f, 1.0f, 0.0f, 0.3f);
-    screen_shader.set_float("noise_intensity", noise_intensity);
+
+    if (enemy->near_player)
+    {
+        screen_shader.set_float("noise_intensity", noise_intensity);
+    } else {
+        screen_shader.set_float("noise_intensity", 0.0f);
+    }
 
     glBindVertexArray(quad_vao);
     glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane

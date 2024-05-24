@@ -38,11 +38,13 @@ inline void print_path(std::vector<glm::ivec2> path)
 
 inline std::vector<glm::ivec2> breadth(Map &map, glm::ivec2 start_pos, glm::ivec2 end_pos)
 {
+    std::cout << "in breadth" << std::endl;
     std::queue<glm::ivec2> frontier;
     std::unordered_map<glm::ivec2, glm::ivec2, KeyFuncs, KeyFuncs> came_from;
 
     frontier.push(start_pos);
-    
+    glm::ivec2 furthest = start_pos;
+
     do {
         glm::ivec2 current = frontier.front();
         frontier.pop();
@@ -51,20 +53,30 @@ inline std::vector<glm::ivec2> breadth(Map &map, glm::ivec2 start_pos, glm::ivec
             break;
 
         const std::vector<glm::ivec2> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-
-        for (const auto &dir : directions)
+        bool found_next = false;
+        // for (const auto &dir : directions)
+        for (int i = 0; i < directions.size(); i++)
         {
-            glm::ivec2 next(current + dir);
+            glm::ivec2 next(current + directions[i]);
 
             if (!is_valid(map.txt_map, next.x, next.y))
                 continue;
 
             if (came_from.find(next) == came_from.end()) // if doesn't exist
             {
+                std::cout << "doesn't exits" << std::endl;
                 frontier.push(next);
                 came_from[next] = current;
+                found_next = true;
             }
         }
+
+        if (!found_next)
+        {
+            end_pos = current;
+            std::cout << "Dead end at " << current.x << ", " << current.y << std::endl;
+        };
+
     } while (!frontier.empty());
 
     glm::ivec2 current = end_pos;

@@ -20,7 +20,7 @@ class Enemy
     public:
         bool scream = false;
         bool see_player = false;
-        bool near = false;
+        bool near_player = false;
         ma_sound noise;
         
 
@@ -51,7 +51,7 @@ class Enemy
             model.transform.rotation.y = 0.0f;
             choose_direction = false;
             see_player = false;
-            near = false;
+            near_player = false;
             scream = false;
             movement_speed = 0.3f;
             it = 0;
@@ -114,13 +114,27 @@ class Enemy
 
         void detect_player()
         {
-            if (glm::distance(map.player_position, map.enemy_position) <= 5.0f)
+            if (glm::distance(map.player_position, map.enemy_position) > 9.0f)
             {
-                std::vector<glm::ivec2> p = breadth(map, path_pos, tile_pos(map.player_position));
-                if (p.size() <= 5)
+                near_player = false;
+                return;
+            }
+
+            std::vector<glm::ivec2> p = breadth(map, path_pos, tile_pos(map.player_position));
+
+            for (int i = 0; i < p.size(); i++)
+            {
+                if (p[i] == tile_pos(map.player_position))
+                {
+                    near_player = true;
+                }
+
+                if (p[i] == tile_pos(map.player_position) && i <= 5)
                 {
                     see_player = true;
-                }
+                } 
+                
+
             }
         }
 
