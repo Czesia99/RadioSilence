@@ -30,8 +30,6 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
-    // init_framebuffer();
 }
 
 void GameScene::store_scene_in_ctx()
@@ -178,6 +176,10 @@ float clamp(float n, float lower, float upper)
     return n <= lower ? lower : n >= upper ? upper : n;
 }
 
+float easeInCubic(float x) {
+    return x * x * x;
+}
+
 void GameScene::update()
 {
     clock.update();
@@ -216,8 +218,6 @@ void GameScene::update()
 
     float clamped_distance = clamp(distance, min_distance, max_distance);
     float normalized_distance = map_range(clamped_distance, min_distance, max_distance, 0.0f, 1.0f);
-
-    // map_range()
 
     float noise_intensity = map_range(1.0f - normalized_distance, 0.0f, 1.0f, 0.0f, 0.3f);
 
@@ -367,12 +367,6 @@ void GameScene::framebuffer_size_callback(GLFWwindow* window, int width, int hei
     player->player_camera.width = width;
     player->player_camera.height = height;
 
-    // glDeleteVertexArrays(1, &cubeVAO);
-    // glDeleteVertexArrays(1, &planeVAO);
-    // glDeleteVertexArrays(1, &quad_vao);
-    // glDeleteBuffers(1, &cubeVBO);
-    // glDeleteBuffers(1, &planeVBO);
-    // glDeleteBuffers(1, &quadVBO);
     glDeleteRenderbuffers(1, &rbo);
     glDeleteFramebuffers(1, &framebuffer);
     init_framebuffer();

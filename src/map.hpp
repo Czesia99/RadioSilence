@@ -22,7 +22,7 @@ class Map {
 
         Map()
         {
-            read_map_file("../assets/map3.txt");
+            read_map_file("../assets/map5.txt");
             stbi_set_flip_vertically_on_load(false);
             statue = Model("../assets/models/statue/untitled2.obj");
             statue2 = Model("../assets/models/statue2/untitled.obj");
@@ -142,7 +142,6 @@ class Map {
 
         void print_map_txt()
         {
-            std::cout << "in print map txt" << std::endl; 
             for (int i = 0; i < txt_map.size(); i++)
             {
                 for (int j = 0; j < txt_map[i].size(); j++)
@@ -155,7 +154,6 @@ class Map {
 
         glm::ivec2 random_walkable_pos()
         {
-            std::cout << "random walkable pos" << std::endl;
             srand (time(NULL));
             int rows = txt_map.size();
             int cols = txt_map[0].size();
