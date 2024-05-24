@@ -5,7 +5,7 @@ CreditsScene::CreditsScene(Context &ctx) : ctx(ctx)
     camera = CameraOrtho(glm::vec3(0.0f, 0.0f, 0.0f), ctx.win_width, ctx.win_height);
 
     stbi_set_flip_vertically_on_load(true);
-    load_texture("../assets/textures/credits4.png", credits_texture);
+    load_texture("../assets/textures/credits.png", credits_texture);
     shape.transform.scale.x = ctx.win_width;
     shape.transform.scale.y = ctx.win_height;
     credits_shader = Shader("button.vs", "button.fs");

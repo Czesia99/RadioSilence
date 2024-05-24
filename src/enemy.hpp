@@ -85,6 +85,7 @@ class Enemy
                 it = 0;
             }
             
+            detect_player();
             map.enemy_position = model.transform.position;
         }
 
@@ -114,9 +115,11 @@ class Enemy
 
         void detect_player()
         {
+            std::cout << "detect player" << std::endl;
             if (glm::distance(map.player_position, map.enemy_position) > 9.0f)
             {
                 near_player = false;
+                std::cout << "more than 9" << std::endl;
                 return;
             }
 
@@ -208,7 +211,7 @@ class Enemy
             if (on_tile(path[it])) {
                 it++;
                 choose_direction = false;
-                detect_player();
+                // detect_player();
                 move_forward();
             }
             else {

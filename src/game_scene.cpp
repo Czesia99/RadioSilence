@@ -17,7 +17,7 @@ GameScene::GameScene(Context &ctx) : ctx(ctx)
 
     ma_sound_init_from_file(&ctx.sound_manager.engine, "../assets/sfx/screamer.wav", MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &ctx.sound_manager.fence, &scream_sound);
     ma_sound_init_from_file(&ctx.sound_manager.engine, "../assets/sfx/ambiance.wav", MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_ASYNC, NULL, &ctx.sound_manager.fence, &ambiance_sound);    
-    load_texture("../assets/textures/flashlight2.png", cookie_mask_id);
+    load_texture("../assets/textures/flashlight.png", cookie_mask_id);
 
     // framebuffer configuration
     // -------------------------
@@ -176,10 +176,6 @@ float clamp(float n, float lower, float upper)
     return n <= lower ? lower : n >= upper ? upper : n;
 }
 
-float easeInCubic(float x) {
-    return x * x * x;
-}
-
 void GameScene::update()
 {
     clock.update();
@@ -232,6 +228,11 @@ void GameScene::update()
     glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
+    end_condition();
+}
+
+void GameScene::end_condition()
+{
     if (player->victory)
     {
         ctx.load_scene_id(2);
@@ -247,11 +248,13 @@ void GameScene::update()
             ma_sound_stop(&scream_sound);
             ctx.load_scene_id(2);
         }
+        // player->dead = true;
     }
 
     if (player->dead)
     {
         screamer();
+
         if (clock.current_time - scream_start_time >= 3.0f) 
         {
             ma_sound_stop(&scream_sound);
