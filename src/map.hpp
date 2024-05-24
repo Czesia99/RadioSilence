@@ -22,12 +22,13 @@ class Map {
 
         Map()
         {
-            read_map_file("../assets/map3.txt");
+            read_map_file("../assets/map2.txt");
             stbi_set_flip_vertically_on_load(false);
             statue = Model("../assets/models/statue/untitled2.obj");
             statue2 = Model("../assets/models/statue2/untitled.obj");
             statue3 = Model("../assets/models/statue3/untitled.obj");
             statue4 = Model("../assets/models/statue4/untitled.obj");
+            brother = Model("../assets/models/brother/maya2sketchfab.obj");
             stbi_set_flip_vertically_on_load(true);
             wall = Model("../assets/models/wall/wall.obj");
             cage = Model("../assets/models/cage/Cage.obj");
@@ -46,6 +47,7 @@ class Map {
             statue2.draw(shader, camera);
             statue3.draw(shader, camera);
             statue4.draw(shader, camera);
+            brother.draw(shader, camera);
 
             floor.transform.position = floor_position;
             floor.render(shader2, camera);
@@ -122,8 +124,13 @@ class Map {
                position.x = 0.0f;
                position.z += 1.0f;
             }
+
             cage.transform.position = win_position;
             cage.transform.scale *= 0.5f;
+
+            brother.transform.position = win_position;
+            brother.transform.position.y = 0.06;
+            brother.transform.scale *= 0.006f;
 
             statue.transform.position = statue_position;
             statue.transform.scale *= 0.4f;
@@ -173,6 +180,7 @@ class Map {
         Model statue2;
         Model statue3;
         Model statue4;
+        Model brother;
 
         Cube floor;
         glm::vec3 floor_position;
