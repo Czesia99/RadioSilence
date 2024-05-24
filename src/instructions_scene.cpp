@@ -6,20 +6,7 @@ InstructionsScene::InstructionsScene(Context &ctx) : ctx(ctx)
 
     stbi_set_flip_vertically_on_load(true);
     load_texture("../assets/textures/instructions.png", instructions_texture);
-    // shape.transform.scale.x = ctx.win_width;
-    // shape.transform.scale.y = ctx.win_height;
-    float bg_ar = 800.0f / 600.0f;
-    float scale_factor;
 
-    if (ctx.aspect_ratio > bg_ar) {
-        scale_factor = ctx.win_height / 800.0f;
-    }
-    else {
-        scale_factor = ctx.win_width / 600.0f;
-    }
-
-    shape.transform.scale.x = 800.0f * scale_factor;
-    shape.transform.scale.y = 600.0f * scale_factor;
     credits_shader = Shader("button.vs", "button.fs");
     store_scene_in_ctx();
 }
@@ -34,6 +21,7 @@ void InstructionsScene::open_scene()
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     clock.update();
     start_time = clock.current_time;
+
     std::cout << "start time instructions = " << start_time << std::endl;
 }
 
@@ -96,6 +84,13 @@ void InstructionsScene::framebuffer_size_callback(GLFWwindow* window, int width,
     glViewport(0, 0, width, height);
     camera.width = width;
     camera.height = height;
-    ctx.win_width = width;
-    ctx.win_height = height;
+
+    //resize instructions
+    float bg_ar = 800.0f / 600.0f;
+    float scale_factor;
+
+    scale_factor = ctx.win_height / 600.0f;
+
+    shape.transform.scale.x = 800.0f * scale_factor;
+    shape.transform.scale.y = 600.0f * scale_factor;
 }

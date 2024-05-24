@@ -85,6 +85,4 @@ void YCubeScene::framebuffer_size_callback(GLFWwindow* window, int width, int he
     glViewport(0, 0, width, height);
     camera.width = width;
     camera.height = height;
-    ctx.win_width = width;
-    ctx.win_height = height;
 }

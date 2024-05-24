@@ -7,24 +7,12 @@ MenuScene::MenuScene(Context &ctx) : ctx(ctx)
     play_btn = Button(-400.0f, 100.0f, 200.0f, 80.0f);
     quit_btn = Button(-400.0f,  0.0f, 200.0f, 80.0f);
     credit_btn = Button(-400.0f,  -100.0f, 200.0f, 80.0f);
+
     stbi_set_flip_vertically_on_load(true);
     load_texture("../assets/textures/menu_bg.png", bg.texture);
     load_texture("../assets/textures/play_button.png", play_btn.texture);
     load_texture("../assets/textures/quit_button.png", quit_btn.texture);
     load_texture("../assets/textures/credits_button.png", credit_btn.texture);
-
-    float bg_ar = 1665.0f / 1369.0f;
-    float scale_factor;
-
-    if (ctx.aspect_ratio > bg_ar) {
-        scale_factor = ctx.win_height / 1369.0f;
-    }
-    else {
-        scale_factor = ctx.win_width / 1665.0f;
-    }
-
-    bg.transform.scale.x = 1665.0f * scale_factor;
-    bg.transform.scale.y = 1369.0f * scale_factor;
 
     btn_shader = Shader("button.vs", "button.fs");
     bg_shader = Shader("bg_texture.vs", "bg_texture.fs");
@@ -41,18 +29,6 @@ void MenuScene::open_scene()
 {
     glDisable(GL_DEPTH_TEST);
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    float bg_ar = 1665.0f / 1369.0f;
-    float scale_factor;
-
-    if (ctx.aspect_ratio > bg_ar) {
-        scale_factor = ctx.win_height / 1369.0f;
-    }
-    else {
-        scale_factor = ctx.win_width / 1665.0f;
-    }
-
-    bg.transform.scale.x = 1665.0f * scale_factor;
-    bg.transform.scale.y = 1369.0f * scale_factor;
 }
 
 void MenuScene::close_scene() { return; }
@@ -129,6 +105,12 @@ void MenuScene::framebuffer_size_callback(GLFWwindow* window, int width, int hei
     glViewport(0, 0, width, height);
     camera.width = width;
     camera.height = height;
-    ctx.win_width = width;
-    ctx.win_height = height;
+
+    float bg_ar = 1665.0f / 1369.0f;
+    float scale_factor;
+
+    scale_factor = ctx.win_width / 1665.0f;
+
+    bg.transform.scale.x = 1665.0f * scale_factor;
+    bg.transform.scale.y = 1369.0f * scale_factor;
 }

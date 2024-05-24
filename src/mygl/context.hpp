@@ -36,6 +36,7 @@ class Context
                 current_scene->close_scene();
             current_scene = scene;
             current_scene->open_scene();
+            framebuffer_size_callback_wrapper(window, win_width, win_height); //because
         }
 
         void load_scene_id(int id)
@@ -104,7 +105,9 @@ class Context
         static void framebuffer_size_callback_wrapper(GLFWwindow* window, int width, int height) 
         {
             Context* ctx = static_cast<Context*>(glfwGetWindowUserPointer(window));
-
+            ctx->win_width = width;
+            ctx->win_height = height;
+            ctx->aspect_ratio = width / height;
             if (ctx->current_scene != nullptr) {
                 ctx->current_scene->framebuffer_size_callback(window, width, height);
             }   

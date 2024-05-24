@@ -366,8 +366,6 @@ void GameScene::framebuffer_size_callback(GLFWwindow* window, int width, int hei
     glViewport(0, 0, width, height);
     player->player_camera.width = width;
     player->player_camera.height = height;
-    ctx.win_width = width;
-    ctx.win_height = height;
 
     // glDeleteVertexArrays(1, &cubeVAO);
     // glDeleteVertexArrays(1, &planeVAO);
