@@ -58,6 +58,10 @@ class Enemy
             path_pos = tile_pos(model.transform.position);
             path.clear();
             path = breadth(map, path_pos, map.random_walkable_pos());
+            if (path.empty())
+            {
+                path = breadth(map, path_pos, map.random_walkable_pos());
+            }
             ma_sound_start(&noise);
             ma_sound_set_looping(&noise, true);
         }
@@ -81,12 +85,16 @@ class Enemy
                 compute_direction();
             } else {
                 path = breadth(map, path_pos, map.random_walkable_pos());
+                if (path.empty())
+                {
+                    path = breadth(map, path_pos, map.random_walkable_pos());
+                }
                 choose_direction = false;
                 it = 0;
             }
             
-            detect_player();
             map.enemy_position = model.transform.position;
+            detect_player();
         }
 
         void screamer(Player &player)
@@ -115,14 +123,16 @@ class Enemy
 
         void detect_player()
         {
-            std::cout << "detect player" << std::endl;
+            glm::ivec2 tp = tile_pos(map.player_position);
+            glm::ivec2 tpe = tile_pos(map.enemy_position);
+
             if (glm::distance(map.player_position, map.enemy_position) > 9.0f)
             {
                 near_player = false;
-                std::cout << "more than 9" << std::endl;
+                see_player = false;
                 return;
             }
-
+            
             std::vector<glm::ivec2> p = breadth(map, path_pos, tile_pos(map.player_position));
 
             for (int i = 0; i < p.size(); i++)
@@ -132,12 +142,10 @@ class Enemy
                     near_player = true;
                 }
 
-                if (p[i] == tile_pos(map.player_position) && i <= 5)
+                if (i < 5 && p[i] == tile_pos(map.player_position))
                 {
                     see_player = true;
-                } 
-                
-
+                } else {see_player = false;}
             }
         }
 
@@ -228,8 +236,6 @@ class Enemy
                 if (dotProduct < -0.95f) {
                     change_direction(BACKWARD);
                 } else if (dotProduct > 0.95f) {
-                    std::cout << "forward" << std::endl;
-                    // move_forward();
                 } else {
                     float crossProduct = direction.x * currentDirection.y - direction.y * currentDirection.x;
                     if (crossProduct > 0.0f) {

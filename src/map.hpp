@@ -84,40 +84,35 @@ class Map {
             roof_position = {floor.transform.position.x, floor.transform.position.y + 2.0f, floor.transform.position.z};
 
             for (const auto &row : txt_map)
-            {
+            {  
                for (const auto &element : row)
                {
-                    if (element == '#')
+                    switch (element)
                     {
-                        walls_position.push_back(position);
-                    }
-                    if (element == '@')
-                    {
-                        player_start_position = {position.x, player_position.y, position.z};
-                    }
-                    if (element == 'w')
-                    {
-                        win_position = position;
-                    }
-                    if (element == 'A')
-                    {
-                        statue_position = {position.x, 0.03f, position.z};
-                    }
-                    if (element == 'B')
-                    {
-                        statue2_position = {position.x, 0.03f, position.z};
-                    }
-                    if (element == 'C')
-                    {
-                        statue3_position = {position.x, 0.03f, position.z};
-                    }
-                    if (element == 'D')
-                    {
-                        statue4_position = {position.x, 0.05f, position.z};
-                    }
-                    if (element == '&')
-                    {
-                        enemy_start_position = {position.x, 0.3, position.z};
+                        case '#':
+                            walls_position.push_back(position);
+                            break;
+                        case '@':
+                            player_start_position = {position.x, player_position.y, position.z};
+                            break;
+                        case 'w':
+                            win_position = position;
+                            break;
+                        case 'A':
+                            statue_position = {position.x, 0.03f, position.z};
+                            break;
+                        case 'B':
+                            statue2_position = {position.x, 0.03f, position.z};
+                            break;
+                        case 'C':
+                            statue3_position = {position.x, 0.03f, position.z};
+                            break;
+                        case 'D':
+                            statue4_position = {position.x, 0.05f, position.z};
+                            break;
+                        case '&':
+                            enemy_start_position = {position.x, 0.3, position.z};
+                            break;
                     }
                     position.x += 1.0f;
                }
