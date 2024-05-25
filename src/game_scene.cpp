@@ -210,7 +210,7 @@ void GameScene::update()
     float distance = glm::distance(map.player_position, map.enemy_position);
 
     float min_distance = 4.0f;
-    float max_distance = 9.0f;
+    float max_distance = 8.0f;
 
     float clamped_distance = clamp(distance, min_distance, max_distance);
     float normalized_distance = map_range(clamped_distance, min_distance, max_distance, 0.0f, 1.0f);
