@@ -34,5 +34,5 @@ class MenuScene : public IScene {
         Button play_btn;
         Button quit_btn;
         Button credit_btn;
-        Rectangle bg;
+        MyRectangle bg;
 };

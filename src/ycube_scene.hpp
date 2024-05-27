@@ -30,7 +30,7 @@ class YCubeScene : public IScene {
 
         CameraOrtho camera;
         Shader credits_shader;
-        Rectangle shape;
+        MyRectangle shape;
         unsigned int credits_texture;
         float start_time;
 };

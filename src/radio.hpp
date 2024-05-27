@@ -4,7 +4,6 @@
 
 #include "mygl/clock.hpp"
 #include "mygl/sound.hpp"
-#include "math.h"
 
 class Radio 
 {

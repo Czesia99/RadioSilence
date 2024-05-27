@@ -30,7 +30,7 @@ class InstructionsScene : public IScene {
 
         CameraOrtho camera;
         Shader credits_shader;
-        Rectangle shape;
+        MyRectangle shape;
         unsigned int instructions_texture;
         float start_time;
 };

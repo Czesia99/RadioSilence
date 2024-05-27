@@ -30,6 +30,6 @@ class CreditsScene : public IScene {
 
         CameraOrtho camera;
         Shader credits_shader;
-        Rectangle shape;
+        MyRectangle shape;
         unsigned int credits_texture;
 };

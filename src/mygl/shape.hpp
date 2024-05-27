@@ -57,9 +57,9 @@ class Triangle {
         };
 };
 
-class Rectangle {
+class MyRectangle {
     public:
-        Rectangle() {
+        MyRectangle() {
             glGenVertexArrays(1, &vao);
             glBindVertexArray(vao);
             glGenBuffers(1, &ebo);

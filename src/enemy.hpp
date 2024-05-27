@@ -81,7 +81,7 @@ class Enemy
                 return;
             }
 
-            if (it < path.size()) {
+            if (it < path.size() - 1) {
                 compute_direction();
             } else {
                 path = breadth(map, path_pos, map.random_walkable_pos());
@@ -219,7 +219,6 @@ class Enemy
             if (on_tile(path[it])) {
                 it++;
                 choose_direction = false;
-                // detect_player();
                 move_forward();
             }
             else {

@@ -6,7 +6,7 @@
 
 class Button {
     public:
-        Rectangle shape;
+        MyRectangle shape;
         unsigned int texture;
         // Transform transform;
 
