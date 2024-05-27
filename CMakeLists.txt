@@ -32,6 +32,7 @@ set(SRC_FILES
     ${SRC}/ycube_scene.cpp
     ${SRC}/instructions_scene.cpp
     ${SRC}/texture.cpp
+    ${SRC}/toolbox.cpp
 )
 
 set(LINK_LIB

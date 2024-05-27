@@ -4,9 +4,7 @@
 #include "mygl/clock.hpp"
 #include "map.hpp"
 #include "breadth.hpp"
-// #include "mygl/sound.hpp"
-#include <cstdlib>
-#include <ctime> 
+#include "toolbox.hpp"
 
 class Enemy 
 {
@@ -21,10 +19,7 @@ class Enemy
         bool scream = false;
         bool see_player = false;
         bool near_player = false;
-        ma_sound noise;
-        
 
-        const char *sf = "../assets/sfx/enemy_noise.wav";
         Enemy(Map &map, Sound &sm) : map(map)
         {
             stbi_set_flip_vertically_on_load(false);
@@ -153,6 +148,8 @@ class Enemy
         Clock clock;
         Map &map;
         Model model;
+        ma_sound noise;
+        const char *sf = "../assets/sfx/enemy_noise.wav";
 
         glm::vec3 front = glm::vec3(0.0f, 0.0f, 1.0f);
         glm::vec3 right = glm::vec3(-1.0f, 0.0f, 0.0f);
@@ -246,23 +243,13 @@ class Enemy
             }
         }
 
-        float map_range(float value, float min1, float max1, float min2, float max2) 
-        {
-            return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
-        }
-
-        float clamp(float n, float lower, float upper)
-        {
-            return n <= lower ? lower : n >= upper ? upper : n;
-        }
-
         void update_sound_position()
         {
             ma_sound_set_position(&noise, model.transform.position.x, model.transform.position.y, model.transform.position.z);
             float distance = glm::distance(map.player_position, model.transform.position);
 
             float min_distance = 4.0f;
-            float max_distance = 8.0f;
+            float max_distance = 7.0f;
 
             float clamped_distance = clamp(distance, min_distance, max_distance);
             float normalized_distance = map_range(clamped_distance, min_distance, max_distance, 0.0f, 1.0f);

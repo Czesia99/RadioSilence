@@ -1,4 +1,5 @@
 #include "game_scene.hpp"
+#include "toolbox.hpp"
 
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
@@ -165,16 +166,6 @@ void GameScene::shader_config()
     glBindTexture(GL_TEXTURE_2D, cookie_mask_id);
 }
 
-float map_range(float value, float min1, float max1, float min2, float max2) 
-{
-    return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
-}
-
-float clamp(float n, float lower, float upper)
-{
-    return n <= lower ? lower : n >= upper ? upper : n;
-}
-
 void GameScene::update()
 {
     clock.update();
@@ -209,7 +200,7 @@ void GameScene::update()
     float distance = glm::distance(map.player_position, map.enemy_position);
 
     float min_distance = 4.0f;
-    float max_distance = 8.0f;
+    float max_distance = 7.0f;
 
     float clamped_distance = clamp(distance, min_distance, max_distance);
     float normalized_distance = map_range(clamped_distance, min_distance, max_distance, 0.0f, 1.0f);
@@ -240,14 +231,7 @@ void GameScene::end_condition()
 
     if (enemy->see_player && player->torchlight_on)
     {
-        screamer();
-    
-        if (clock.current_time - scream_start_time >= 3.0f) 
-        {
-            ma_sound_stop(&scream_sound);
-            ctx.load_scene_id(2);
-        }
-        // player->dead = true;
+        player->dead = true;
     }
 
     if (player->dead)
