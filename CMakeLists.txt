@@ -6,6 +6,7 @@ project(${PROJECT_RADIOSILENCE} VERSION 0.1.0)
 
 #cmake_policy(SET CMP0072 NEW)
 #set(CMAKE_CXX_STANDARD 11.4.0)
+set(CMAKE_CXX_STANDARD 20)
 
 find_package(OpenGL REQUIRED)
 
@@ -19,6 +20,7 @@ set(ASSIMP_DIR ./include/assimp)
 # set(SHADERS ./shaders)
 
 # Add Assimp library
+add_subdirectory(include/glfw)
 add_subdirectory(include/assimp)
 
 set(SRC_FILES

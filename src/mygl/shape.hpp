@@ -28,7 +28,7 @@ class Triangle {
             glEnableVertexAttribArray(1);
         }
 
-        void render(Shader shader, const ICamera &camera) 
+        void render(Shader shader, const ICamera &camera)
         {
             shader.use();
             glm::mat4 mat = transform.get_model_matrix();
@@ -107,10 +107,10 @@ class MyRectangle {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,// bottom left
             0.5f, -0.5f, 0.0f,  1.0f, 0.0f,// bottom right
             0.5f,  0.5f, 0.0f,  1.0f, 1.0f,// top right
-            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,// top left 
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,// top left
         };
-    
-        uint indices[6] = {  // note that we start from 0!
+
+        unsigned int indices[6] = {  // note that we start from 0!
             0, 1, 2,   // first triangle
             0, 2, 3    // second triangle
         };
@@ -141,7 +141,7 @@ class Cube {
             -0.5f, 0.5f, -0.5f,     0.0f, 1.0f,    0.0f, 0.0f, -1.0f,
             -0.5f, -0.5f, -0.5f,    0.0f, 0.0f,    0.0f, 0.0f, -1.0f,
 
-            -0.5f, -0.5f, 0.5f,    0.0f, 0.0f,    0.0f, 0.0f, 1.0f, 
+            -0.5f, -0.5f, 0.5f,    0.0f, 0.0f,    0.0f, 0.0f, 1.0f,
             0.5f, -0.5f, 0.5f,     1.0f, 0.0f,    0.0f, 0.0f, 1.0f,
             0.5f, 0.5f, 0.5f,      1.0f, 1.0f,    0.0f, 0.0f, 1.0f,
             0.5f, 0.5f, 0.5f,      1.0f, 1.0f,    0.0f, 0.0f, 1.0f,
@@ -169,7 +169,7 @@ class Cube {
             -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,    0.0f, -1.0f,  0.0f,
             -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,    0.0f, -1.0f,  0.0f,
 
-            -0.5f, 0.5f, -0.5f,    0.0f, 1.0f,    0.0f, 1.0f,  0.0f, 
+            -0.5f, 0.5f, -0.5f,    0.0f, 1.0f,    0.0f, 1.0f,  0.0f,
             0.5f, 0.5f, -0.5f,     1.0f, 1.0f,    0.0f, 1.0f,  0.0f,
             0.5f, 0.5f, 0.5f,      1.0f, 0.0f,    0.0f, 1.0f,  0.0f,
             0.5f, 0.5f, 0.5f,      1.0f, 0.0f,    0.0f, 1.0f,  0.0f,
