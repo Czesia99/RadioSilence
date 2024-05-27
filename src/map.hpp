@@ -137,9 +137,6 @@ class Map {
 
             statue4.transform.position = statue4_position;
             statue4.transform.scale *= 0.5f;
-
-            std::cout << "size x = " << txt_map[0].size() << std::endl;
-            std::cout << "size y = " << txt_map.size() << std::endl;
         }
 
         void print_map_txt()

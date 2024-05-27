@@ -3,9 +3,8 @@
 GameScene::GameScene(Context &ctx) : ctx(ctx)
 {
     store_scene_in_ctx();
-    map.print_map_txt();
-    map.load_map();
 
+    map.load_map();
     map_shader = Shader("basic_light.vs", "map_spotlight.fs");
     floor_shader = Shader("floor.vs", "floor_spotlight.fs");
 

@@ -21,8 +21,6 @@ void InstructionsScene::open_scene()
     glfwSetInputMode(ctx.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     clock.update();
     start_time = clock.current_time;
-
-    std::cout << "start time instructions = " << start_time << std::endl;
 }
 
 void InstructionsScene::close_scene() { return; }

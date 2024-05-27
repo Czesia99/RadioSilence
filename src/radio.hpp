@@ -30,7 +30,6 @@ class Radio
             radio_on = false;
             activation_number = 0;
             max_activation = random_int(7, 10);
-            std::cout << "max activation = " <<  max_activation << std::endl;
         };
 
         void update()
@@ -44,7 +43,6 @@ class Radio
                 listening_time += clock.delta_time;
                 if (listening_time > max_listening_time)
                 {
-                    std::cout << "listening time"<< listening_time << std::endl;
                     game_over();
                 }
             }
@@ -68,7 +66,6 @@ class Radio
                 ma_sound_start(&radio_sounds[2]);
             }
             activation_number += 1;
-            std::cout << activation_number << std::endl;
             radio_on = true;
         }
 
