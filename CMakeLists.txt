@@ -4,8 +4,6 @@ set(PROJECT_RADIOSILENCE "radio_silence")
 
 project(${PROJECT_RADIOSILENCE} VERSION 0.1.0)
 
-#cmake_policy(SET CMP0072 NEW)
-#set(CMAKE_CXX_STANDARD 11.4.0)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(OpenGL REQUIRED)
@@ -15,9 +13,6 @@ set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(SRC ./src)
 set(MYGL ./src/mygl)
 set(ASSIMP_DIR ./include/assimp)
-
-# set(TEXTURES ./textures)
-# set(SHADERS ./shaders)
 
 # Add Assimp library
 add_subdirectory(include/glfw)
@@ -42,7 +37,18 @@ set(LINK_LIB
     OpenGL::GL
     assimp
 )
-# include_directories(${SHADERS})
+
 include_directories(${INCLUDE_DIR})
 add_executable(${PROJECT_RADIOSILENCE} ${SRC_FILES})
+
+if(WIN32)
+    set_target_properties(${PROJECT_NAME}
+    PROPERTIES
+        LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE"
+        LINK_FLAGS_RELEASE "/SUBSYSTEM:windows /ENTRY:mainCRTStartup"
+        LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:windows /ENTRY:mainCRTStartup"
+        LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:windows /ENTRY:mainCRTStartup"
+    )
+endif(WIN32)
+
 target_link_libraries(${PROJECT_RADIOSILENCE} ${LINK_LIB})
