@@ -41,6 +41,12 @@ set(LINK_LIB
 include_directories(${INCLUDE_DIR})
 add_executable(${PROJECT_RADIOSILENCE} ${SRC_FILES})
 
+if (assimp_FOUND)
+    set(ASSIMP_LIBRARY "assimp")
+    add_library(${ASSIMP_LIBRARY} SHARED IMPORTED)
+    set_target_properties(${ASSIMP_LIBRARY} PROPERTIES IMPORTED_LOCATION "${ASSIMP_LIBRARY_DIRS}/libassimp.so")
+endif(assimp_FOUND)
+
 if(WIN32)
     set_target_properties(${PROJECT_NAME}
     PROPERTIES

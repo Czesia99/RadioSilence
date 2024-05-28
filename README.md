@@ -14,3 +14,7 @@ cmake ..
 ```
 cmake -S . -B build/
 ```
+
+<p align="center">
+    <img src = "showcase/horrorGL.gif">
+</p>
